@@ -1,0 +1,137 @@
+微扰理论的发展有两条路径，一种是不具体到某个物理图像，也不具体写出哈密顿量的表达式，只是将哈密顿量分为非微扰与微扰部分，写出最一般的公式，这称为形式微扰理论。形式微扰理论的优点是公式推导通用且优雅，能够直接得到 RSPT 与 BWPT（这两个缩写由 \cite{2009shavitt} 使用）。而另一种是具体到了多核子或多电子体系，将夹在两个组态之间的哈密顿量用轨道表示出来，这种做法是通称的多体微扰理论 \cite{2009shavitt}；在某本量子化学教材中，也把使用了图展开的做法称为“多体微扰理论”，与这里的定义是一致的。总之，多体微扰理论属于微扰理论的一部分，是微扰理论在多体系统中的应用。
+
+\section{单参考态微扰理论}
+在进行形式微扰理论的推导之前，先用经典的方式推导单参考态微扰理论。单参考态微扰理论以一个 Slater 行列式作为参考态，这对应闭壳体系的基态。
+
+哈密顿量 $H=H_0+V$ 的本征方程为
+\begin{equation}
+  H|\Psi_n\rangle=E_n|\Psi_n\rangle,
+\end{equation}
+给微扰部分 $V$ 添加一个系数 $\lambda$，
+\begin{equation}
+  H(\lambda)=H_0+\lambda V,
+\end{equation}
+非微扰部分 $H_0$ 的本征方程为
+\begin{equation}
+  H_0|\Phi_n\rangle=E_n^{(0)}|\Phi_n\rangle,
+\end{equation}
+非微扰波函数有正交归一关系
+\begin{equation}
+  \langle\Phi_m|\Phi_n\rangle=\delta_{mn},
+\end{equation}
+这构成了多体 Hilbert 空间的基矢。注意 $E_n^{(0)}$ 不是 HO 基或 HF 基的单粒子能量，而是这个多体组态的能量，也就是所有占据轨道的单粒子能量之和（$H_0$ 没有非对角元时成立）。这里需要注意单粒子基和组态空间基的区别，研究的原子核有 $A$ 个核子，就在 $A$ 体的组态空间中进行计算，组态空间的基矢是 $A$ 个核子占据的单粒子轨道组成的 Slater 行列式。非简并微扰主要用于计算闭壳核的基态（激发态就会有某条轨道没有填满，进而出现简并），对应 $n=0$。在 \cite{2020tichai} 中直接省略掉下标，这里保留下标 $n$，与 \cite{2009shavitt,2010roth} 的公式对应。
+
+微扰理论假设能量与波函数可以按照 $\lambda$ 的幂级数展开为
+\begin{align}
+  E_n(\lambda)&=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2 E_n^{(2)}+\ldots,\\
+  |\Psi_n(\lambda)\rangle&=|\Psi_n^{(0)}\rangle+\lambda|\Psi_n^{(1)}\rangle+\lambda^2|\Psi_n^{(2)}\rangle+\ldots,
+\end{align}
+最低阶就是
+\begin{equation}
+  |\Psi_n^{(0)}\rangle=|\Phi_n\rangle,
+\end{equation}
+将能量与波函数的幂级数展开代入
+\begin{equation}
+  H|\Psi_n(\lambda)\rangle=E_n(\lambda)|\Psi_n(\lambda)\rangle
+\end{equation}
+中，得到
+\begin{align}
+  H_0|\Psi_n^{(0)}\rangle+\sum_{p=1}^\infty\lambda^p\left(H_0|\Psi_n^{(p)}\rangle+V|\Psi_n^{(p-1)}\rangle\right)=E_n^{(0)}|\Psi_n^{(0)}\rangle+\sum_{p=1}^\infty\lambda^p\sum_{j=0}^pE_n^{(j)}|\Psi_n^{(p-j)}\rangle,
+\end{align}
+使用 intermediate normalization，
+\begin{equation}
+  \langle\Psi_n^{(0)}|\Psi_n(\lambda)\rangle=1,
+\end{equation}
+得到
+\begin{equation}
+  \langle\Psi_n^{(0)}|\Psi_n^{(p)}\rangle=0,\quad p\ge1,
+\end{equation}
+在曾谨言量子力学的推导中是直接约定零阶微扰 $|\Psi_n^{(0)}\rangle$ 与高阶的所有修正都正交。由此左乘 $\langle\Psi_n^{(0)}|=\langle\Phi_n|$，对比 $\lambda^p$ 项的系数，得到
+\begin{equation}
+  E_n^{(p)}=\langle\Phi_n|V|\Psi_n^{(p-1)}\rangle,
+\end{equation}
+因此能量的一阶修正为
+\begin{equation}
+  E_n^{(1)}=\langle\Phi_n|V|\Phi_n\rangle=V_{nn}.
+\end{equation}
+
+左乘 $\langle\Phi_m|,m\ne n$，得到
+\begin{equation}
+  C_{mn}^{(p)}\equiv\langle\Phi_m|\Psi_n^{(p)}\rangle=\frac1{E_n^{(0)}-E_m^{(0)}}\left[\langle\Phi_m|V|\Psi_n^{(p-1)}\rangle-\sum_{j=1}^pE_n^{(j)}\langle\Phi_m|\Psi_n^{(p-j)}\rangle\right],
+\end{equation}
+这里的 $C_{mn}^{(p)}$ 是把 $|\Psi_n^{(p)}\rangle$ 用多体基 $|\Phi_m\rangle$ 展开，
+\begin{equation}
+  |\Psi_n^{(p)}\rangle=\sum_mC_{mn}^{(p)}|\Phi_m\rangle,\label{eqs:formal-psin}
+\end{equation}
+当 $p=0$ 时，有 $C_{mn}^{(0)}=\delta_{mn}$，而 $p\ge1$ 时 $|\Psi_n^{(p)}\rangle$ 不会混有零阶的 $|\Psi_n^{(0)}\rangle$，也就是说 $C_{nn}^{(p)}=0, p\ge1$，而
+\begin{equation}
+  C_{mn}^{(p)}=\frac1{E_n^{(0)}-E_m^{(0)}}\left[\sum_{m'}\langle\Phi_m|V|\Phi_{m'}\rangle C^{(p-1)}_{m'n}-\sum_{j=1}^pE_n^{(j)}C^{(p-j)}_{mn}\right],\quad m\ne n,\;p\ge1,
+\end{equation}
+因此 
+\begin{equation}
+  C_{mn}^{(1)}=\frac{V_{mn}}{E_n^{(0)}-E_m^{(0)}},\quad m\ne n,
+\end{equation}
+波函数的一阶修正为
+\begin{equation}
+  |\Psi_n^{(1)}\rangle=\sum_{m\ne n}\frac{V_{mn}}{E_n^{(0)}-E_m^{(0)}}|\Phi_m\rangle.
+\end{equation}
+由此还可以得到能量的二阶修正，
+\begin{align}
+  E_n^{(2)}&=\langle\Phi_n|V|\Psi_n^{(1)}\rangle=\sum_mC_{mn}^{(1)}V_{nm}\notag\\
+  &=\sum_{m\ne n}\frac{V_{mn}V_{nm}}{E_n^{(0)}-E_m^{(0)}}=\sum_{m\ne n}\frac{|V_{mn}|^2}{E_n^{(0)}-E_m^{(0)}}
+\end{align}
+以及更高阶的修正。
+
+这里会出现一个疑问：公式推导至此所有阶的能量修正与波函数修正都可以写出来了，为什么还需要推导那一堆 Goldstone 图的公式呢？可以看出，以上所有公式所求和的都是插入的中间态，而这些组态的数量会非常多，这称为“对组态求和”；Goldstone 图的推导方式是，将每个插入求和的组态都用相对于参考态的产生湮灭算符写出来再进行缩并，相当于把所有被求和的矩阵元都进行了分类，显式地用单粒子轨道写出了每个矩阵元的表达式，每一类矩阵元用一个图来表示，这样求和的对象就是图的指标，也就是单粒子轨道，这称为“对轨道求和” \cite{thesis-tichai}。而单粒子轨道的量也有很多，可以进一步将图转为 $j$-scheme 来减少求和的计算量。 
+
+这里举一个例子，展示标准的 RS 微扰公式与 Goldstone 图的对应。
+在常用的 HF-MBPT 中，对非微扰与微扰哈密顿量的划分为
+\begin{align}
+  H_0&=\sum_\alpha\epsilon_\alpha a_\alpha^\dagger a_\alpha,\\
+  V&=\sum_{\alpha\beta}(h_{\alpha\beta}-\epsilon_\alpha\delta_{\alpha\beta})a_\alpha^\dagger a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a_\alpha^\dagger a_\beta^\dagger a_\delta a_\gamma\notag\\
+  &=\sum_{\alpha\beta}g_{\alpha\beta}a_\alpha^\dagger a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a_\alpha^\dagger a_\beta^\dagger a_\delta a_\gamma.
+\end{align}
+设微扰的能级 $n$ 是闭壳 $|D_n\rangle=\prod_{i=1}^{N}a_i^\dagger|0\rangle$，零阶能量就是多体组态 $|D_n\rangle$ 的能量，
+\begin{equation}
+  E_n^{(0)}=\langle D_n|H_0|D_n\rangle=\sum_{i=1}^N\epsilon_i,
+\end{equation}
+再次重申单粒子能相加的这个结果只有当非微扰部分为对角时才成立，后面 MCPT 的推导中会出现不一样的结果。能量的一阶修正为
+\begin{equation}
+  E_n^{(1)}=V_{nn}=\langle0|\prod_i a_i\left(\sum_{\alpha\beta}g_{\alpha\beta}a_\alpha^\dagger a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a_\alpha^\dagger a_\beta^\dagger a_\delta a_\gamma\right)\prod_j a_j^\dagger|0\rangle=\sum_{i=1}^Ng_{ii}+\frac12\sum_{i,j=1}^NV_{ijij},
+\end{equation}
+这里的 1/2 的产生原因是，多体组态并不关心其中包含的粒子轨道顺序，因此把多体组态中的粒子按照轨道编号从低到高的顺序排列是最直观的一种记法，为了使第二项不为 0，必须成对缩并，因此取出 $i<j$ 这两条轨道与哈密顿量中的产生湮灭算符缩并，剩下的轨道成对缩并，这样可以缩并出 4 个 $V_{ijij}$，但是求和是 $i<j$，再乘 1/2 才是对 $i,j$ 的全求和。
+
+能量的二阶修正含有组态之间的矩阵元 $V_{mn}$，因此 $|D_m\rangle$ 必须为相对于闭壳的单激发（1p1h 激发）或双激发（2p2h 激发）才能保证结果非 0，也就是说 
+\begin{equation}
+  |D_m\rangle=a_p^\dagger a_h|D_n\rangle\;\text{or}\; a_{p_1}^\dagger a_{p_2}^\dagger a_{h_1}a_{h_2}|D_n\rangle,
+\end{equation}
+对于单激发，$E_m^{(0)}=E_n^{(0)}-\epsilon_h+\epsilon_p$，而矩阵元为
+\begin{equation}
+  V_{nm}=\langle D_n|\left(\sum_{\alpha\beta}g_{\alpha\beta}a_\alpha^\dagger a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a_\alpha^\dagger a_\beta^\dagger a_\delta a_\gamma\right)a_p^\dagger a_h|D_n\rangle
+\end{equation}
+
+总之可以证明逐阶算出的微扰能量就等于 $m$-scheme 的 Goldstone 图。
+
+\subsection{Wigner's rule}
+Wigner's rule 作用是通过 $\Psi_n^{(p)},\;p=1,2,\ldots,k$ 直接得到 $E_n^{(p)},\;p=1,2,\ldots,2k+1$。最显然的应用就是快速得到能量的三阶微扰。
+\begin{align}
+  E_{n}^{(2m)} &= \langle \Psi_{n}^{(m-1)} | \hat{V} | \Psi_{n}^{(m)} \rangle - \sum_{j=1}^{m-1} \sum_{l=1}^{m} E_{n}^{(2m-j-l)} \langle \Psi_{n}^{(j)} | \Psi_{n}^{(l)} \rangle ,\\
+  E_{n}^{(2m+1)} &= \langle \Psi_{n}^{(m)} | \hat{V} | \Psi_{n}^{(m)} \rangle - \sum_{j=1}^{m} \sum_{l=1}^{m} E_{n}^{(2m-j-l+1)} \langle \Psi_{n}^{(j)} | \Psi_{n}^{(l)} \rangle.
+\end{align}
+
+\subsection{递推公式}
+用 Goldstone 图展开的方式算基态能量微扰的前几阶非常方便，尤其是在 $j$-scheme 下进行计算的速度更快。但为了验证 MBPT 的收敛性，需要计算高阶的贡献。从前面的推导中可以很方便地得到递推公式 \cite{2010roth}。当 $p=0$ 时，有 $C_{mn}^{(0)}=\delta_{mn}$，而 $p\ge1$ 时 $C_{nn}^{(p)}=0$，
+\begin{equation}
+  C_{mn}^{(p)}=\frac1{E_n^{(0)}-E_m^{(0)}}\left[\sum_{m'}\langle\Phi_m|V|\Phi_{m'}\rangle C^{(p-1)}_{m'n}-\sum_{j=1}^pE_n^{(j)}C^{(p-j)}_{mn}\right],\quad m\ne n,\;p\ge1
+\end{equation}
+以及
+\begin{equation}
+  E_n^{(p)}=\sum_m\langle\Phi_n|V|\Phi_m\rangle C_{mn}^{(p-1)}.
+\end{equation}
+实际计算时从 $C_{mn}^{(0)}$ 出发，先求出各阶的 $E_n^{(p)}$，再求波函数展开系数 $C_{mn}^{(p)}$。因为是递推算法，所以每一阶的 $C_{mn}^{(p)}$ 都需要存下来，而 $m$ 取遍整个 $A$ 体 Hilbert 空间，因此需要存储的数据数量就是 $N_pD$，$D$ 为 Hilbert 空间的维数。
+由此，所需的基态能量与波函数就是
+\begin{equation}
+  E_n^A=\sum_{p=0}^\infty E_n^{(p)},\quad |\Psi_n^A\rangle=\sum_{p=0}^\infty|\Psi_n^{(p)}\rangle.
+\end{equation}
+
+\section{形式微扰理论}

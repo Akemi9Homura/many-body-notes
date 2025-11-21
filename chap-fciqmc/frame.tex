@@ -1,0 +1,112 @@
+\section{理论推导}
+量子蒙特卡洛大致可以分为两类，一类是变分蒙特卡洛（VMC），其基础是变分法，从试探波函数出发，通过对波函数的变分优化寻找体系的基态，计算能量期望值的过程需要计算高维积分，VMC 用蒙特卡洛模拟的方式计算高维积分。另一类是投影量子蒙特卡洛，包括扩散蒙特卡洛（DMC），格林函数蒙特卡洛（GFMC），辅助场蒙特卡洛等，投影的本质就是解薛定谔方程。
+
+全组态相互作用量子蒙特卡洛（FCIQMC）也是投影量子蒙特卡洛方法，出发点是虚时薛定谔方程，虽然将虚时间 $\tau$ 定义为 $it$，然而虚时薛定谔方程的本质是原本薛定谔方程的 Wick 转动，在转动之后虚时间也是实数。虚时薛定谔方程为
+\begin{equation}
+    \frac{\partial}{\partial\tau}\psi(\tau) = -H\psi(\tau),
+\end{equation}
+通过 Wick 转动变为虚时演化的目的在于，将 $e^{-iHt}$ 因子导致的振荡变为形如 $e^{-\tau H}$ 的指数衰减。这样就能够通过指数衰减将演化初始波函数中的非基态成分去掉，只留下基态。虚时薛定谔方程的解是
+\begin{equation}
+    \psi(\tau)=e^{-\tau H}\psi(\tau=0),
+\end{equation}
+虽然这里写的是等于，但因为波函数总是可以添加相因子的，因此其实可以写为
+\begin{equation}
+    \psi(\tau)\propto e^{-\tau H}\psi(\tau=0),
+\end{equation}
+在后面也会额外添加相因子，不过目前还是先从等于的这个式子出发，这样才能更好地理解后面添加相因子的意义。考虑 $H$ 的本征方程
+\begin{equation}
+    H\Psi_n=E_n\Psi_n,
+\end{equation}
+将虚时为 0 时的任意初始波函数用这组基矢展开，
+\begin{equation}
+    \psi(\tau=0)=\sum_nc_n\Psi_n,
+\end{equation}
+因此
+\begin{equation}
+    \psi(\tau)=e^{-\tau H}\sum_nc_n\Psi_n=\sum_nc_ne^{-\tau E_n}\Psi_n,
+\end{equation}
+虚时演化到 $\tau\to\infty$，因为 $E_0<E_1<E_2<\ldots$，
+\begin{equation}
+    e^{-\tau E_n}/e^{-\tau E_0}=e^{-\tau(E_n-E_0)}\to0,\quad n>0,
+\end{equation}
+此时主导的一定是基态波函数的系数，也即
+\begin{equation}
+    \lim_{\tau\to\infty}\psi(\tau)=c_0e^{-\tau E_0}\Psi_0.
+\end{equation}
+这还不完全是想要的基态波函数 $\Psi_0$，$c_0$ 可以直接归一化，但需要注意 $c_0\ne0$，也就是选取的演化初始波函数必须包含基态的成分，与基态完全正交显然是演化不出基态的。另外多出的 $e^{-\tau E_0}$ 因子也可以在虚时演化算符的定义中将其去掉，也就是前面提到的，可以把虚时薛定谔方程的解添加相因子，写为
+\begin{equation}
+    \psi(\tau)=e^{-\tau(H-E_0)}\psi(\tau=0),
+\end{equation}
+这种写法等价于如下虚时薛定谔方程
+\begin{equation}
+    -\odv{}{\tau}\psi(\tau)=(H-E_0)\psi(\tau).
+\end{equation}
+
+接下来在组态空间中进行虚时演化。组态空间的基矢是 Slater 行列式 \(\ket{D_i}\)，将 $\psi(\tau)$ 在组态空间展开为
+\begin{equation}
+    \psi(\tau)=\sum_iC_i(\tau)\ket{D_i},
+\end{equation}
+代入虚时薛定谔方程得到
+\begin{equation}
+    -\odv{}{\tau}C_i(\tau)=\sum_j(H_{ij}-S\delta_{ij})C_j(\tau), 
+\end{equation}
+由于并不能在计算之前就知道 \(E_0\) 是多少，因此在实际计算时需要把 \(E_0\) 换为一个自适应调节的位移参数 \(S\)。
+
+由于展开系数 \(C_i\) 有正也有负，无法将其分布情况转换为概率分布，因此 FCIQMC 将 \(N_i\) 个 walker 放在组态 \(\ket{D_i}\) 上，这些 walker 是带有符号的，因此可以表示负的展开系数。要求 walker 数目 \(N_i\) 与 \(C_i\) 成正比，因此 \(N_i\) 满足的演化方程离散化为
+\begin{equation}
+    -\adv{N_i}{\tau}=\sum_j(H_{ij}-S\delta_{ij})N_j,\label{eqs:fciqmc-master1}
+\end{equation}
+问题的关键就变成了设计一套算法，使 \(N_i\) 按照 \ref{eqs:fciqmc-master1} 演化。可以将 \ref{eqs:fciqmc-master1} 拆分为非对角项与对角项两部分，即
+\begin{equation}
+    -\adv{N_i}{\tau}=(H_{ii}-S)N_i+\sum_{j\ne i}H_{ij}N_j.\label{eqs:fciqmc-master2}
+\end{equation}
+
+先看非对角部分。对于每个 \(\ket{D_i}\)，都有一系列 \(\ket{D_j}\) 与其相连，在 FCI 计算中这样的行列式非常多，不可能全纳入计算。这里就是 FCIQMC 的随机性的体现：通过蒙特卡洛方法采样波函数，保留重要的组态，以大幅度降低波函数的维数。简单来说，对于组态 \(\ket{D_i}\) 上的每个 walker，将其以一定的概率激发到某个与之相连的组态 \(\ket{D_j}\) 上，即在 \(\ket{D_j}\) 上以一定的概率生成 walker。这种表述与 \ref{eqs:fciqmc-master2} 的 \(i,j\) 记号其实是反着的，但 \cite{2009booth} 等文献都是把公式写为 \ref{eqs:fciqmc-master2}，在语言表述中也是反过来。FCIQMC walkers 随机游走的详细过程是，目前演化到虚时间 \(\tau\)，全空间的 walkers 分布为 \(\bm{N}(\tau)\)，对每个有占据的行列式 \(\ket{D_i}\) 上的 \(N_i\) 个 walkers 中的每一个，将其以一定的概率激发到与 \(\ket{D_i}\) 相连的 \(\ket{D_j}\) 上，这个过程写为
+\begin{equation}
+    \Delta N_{j\gets i}=p_\text{spawn}(j|i)=\frac{\Delta
+    \tau|H_{ji}|}{p_\text{gen}(j|i)},
+\end{equation}
+在确定性的对角化方法中，\(\ket{D_i}\) 的波函数系数 \(C_i\) 对所有其他的 \(C_j\) 都有贡献，贡献的强度由 \(H_{ij}\) 衡量。而在随机算法中，用 walker 数目 \(N_i\) 随机采样波函数的系数，目标是在每次演化中投影出重要的组态，以控制内存。因此不能在一步演化中完整考虑与 \(\ket{D_i}\) 相连的每一个 \(\ket{D_j}\)，而是对 \(N_i\) 个 walkers 中的每个进行随机激发，就能在多步演化之后，从统计意义上达到 FCI 的效果。从 \(\ket{D_i}\) 激发到 \(\ket{D_j}\) 的概率为 \(p_\text{gen}(j|i)\)，一种最简单的计算方法就是按照轨道占据等概率激发，当然还有更高效的激发算法，这会在后续讨论。激发概率出现在分母上相当于条件概率，walker 先选择激发到哪个 \(\ket{D_j}\)，再按照 \ref{eqs:fciqmc-master2} 的要求于 \(\ket{D_j}\) 上生成对应数量的 walker。以上过程称为 spawning，实际计算中需要对 \(\bm{N}(\tau)\) 的每个行列式上的每个 walker 都进行以上的 spawning。
+
+再看对角部分。这意味着在 \(\tau\to\tau+\Delta\tau\) 的演化中，\(\ket{D_i}\) 上的 \(N_i\) 个 walker 以
+\begin{equation}
+    p_\text{death}(i)=\Delta\tau(H_{ii}-S)
+\end{equation}
+的概率死亡。如果 \(p_\text{death}(i)<0\)，则是以 \(-p_\text{death}(i)\) 的概率复制。由于以上演化全是在 \(\ket{D_i}\) 上进行的，只涉及 \(\ket{D_i}\) 上的 walkers，因此 \(N_i\) 死亡或克隆的数量就是
+\begin{equation}
+    \Delta N_i=-(H_{ii}-S)N_i\Delta\tau.
+\end{equation}
+这个过程称为 diagonal death/cloning。
+
+这两个过程完成之后，得到了 \(\tau+\Delta\tau\) 时刻的一组新 walkers 分布。由于 walkers 都是自带符号的，接下来进行 annihilation 过程把符号相反的 walker 湮灭掉。该步骤是为了控制 walkers 的总数，也是 FCIQMC 方法处理费米子符号问题的关键步骤。
+
+\section{算法}
+\subsection{预热}
+FCIQMC 计算本质是对某个波函数虚时投影，提取出基态乘风。也就是说需要将一定数量的 walkers 放在 \(\psi(\tau=0)\) 上作为计算的起点。
+
+
+\section{起始子近似}
+最原始的 FCIQMC 算法存在的问题是，需要 walker 数目达到一定值才能稳定地收敛到基态。虚时演化收敛需要的最小 walker 数目与 Hilbert 空间的维数成比例，这会导致 FCIQMC 需要的计算量并不比 FCI 小多少。FCIQMC 虚时演化收敛需要的 walker 数目很大，这是费米子符号问题在 FCIQMC 这个方法中的表现形式。
+
+\subsection{费米子符号问题}
+QMC 的本质是用概率分布模拟波函数。但量子力学玻恩的概率波诠释是波函数振幅（概率幅）的模方表示概率。然而 QMC 直接处理的是波函数的概率幅本身，对于费米子，由于需满足交换反对称性，波函数的概率幅一定是有正有负的（甚至还可能是复数），这就会导致 QMC 计算可观测量的平均值时，
+\begin{equation}
+    \expval{O}=\frac{\sum_i w_iO_i}{\sum_i w_i},
+\end{equation}
+权重 \(w_i\) 只采样了一部分概率幅，所以可能使分母的正负相抵，统计时平均值出现剧烈振荡，或者说统计噪声。另外，费米子符号问题还有另一种表现形式，投影量子蒙特卡洛方法求解的是薛定谔方程，但如果像 DMC 那样不在反对称化的空间中进行求解，可能无法保证费米子波函数的符号结构，导致投影出哈密顿量的无节点的最低能量解，该最低能量波函数不满足费米子的反对称性，这称为“Boson catastrophe”，也是费米子符号问题的一种体现。
+
+通常解决费米子符号问题的方式是固定节点近似或约束路径方法，这些方法都需要比较好的试探波函数（或称为指导波函数）对波函数的节点结构进行限制，也是系统误差的主要来源。而 FCIQMC 在反对称化的子空间，也就是组态空间进行，能够避免计算出玻色子基态。但仅仅如此并不能完全避免符号问题，因为即使在组态空间计算也有负的概率幅。在此基础上，符号相反的 walker 湮灭有助于提高体系的信噪比 \cite{2009booth}，进一步压制符号问题；湮灭操作并非 FCIQMC 的首创，但相比在连续空间的 GFMC 与 DMC walker 的湮灭，离散的组态进行湮灭非常简单与自然。
+
+然而费米子符号问题也没有被 FCIQMC 完全解决。FCIQMC 演化收敛需要相当数量的 walkers，这是因为 \(\ket{\Psi_0}\) 与 \(-\ket{\Psi_0}\) 都是体系允许的基态波函数，然而在随机游走的过程中，可能会激发出属于 \(-\ket{\Psi_0}\) 的 walkers，导致大部分 walkers 是 \(\ket{\Psi_0}\) 的，而小部分 walkers 是 \(-\ket{\Psi_0}\) 的。这两部分 walkers 对基态波函数贡献的符号相反，且这种差别会通过指数的投影算符继续向后传播，导致随机产生的少数属于 \(-\ket{\Psi_0}\) 的 walkers 的效应被迅速放大，演化难以收敛。
+
+\subsection{\textit{i}-FCIQMC}
+体系波函数只有小部分的主导组态的概率幅绝对值比较大，绝大部分组态都是少占据或不占据的。在随机游走中，如果某个 walker spawn 到不被占据的行列式上，这个新 walker 的符号就完全由原来的 walker 决定，这就会出现符号波动，且会被指数投影迅速向之后的演化传播。也就是说，为了压制符号问题，限制可能符号不对的行列式上的 walkers 向未占据的行列式上 spawning 是一个直接的思路，这就是 initiator-FCIQMC（\textit{i}-FCIQMC）。
+
+将 walker 数目大于给定阈值 \(n_a\) 的行列式称为 initiator 行列式，这些行列式的 walker 数目多，因此可认为符号是正确的，这些是 initiator 的 walkers 可以向未占据的行列式激发。不是 initiator 的 walkers 则不能向未占据的行列式激发，这能防止某个符号错误的 walker 主导与其相连的行列式的符号，并将错误的符号继续传播下去；非 initiator 的 walker 可以激发到已经有占据的行列式上，这些行列式上已经存在的 walkers 能够把这个符号错误的 walker 湮灭掉，阻止统计噪声的出现。
+
+公式
+
+已经证明 \textit{i}-FCIQMC 在任意的 walker 数目下都能实现稳定的演化 \cite{2019ghanem-as}，但这是以引入系统误差为代价的。显然 initiator 近似相当于对真实的哈密顿量施加了截断
+
+\subsection{Adaptive shift FCIQMC}
+需要注意的是，adaptive shift 方法并不是必须要进行的，如果计算能力足够将所研究的体系用 \textit{i}-FCIQMC 算到对 walker 数收敛，系统误差就会被消除。也就是说 initiator 近似引入的系统误差并不是方法本身的缺陷。Adaptive shift 方法是计算能力不足以算收敛时引入的一种改进方法，其本质是用微扰将丢掉的部分补回来。

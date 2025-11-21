@@ -1,0 +1,144 @@
+% !TEX program = xelatex
+\documentclass[a4paper, 12pt]{book}
+
+\usepackage{geometry}
+\geometry{
+    left=20mm, top=20mm, right=20mm, bottom=20mm,
+}
+\usepackage{ctex}
+\usepackage[colorlinks,
+    linkcolor=red,
+    anchorcolor=blue,
+    citecolor=green]{hyperref}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+%花写
+\usepackage{mathrsfs}
+%加粗
+\usepackage{bm}
+%核素符号
+\usepackage[version=4]{mhchem}
+% Wick 收缩
+\usepackage{simpler-wick}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{wrapfig}
+
+%一些符号更好写，参考文档
+\usepackage{physics}
+%\usepackage{physics2}
+%\usephysicsmodule{ab,braket}
+%导数，physics2 不支持
+\usepackage{fixdif,derivative}
+
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{unsrt}
+
+\title{核物理的多体方法}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\part{导论}
+
+\chapter{基础知识}
+\input{chap-intro/fundmental.tex}
+
+\chapter{多体方法概述}
+\input{chap-intro/many_body-intro.tex}
+
+\chapter{壳模型}
+\input{chap-intro/sm.tex}
+
+\chapter{Hartree-Fock 方法}
+\label{chap:hf}
+\input{chap-intro/hf.tex}
+
+\chapter{正规序}
+\input{chap-intro/no.tex}
+
+\chapter{组态相互作用}
+\input{chap-intro/ci.tex}
+
+
+\part{多体微扰理论}
+\label{part:mbpt}
+
+\chapter{RS 微扰与 BW 微扰}
+\input{chap-mbpt/rs-bw.tex}
+
+\chapter{形式微扰理论}
+\label{chap:formal-pt}
+\input{chap-mbpt/formal.tex}
+
+\chapter{多组态微扰理论}
+\input{chap-mbpt/mcpt.tex}
+
+
+\part{$\hat{Q}$-box 有效相互作用}
+\label{part:qbox}
+
+\chapter{有效相互作用概述}
+\input{chap-qbox/effint-intro.tex}
+
+\chapter{简并模型空间}
+\input{chap-qbox/deg.tex}
+
+\chapter{非简并模型空间}
+\input{chap-qbox/nondeg.tex}
+
+\chapter{Goldstone 图的计算}
+\label{chap:goldstone}
+\input{chap-qbox/goldstone.tex}
+
+\chapter{$A$ 粒子空间的代数}
+\input{chap-qbox/a-body.tex}
+
+\chapter{有效算符}
+\label{chap:effop}
+\input{chap-qbox/effoperator.tex}
+
+\chapter{多能 $\hat{Q}$-box}
+\input{chap-qbox/multi-energy.tex}
+
+\chapter{与其他多体方法的比较}
+\label{chap:comparison}
+\input{chap-qbox/comparison.tex}
+
+
+\part{Gamow 壳模型}
+
+\chapter{Berggren 基矢}
+\label{chap:berggren}
+\input{chap-gamow/berggren.tex}
+
+
+\chapter{Gamow 壳模型对角化}
+\label{chap:gamow-diag}
+\input{chap-gamow/gamow-diag.tex}
+
+
+\part{全组态相互作用量子蒙特卡洛}
+
+\chapter{FCIQMC 的理论框架}
+\label{chap:fciqmc-frame}
+\input{chap-fciqmc/frame}
+
+\chapter{FCIQMC 的计算实践}
+\label{chap:fciqmc-practice}
+\input{chap-fciqmc/practice}
+
+
+
+
+\appendix
+\chapter{角动量耦合的公式}
+\input{chap-appendix/angular.tex}
+
+\bibliography{bib/many_body.bib}
+
+\end{document}

@@ -1,0 +1,44 @@
+正规序（normal order）并非一种独立的多体方法，而是一种在很多多体方法中都会使用的技术。其主要进行的操作是选定一个参考态作为真空态，将作用在参考态上变为 0 的算符移动到最右边，不为 0 的则放在左边。
+
+用 Wick 定理进行正规排序比使用最基本的费米子产生湮灭算符的对易关系要方便很多。
+
+\section{三体力的正规序}
+正规排序在核物理中的应用主要是简化三体力的处理。如果想严格包含三体力，需要处理的指标数目太多了，而对哈密顿量进行正规排序后，三体力会产生零体、一体与两体部分，只保留正规排序后的零体、一体与两体部分，舍弃正规排序后仍存在的三体部分，这样就部分地考虑了三体力的影响，这称为 NO2B 近似。
+对一个包含三体力的哈密顿量
+\begin{equation}
+  H = \sum_{ij}h_{ij}a_i^\dagger a_j
+  +\frac14\sum_{ijkl}V_{ijkl}a_i^\dagger a_j^\dagger a_l a_k
+  +\frac1{36}\sum_{ijklmn}W_{ijklmn}a_i^\dagger a_j^\dagger a_k^\dagger a_na_ma_l,
+\end{equation}
+其中两体力矩阵元 $V$ 与三体力矩阵元 $W$ 都是反对称化之后的，在一些文献中会用上标横线作为区分。
+
+对这个哈密顿量进行正规排序，这里先将参考态取为闭壳或分数填充后的闭壳，对一般参考态的正规排序在之后推导。舍弃正规排序后仍存在的三体项
+\begin{equation}
+  \frac1{36}\sum_{ijklmn}W_{ijklmn}\{a_i^\dagger a_j^\dagger a_k^\dagger a_n a_m a_l\}
+\end{equation}
+之后，得到
+\begin{equation}
+  H=E_0 + \sum_{ij}f_{ij}\{a_i^\dagger a_j\}
+  +\frac14\sum_{ijkl}\Gamma_{ijkl}\{a_i^\dagger a_j^\dagger a_l a_k\},
+\end{equation}
+其中
+\begin{align}
+  E_0 &= \sum_i h_{ii}n_i 
+  + \frac12\sum_{ij}V_{ijij}n_in_j 
+  + \frac16\sum_{ijk}W_{ijkijk}n_in_jn_k,\\
+  f_{ij} &= h_{ij} + \sum_kV_{ikjk}n_k 
+  + \frac12\sum_{kl}W_{ikljkl}n_kn_l,\\
+  \Gamma_{ijkl} &= V_{ijkl} + \sum_{k}W_{ijkijk}n_k.
+\end{align}
+这里的 $n$ 是占据数，通过产生湮灭算符的缩并产生，
+\begin{equation}
+  \wick{\c a_i^\dagger \c a_j} = \langle\Phi|a_i^\dagger a_j|\Phi\rangle \equiv \rho_{ji}，
+\end{equation}
+对于（分数填充的）闭壳参考态，
+\begin{equation}
+  \rho_{ij} = n_i\delta_{ij},\quad n_i\in[0,1].
+\end{equation}
+
+不同于组态相互作用章节中将二次量子化的哈密顿量下标用希腊字母表示，这里改用拉丁字母表示，这既是为了与 IMSRG 文献中的常用记号对应，也是为了防止之后讨论 Fock 空间与 Hilbert 空间的区别时混淆。在 Fock 空间与组态空间同时出现时，用希腊字母 $\alpha,\beta,\mu,\nu$ 等表示组态空间中的基矢，也就是 Slater 行列式，而拉丁字母 $i,j,k,l$ 等则为单粒子轨道。在不会产生混淆的情况下用哪种字母都可以，不过文献中不太多见用希腊字母表示二次量子化的哈密顿量的。
+
+\section{多参考正规序}

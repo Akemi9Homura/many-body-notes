@@ -1,0 +1,433 @@
+设哈密顿量 $H$ 的本征方程为
+\begin{equation}
+  H|\Psi_\lambda\rangle=E_\lambda|\Psi_\lambda\rangle,\quad \lambda=1,...,D,
+\end{equation}
+$D$ 是全空间的维数，非常大，无法直接对角化。将 Hilbert 空间划分为模型空间 $P$ 空间与其补空间 $Q$，并要求 $P$ 空间由 $H=H_0+H_1$ 的非微扰部分 $H_0$ 的 $d$ 个本征态张成（比较早的文献把 $H_1$ 记为 $V$，比如 \cite{2011takayanagi1,2011takayanagi2}，但是 Coraggio 以及许师兄的文章都是 $H_1$，因此这里也写为 $H_1$），这意味着
+\begin{equation}
+  [H_0,P]=[H_0,Q]=0,
+\end{equation}
+也就是说 $H_0$ 的 $PH_0Q$ 块与 $QH_0P$ 块均为 0。
+本征波函数可以写为
+\begin{equation}
+  |\Psi_\lambda\rangle=P|\Psi_\lambda\rangle+Q|\Psi_\lambda\rangle=|\Psi^P_\lambda\rangle+|\Psi^Q_\lambda\rangle,\label{eqs:full-space Psi}
+\end{equation}
+
+一种最简单的有效哈密顿量是 Bloch-Horowitz 哈密顿量，与能量有关。
+$H^\mathrm{BH}(E)$ 作用于 $|\Psi^P_\lambda\rangle$，得到与原始的哈密顿量作用于完整本征态 $|\Psi_\lambda\rangle$ 上相同的本征值，即
+\begin{equation}
+  H^\mathrm{BH}(E_\lambda)|\Psi^P_\lambda\rangle=E_\lambda|\Psi^P_\lambda\rangle,\quad \lambda=1,...,D,\label{eqs:BH-hamiltonian-eigen}
+\end{equation}
+BH 哈密顿量为
+\begin{equation}
+  H^\mathrm{BH}(E)=PHP+PH_1Q\frac{1}{E-QHQ}QH_1P,
+\end{equation}
+这个公式是通过
+\begin{equation}
+  \begin{pmatrix}
+    PHP & PH_1Q\\QH_1P&QHQ
+  \end{pmatrix}
+  \begin{pmatrix}
+    |\Psi^P_\lambda\rangle\\|\Psi^Q_\lambda\rangle
+  \end{pmatrix}
+  =E_\lambda
+  \begin{pmatrix}
+    |\Psi^P_\lambda\rangle\\|\Psi^Q_\lambda\rangle
+  \end{pmatrix}
+\end{equation}
+得出的 \cite{2014tsunoda}，
+从中消去 $|\Psi^Q_\lambda\rangle$ 即可得到 \ref{eqs:BH-hamiltonian-eigen} 以及 BH 哈密顿量的表达式。注意 BH 哈密顿量需要投影到 $P$ 空间，是 $d\times d$ 矩阵，但由于是能量依赖的，对于 $D$ 个本征能量中的每一个都能得到一个 BH 哈密顿量，因此指标可以取到 $D$，哈密顿量对应有 $D$ 个，每个由 $E_\lambda$ 确定的 $B^\text{BH}(E_\lambda)$ 只能得到 $E_\lambda$，其他本征值都得不到。
+
+因此更愿意使用与能量无关的有效哈密顿量，我们希望得到一个作用于 $d$ 维模型空间的有效哈密顿量 $H^\text{eff}$，满足
+\begin{equation}
+  H^\text{eff}|\psi_i\rangle=E_i|\psi_i\rangle,\quad i=1,...,d,\label{eqs:Heff-SE}
+\end{equation}
+这里将下标改为 $i$ 是因为 $i$ 最多只能取到 $d$ 而不是 $\lambda$ 的上限 $D$。有效相互作用最一般的原则只是保证 $E_i$ 不变，并不对本征函数 $|\psi_i\rangle$ 额外加以限制，可能与原先的 $|\Psi_i\rangle$ 有关系，但也可能没关系，甚至也可以与 $|\chi_i\rangle$ 没关系，需要看相似变换具体是如何进行的。
+
+考虑相似变换 $X=e^\omega$，将原始哈密顿量变换为
+\begin{equation}
+  \mathcal{H}=X^{-1}HX=e^{-\omega}He^\omega,
+\end{equation}
+相似变换不会改变矩阵的本征值。再投影到 $P$ 空间获得有效哈密顿量
+\begin{equation}
+  H^\text{eff}=P\mathcal{H}P.
+\end{equation}
+在进行 $\mathcal{H}=X^{-1}HX=e^{-\omega}He^\omega$ 的这个算符变换的同时，波函数也要进行变换，$|\Psi_i\rangle$ 要变为 $e^{-\omega}|\Psi_i\rangle$。这种变换规则的原因是，变换前的本征方程为
+\begin{equation}
+  H|\Psi_i\rangle=E_i|\Psi_i\rangle,
+\end{equation}
+先用 $X^{-1}$ 对波函数进行变换，变换后的本征方程为
+\begin{equation}
+  \mathcal{H}X^{-1}|\Psi_i\rangle=E_iX^{-1}|\Psi_i\rangle,
+\end{equation}
+这两个本征方程对照，可知对应波函数变换 $|\Psi_i\rangle\to X^{-1}|\Psi_i\rangle$ 的算符变换为 $H\to X^{-1}HX$。
+记变换后的波函数为 $|\chi_i\rangle=X^{-1}|\Psi_i\rangle$。相似变换自然能保证 $\mathcal{H}$ 的本征值与 $H$ 相同，但这没有意义，维数仍然是巨大的 $D$，仍无法直接对角化。能够对角化的只是 $P\mathcal{H}P$，因此邮箱相互作用不是 $\mathcal{H}$ 而是 $P\mathcal{H}P$。
+
+因此问题变为了如何确定 $\mathcal{H}$，也就是确定 $X$，以满足 \ref{eqs:Heff-SE}。
+从 $\mathcal{H}$ 的本征方程出发，将其写为分块矩阵，
+\begin{equation}
+  \begin{pmatrix}
+    P\mathcal{H}P&P\mathcal{H}Q\\Q\mathcal{H}P&Q\mathcal{H}Q
+  \end{pmatrix}
+  \begin{pmatrix}
+    |\chi^P_i\rangle\\|\chi^Q_i\rangle
+  \end{pmatrix}
+  =E_i
+  \begin{pmatrix}
+    |\chi^P_i\rangle\\|\chi^Q_i\rangle
+  \end{pmatrix}
+\end{equation}
+$P$ 空间的部分摘出来为
+\begin{equation}
+  P\mathcal{H}P|\chi^P_i\rangle+P\mathcal{H}Q|\chi^Q_i\rangle = E_i|\chi_i^P\rangle,\label{eqs:Heff-SE-P}
+\end{equation}
+而 $Q$ 空间的部分为 
+\begin{equation}
+  Q\mathcal{H}P|\chi^P_i\rangle + Q\mathcal{H}Q|\chi^Q_i\rangle = E_i|\chi^Q_i\rangle.\label{eqs:Heff-SE-Q}
+\end{equation}
+有效相互作用希望对角化 $H^\text{eff}$ 得到同样的一组本征值 $\{E_i\}$，即 \ref{eqs:Heff-SE}。但是其实并没有什么能保证 $P\mathcal{H}P$ 的本征态 $|\psi_i\rangle$ 就等于 $|\chi_i\rangle$ 的 $P$ 空间分量 $|\chi^P_i\rangle$。
+
+这里的推导是期望能获得使得有效相互作用能够重现本征值的充分必要条件，但因为最终需要的只有 $P\mathcal{H}P$，可能有多个 $X$ 变换得到不同的 $\mathcal{H}$；而且这些 $P\mathcal{H}P$ 本征值虽然都是 $\{E_i\}$，但本征态也可以有不同。因此相似变换是不唯一的，最终得到的有效相互作用也是不唯一的，也不会存在一个确定的充分必要条件。
+实际求解时必须额外加条件，只用 \ref{eqs:Heff-SE} 这个最基础的条件是求不出来的。
+
+文献中外加的最常见的条件是解耦条件 $Q\mathcal{H}P = 0$ \cite{1995jensen,2012coraggio,2019stroberg,2009coraggio}，目前核物理中常用的有效相互作用理论主要有三种，分别是 VS-IMSRG，SMCC 以及这里重点讨论的 $\hat{Q}$-box \cite{2019stroberg}，这些方法使用的都是这个解耦条件，但仅有这个条件还不够，仍需要对相似变换加以限制。这些方法的不同点就在于对相似变换 $X=e^\omega$ 的要求。接下来就仔细看看这三种方法是如何保证 \ref{eqs:Heff-SE} 成立的。
+
+\textbullet VS-IMSRG 是厄米变换，也就是 $\omega^\dagger = -\omega$，还要求 $\omega$ 满足流方程，流方程则是为了使 $Q\mathcal{H}P=P\mathcal{H}Q=0$ 设计的。在这些条件下 \ref{eqs:Heff-SE-P} 变为 
+\begin{equation}
+  P\mathcal{H}P|\chi^P_i\rangle = E_i|\chi_i^P\rangle,
+\end{equation}
+也就是 \ref{eqs:Heff-SE}。也就是说在 VS-IMSRG 中，有效相互作用对角化出的 $|\psi_i\rangle$ 与真实的 $|\Psi_i\rangle$ 没什么关系，仅是相似变换后的 $\mathcal{H}$ 本征态 $|\chi_i\rangle$ 的 $P$ 空间分量，不太容易估计其与真实波函数的关系。
+
+\textbullet $\hat{Q}$-box 除了解耦条件之外还有其他外加条件，但在很多时候都被忽略了或没有被明确指出，它们是\cite{1995jensen,2023li}
+\begin{equation}
+  |\psi_i\rangle = P|\Psi_i\rangle,\quad |\Psi_i\rangle = X|\psi_i\rangle, \label{eqs:qbox-wf-restrict}
+\end{equation}
+第一个条件的含义是模型空间的波函数 $|\psi_i\rangle$ 就是真实波函数 $|\Psi_i\rangle$ 在 $P$ 空间的投影 $|\Psi^P_i\rangle$，而第二个条件的含义是模型空间的 $d$ 个波函数与精确的波函数存在一一对应的关系，且两者的关系可以用 $X$ 简单地变换得到。这一点是不平凡的，因为由
+第二个条件可推出 $|\psi_i\rangle=|\chi_i\rangle=|\chi^P_i\rangle$，这隐含地要求相似变换后 $\mathcal{H}$ 的本征函数 $|\chi_i\rangle$ 只有 $P$ 空间分量，$Q$ 空间分量 $|\chi_i^Q\rangle$ 为 0。这么假设是因为，相似变换只描述了精确波函数 $|\Psi_i\rangle$ 与 $|\chi_i\rangle$ 的关系，如果 $|\chi^Q_i\rangle$ 不为 0，那 $P\mathcal{H}P$ 的本征函数 $|\psi_i\rangle$ 与 $|\chi_i\rangle$ 的关系就不好说了。
+
+所以，$\hat{Q}$-box 的这两个对波函数的要求，总结起来为 \textbf{要求模型空间波函数是精确波函数的 $P$ 空间分量，且假设存在这样的相似变换 $X$ 可以直接把精确波函数的 $Q$ 空间分量变换为 0 而保持 $P$ 空间分量不变}。为了得到解耦条件，后者是必要的，只要有了条件二，
+\ref{eqs:Heff-SE-P} 就能变为 
+\begin{equation}
+  P\mathcal{H}P|\chi^P_i\rangle = E_i|\chi_i^P\rangle,
+\end{equation}
+同样满足 \ref{eqs:Heff-SE}，而 \ref{eqs:Heff-SE-Q} 的成立需要有
+\begin{equation}
+  Q\mathcal{H}P=0,
+\end{equation}
+即为解耦条件。
+
+那么条件一有什么作用呢？可以看出，最初 \ref{eqs:Heff-SE} 中定义的 $|\psi_i\rangle$ 太一般了，没有对其施加任何的限制，可能会得到与真实波函数 $|\Psi_i\rangle$ 相差甚远的模型空间波函数。用一般的 $|\psi_i\rangle$ 去讨论是希望能获得一套通用的有效相互作用理论，但通过这里的推导发现，即使各种有效相互作用理论都在使用解耦条件，但它其实并不通用，单凭解耦条件自己是得不到 \ref{eqs:Heff-SE} 的，必须要配合某种方法的特定条件。对于 $\hat{Q}$-box，条件二加解耦条件就足够确保 \ref{eqs:Heff-SE} 成立了，此时 $|\psi_i\rangle$ 为 $|\chi_i^P\rangle$；条件一则进一步要求 $|\psi_i\rangle$ 为 $|\Psi_i^P\rangle$，这是出于物理上的考虑，比如我们关心原子核某个态的价空间轨道占据情况，为了使模型空间波函数与精确波函数得到相同的结果，就必须要求模型空间波函数与精确波函数的模型空间分量一致。条件一可以在定义有效相互作用的时候自然地表述出来：我们将 \ref{eqs:Heff-SE} 限制为 $H^\text{eff}$ 作用于 $P|\Psi_i\rangle$ 上时就有
+\begin{equation}
+  H^\text{eff}P|\Psi_i\rangle = E_iP|\Psi_i\rangle,\quad i=1,\ldots,d.
+\end{equation}
+
+\textbullet SMCC 
+
+
+\section{Lee-Suzuki 变换} 
+前面提到的 \ref{eqs:qbox-wf-restrict} 与解耦条件应该不能唯一确定 $X$，但需要得到相似变换满足的明确方程才能进一步计算，比如 VS-IMSRG 的流方程。而 $\hat{Q}$-box 则对 $\omega$ 的形式加以限制， 
+\begin{equation}
+  P\omega P=P\omega Q=Q\omega Q=0,\quad Q\omega P=\omega,
+\end{equation}
+这称为 Lee-Suzuki 变换，
+可以认为是一种最简单的相似变换，除了要变为 0 的 $Q\mathcal{H}P$，也就是夹在 $Q$ 与 $P$ 块之间的部分不能设为 0，其他全强制要求为 0，此时
+\begin{equation}
+  \omega^2=Q\omega PQ\omega P=0,\quad X=e^\omega=1+\omega.
+\end{equation}
+在 Lee-Suzuki 变换下
+\begin{equation}
+  |\chi^P_i\rangle=Pe^{-\omega}|\Psi_i\rangle=P(1-\omega)|\Psi_i\rangle=|\Psi^P_i\rangle-P\omega(P+Q)|\Psi_i\rangle=|\Psi^P_i\rangle,\label{eqs:transformed-wf-P}
+\end{equation}
+可以看出该变换与 \ref{eqs:qbox-wf-restrict} 的条件一是相容的，
+而 
+\begin{equation}
+  |\chi^Q_i\rangle=Qe^{-\omega}|\Psi_i\rangle=Q(1-\omega)|\Psi_i\rangle=|\Psi^Q_i\rangle-Q\omega(P+Q)|\Psi_i\rangle=|\Psi^Q_i\rangle-\omega|\Psi^P_i\rangle.\label{eqs:transformed-wf-Q}
+\end{equation}
+仅有 Lee-Suzuki 变换却不能使 \ref{eqs:qbox-wf-restrict} 的条件二必定成立。这些讨论说明，Lee-Suzuki 变换加解耦条件不能唯一确定 $X$，\ref{eqs:qbox-wf-restrict} 的条件加解耦条件也不能唯一确定 $X$，总结一下 $\hat{Q}$-box 外加的条件，应该是 Lee-Suzuki 变换，\ref{eqs:qbox-wf-restrict} 以及解耦条件这一堆。在这些条件下，还有一个结论是
+\begin{equation}
+  |\Psi^Q_i\rangle=\omega|\Psi^P_i\rangle.
+\end{equation}
+
+下面进入 $\hat{Q}$-box 有效相互作用的具体计算，解耦条件写为
+\begin{align}
+  Q\mathcal{H}P&=Q(1-\omega)H(1+\omega)P\notag\\
+  &=Q(1-Q\omega P)H(1+Q\omega P)P\notag\\
+  &=(Q-\omega)H(P+\omega)\notag\\
+  &=QHP+QH\omega-\omega HP-\omega H\omega\notag\\
+  &=QHP+QH(P+Q)Q\omega P-Q\omega P(P+Q)HP-Q\omega P(P+Q)H(P+Q)Q\omega P\notag\\
+  &=QH_1P+QHQ\omega-\omega PHP-\omega PH_1Q\omega=0\label{eqs:origin-decouple}
+\end{align}
+最后一行用到了 $H_0$ 的 $PH_0Q$ 与 $QH_0P$ 块都是 0。有效相互作用则是一个 $d\times d$ 矩阵，
+\begin{align}
+  H^\text{eff}&=P(1-\omega)H(1+\omega)P\notag\\
+  &=P(1-Q\omega P)H(1+Q\omega P)P\notag\\
+  &=PH(P+\omega)=PHP+PH_1Q\omega.\label{eqs:origin-heff}
+\end{align}
+不同方法就是以不同的方式求解解耦条件。
+
+适用于简并模型空间的迭代方法为 Krenciglowa–Kuo（KK）方法与 Lee–Suzuki（LS）方法 \cite{2012coraggio}。将有效哈密顿量分解为 $H^\text{eff}=PH_0P+H_1^\text{eff}$，KK 与 LS 迭代都是直接针对 $H_1^\text{eff}$ 进行的迭代。对于谐振子基下进行的 HO-MBPT，一个主壳内是简并的，模型空间跨壳则不简并，如果用 HO 基，就只能用这个主壳的能量而不能用每条轨道的经验单粒子能 \cite{2011takayanagi2}。而 HF-MBPT 一定是非简并的。
+
+模型空间简并意味着
+\begin{equation}
+  PH_0P=\epsilon_0P,
+\end{equation}
+因此解耦条件写为
+\begin{equation}
+  QH_1P+QHQ\omega-\omega(\epsilon_0P+H_1^\text{eff})=0,
+\end{equation}
+因此相似变换的算符
+\begin{equation}
+  \omega=\frac{1}{\epsilon_0-QHQ}QH_1P-\frac{1}{\epsilon_0-QHQ}\omega H_1^\text{eff},\label{eqs:deg-omega}
+\end{equation}
+代入 \ref{eqs:origin-heff} 中，在等式两侧同时减去 $PH_0P$ 得到微扰的有效哈密顿量为 
+\begin{equation}
+  H_1^\text{eff}(\omega)=PH_1P+PH_1Q\frac{1}{\epsilon_0-QHQ}QH_1P-PH_1Q\frac{1}{\epsilon_0-QHQ}\omega H_1^\text{eff}(\omega),
+\end{equation}
+这里把 $H_1^\text{eff}$ 写成 $H_1^\text{eff}(\omega)$ 是为了与后文非简并模型空间中迭代出现的 $H_n^\text{eff}$ 区分。非简并模型空间迭代的是有效哈密顿量这个整体，下标 $n$ 为步数，
+而简并模型空间迭代的是 $H_1^\text{eff}$，下标 1 代表这是哈密顿量的微扰部分，为了防止被误解为迭代步数，用 $\omega_n$ 作为自变量来表示迭代的步数。
+定义 $\hat{Q}$-box 及其导数
+\begin{align}
+  \hat{Q}(\epsilon)&=\hat{Q}_0(\epsilon)=PH_1P+PH_1Q\frac{1}{\epsilon-QHQ}QH_1P,\label{eqs:qbox}\\
+  \hat{Q}_k(\epsilon)&=\frac{1}{k!} \frac{\mathrm{d}^k \hat{Q}(\epsilon)}{\mathrm{d} \epsilon^k}=(-1)^k PH_1Q\frac{1}{(\epsilon-QHQ)^{k+1}}QH_1P,
+\end{align}
+因此 
+\begin{equation}
+  H_1^\text{eff}(\omega)=\hat{Q}(\epsilon_0)-PH_1Q\frac{1}{\epsilon_0-QHQ}\omega H_1^\text{eff}(\omega),\label{eqs:deg-iter}
+\end{equation}
+
+\subsection{Lee-Suzuki 变换的存在性}
+在推导详细的求解方法之前，先考虑一下相似变换是不是确实存在。正如之前讨论的，$\hat{Q}$-box 需要额外附加 \ref{eqs:qbox-wf-restrict} 的这两个条件。在实际计算中只能操作解耦条件，\ref{eqs:qbox-wf-restrict} 的条件一由 Lee-Suzuki 变换的形式得到满足，而条件二没法用于计算。这是可能出现问题的地方。Lee-Suzuki 变换加解耦条件能够解出的相似变换就只有一个，而这个相似变换能否保证 $|\chi_i^Q\rangle=0$ 是值得怀疑的。
+
+为此，将原始哈密顿量写为分块矩阵形式，
+\begin{equation}
+  H=\begin{pmatrix}
+    A&\beta^\dagger\\\beta&B
+  \end{pmatrix},
+\end{equation}
+$A$ 的分块就对应模型空间。可以对 $H$ 进行特征值分解，$H=UEU^{-1}$，$E$ 为对角矩阵，$U$ 为本征矢量组成的正交矩阵，正交矩阵的含义是 $U^T=U^{-1}$。
+因此将 $U$ 也写为分块的形式，有 
+\begin{equation}
+  \begin{pmatrix}
+    A&\beta^\dagger\\\beta&B
+  \end{pmatrix}
+  \begin{pmatrix}
+    U_A\\U_B
+  \end{pmatrix}=
+  \begin{pmatrix}
+    U_A\\U_B
+  \end{pmatrix}E,
+\end{equation}
+这里的 $U_A$ 为 $d\times D$ 矩阵，而 $U_B$ 为 $(D-d)\times D$ 矩阵，$U_A$ 与 $U_B$ 的第 $i$ 列就分别对应 $|\Psi_i^P\rangle$ 与 $|\Psi_i^Q\rangle$。假设存在 $(D-d)\times d$ 矩阵 $\omega$，使得 
+\begin{equation}
+  U_B=\omega U_A,\label{eqs:UB-omegaUA}
+\end{equation}
+这意味着所有本征函数的 $Q$ 空间与 $P$ 空间分量都共用相同的变换 $\omega$。但是这个条件过于强了，如果考虑 $U$ 的正交性，可以得到
+\begin{equation}
+    \begin{pmatrix}
+    U_A\\U_B
+  \end{pmatrix} 
+    \begin{pmatrix}
+    U_A\\U_B
+  \end{pmatrix}^T = 
+    \begin{pmatrix}
+    U_AU_A^T&U_AU_B^T\\U_BU_A^T&U_BU_B^T
+  \end{pmatrix} = 
+  \begin{pmatrix}
+    I_d&0\\0&I_{D-d}
+  \end{pmatrix},
+\end{equation}
+也就有 $U_AU_A^T=I,U_BU_A^T=0$，因此在 \ref{eqs:UB-omegaUA} 左右两侧同时右乘 $U_A^T$，会得到 $\omega=0$，这显然不合理，证明不存在同一个作用于全部 $D$ 个波函数的共同变换 $\omega$ 满足 \ref{eqs:UB-omegaUA}。但幸运的是，
+$\hat{Q}$-box 的推导 \ref{eqs:Heff-SE-P} 与 \ref{eqs:Heff-SE-Q} 中只要求模型空间的 $d$ 个 $|\chi_i^Q\rangle=0$ 即可，不关心模型空间之外的 $D-d$ 个波函数如何变换。因此不对 $H$ 进行特征值分解，而是进行偏特征分解，相当于只用模型空间的 $d$ 个本征函数作为列矢量代替 $U$，可写出
+\begin{equation}
+    \begin{pmatrix}
+    A&\beta^\dagger\\\beta&B
+  \end{pmatrix}
+  \begin{pmatrix}
+    V_A\\V_B
+  \end{pmatrix}=
+  \begin{pmatrix}
+    V_A\\V_B
+  \end{pmatrix}E_d,
+\end{equation}
+这里的 $V_A$ 就是 $d$ 维方阵了，$V_B$ 为 $(D-d)\times d$ 矩阵，$E_d$ 为 $d$ 维对角矩阵，对角元只有模型空间的 $d$ 个本征值。假设存在 $(D-d)\times d$ 矩阵 $\omega$，使得 
+\begin{equation}
+  V_B=\omega V_A,\label{eqs:VB-omegaVA}
+\end{equation}
+这个假设意味着模型空间这个子空间共享同一个相似变换。如果把这个方程按列写出来就是 
+\begin{equation}
+  |\Psi_i^Q\rangle=\omega|\Psi_i^P\rangle,\quad i=1,\ldots,d,
+\end{equation}
+因此 
+\begin{align}
+  AV_A+\beta^\dagger V_B&=V_AE_d,\label{eqs:H-SE-P}\\
+  \beta V_A+BV_B&=V_BE_d,\label{eqs:H-SE-Q}
+\end{align}
+
+下面证明 $\omega$ 的存在性与唯一性，\ref{eqs:H-SE-Q} 可改写为 
+\begin{equation}
+  \beta V_A + B\omega V_A = \omega V_AE_d,
+\end{equation}
+因此 
+\begin{equation}
+  \beta+B\omega = \omega V_AE_dV_A^{-1},
+\end{equation}
+这个方程形式与 Sylvester 方程
+\begin{equation}
+  AX-XB=C,
+\end{equation}
+一致，其中 $A,B$ 为方阵，$X,C$ 可以不是方阵，当 $A$ 与 $B$ 没有共同的本征值时，对每个 $C$，该方程都有唯一解 $X$。
+
+在 Lee-Suzuki 变换下，相似变换后 $|\chi_i^P\rangle$ 就是 $V_A$ 的第 $i$ 列 $\vec{v}_{iA}$，而 $|\chi_i^Q\rangle=0$，因此 \ref{eqs:Heff-SE-P} 变为 
+\begin{equation}
+  P\mathcal{H}P\vec{v}_{iA}=E_i\vec{v}_{iA},\quad i=1,\ldots,d,
+\end{equation}
+对 $P\mathcal{H}P$ 进行特征值分解，得到 
+\begin{equation}
+  P\mathcal{H}P = V_A'E_dV_A'^{-1},
+\end{equation}
+$V_A'$ 需要是正交矩阵，但在 $H$ 的偏特征分解中拆分出的 $V_A$ 不是正交矩阵，因为这部分不能归一，不过 $V_A$ 与其逆矩阵的归一化的系数相互抵消，因此也有 
+\begin{equation}
+  V_AE_dV_A^{-1}=P\mathcal{H}P,
+\end{equation}
+也就是说 $V_AE_dV_A^{-1}$ 的本征值为 $\{E_i,i=1,\ldots,d\}$，就是希望得到的模型空间的本征值。
+
+因此，当 $QHQ$ 的本征值与所选定的模型空间的本征值无重合时，就存在唯一的相似变换 $\omega$ 使 \ref{eqs:VB-omegaVA} 成立。这就保证了在 Lee-Suzuki 变换的框架下，满足 $\hat{Q}$-box 额外加的条件 \ref{eqs:qbox-wf-restrict} 的相似变换是存在且唯一的。$QHQ$ 本征值与模型空间无重合有更深远的物理意义，回忆 BH 哈密顿量 \ref{eqs:BH-hamiltonian}，分母正是 $H$ 的本征值 $E_k$ 减去 $QHQ$，如果 $QHQ$ 的本征值与 $E_k$ 有重复，$E_k-QHQ$ 就没有逆，BH 哈密顿量定义就会出现问题。这也就是所谓的闯入态。因此需要恰当地选取模型空间，保证想要得到的这组 $E_k$ 与 $QHQ$ 的本征值不重合。
+
+另外，这个相似变换还满足 \ref{eqs:H-SE-P}，将 \ref{eqs:H-SE-P} 代入 \ref{eqs:H-SE-Q}，得到 
+\begin{equation}
+  (\beta +B\omega - \omega A - \omega\beta^\dagger\omega)V_A = 0,
+\end{equation}
+由于 $V_A$ 是可逆的，由此可以直接得到 
+\begin{equation}
+  \beta +B\omega - \omega A - \omega\beta^\dagger\omega=0,
+\end{equation}
+换为熟悉的记号就是 
+\begin{equation}
+  QHP + QHQ\omega -\omega PHP -\omega PHQ\omega=0,
+\end{equation}
+这与 \ref{eqs:origin-decouple} 完全一致。以上推导证明了，满足 \ref{eqs:qbox-wf-restrict} 的 Lee-Suzuki 变换是存在且唯一的，且与解耦条件相容，$\hat{Q}$-box 理论是完全自洽的。除了这里的推导之外，还有一条简单的路径得到 $\hat{Q}$-box 的有效相互作用，即之前通过对 \ref{eqs:BH-hamiltonian} 的泰勒展开 \ref{eqs:BH-to-qbox}，就直接得到了 $\hat{Q}$-box 有效相互作用的表达式。看似这番推导没有用到这里引入的额外条件 \ref{eqs:qbox-wf-restrict} 以及解耦条件，但从这里的推导可以看出，若想良定义 BH 哈密顿量，就自然需要这些条件，这些条件被隐含地包含在了 $E_k-QHQ$ 可逆的这个事实中了。
+
+\section{KK 方法}
+将 \ref{eqs:deg-omega} 反复代入自身，当迭代到无穷项后，\ref{eqs:deg-omega} 的右侧就没有 $\omega$ 了，得到用 $H_1^\text{eff}$ 表示的 $\omega$ 为 
+\begin{equation}
+  \omega=\sum_{k=0}^\infty(-1)^k\frac1{(\epsilon_0-QHQ)^{k+1}}QH_1P(H_1^\text{eff})^k,
+\end{equation}
+代入 \ref{eqs:deg-iter} 中，得到
+\begin{equation}
+  H_1^\text{eff}=\sum_{k=0}^\infty\hat{Q}_k(\epsilon_0)(H_1^\text{eff})^k,
+\end{equation}
+改写为迭代的形式为 
+\begin{equation}
+  H_1^\text{eff}(\omega_n)=\sum_{k=0}^\infty\hat{Q}_k(\epsilon_0)[H_1^\text{eff}(\omega_{n-1})]^k,\label{eqs:deg-kk}
+\end{equation}
+注意 \cite{2012coraggio} 的式 (20) 
+\begin{equation}
+  H_1^{\text{eff}}(\omega_n) = \sum_{k=0}^\infty \left[ -P H_1 Q \left( \frac{-1}{\epsilon_0 - Q H Q} \right)^{k+1} Q H_1 P \right][ H_1^{\text{eff}}(\omega_{n-1})]^k
+\end{equation}
+$k=0$ 的项其实写错了，少了 $\hat{Q}(\epsilon_0)$ 的 $PH_1P$ 这一项。
+
+\subsection{KK 方法的精确解}
+迭代的首项取 $H_1^\text{eff}(\omega_0)=\hat{Q}(\epsilon_0)$，得到 
+\begin{equation}
+  H_1^\text{eff}(\omega_1)=\hat{Q}(\epsilon_0)+\hat{Q}_1(\epsilon_0)\hat{Q}(\epsilon_0)+\hat{Q}_2(\epsilon_0)\hat{Q}(\epsilon_0)\hat{Q}(\epsilon_0)+\ldots,
+\end{equation}
+依次计算 $H_1^\text{eff}(\omega_2),H_1^\text{eff}(\omega_3),\ldots$，并反复代入 \ref{eqs:deg-kk}，最后得到的就是 $H_1^\text{eff}(\omega_\infty)$，也就是最终需要的 $H_1^\text{eff}$，这个结果可以看作 KK 迭代的精确解，
+\begin{equation}
+  H_1^\text{eff}=\sum_{i=0}^\infty F_i
+\end{equation}
+其中
+\begin{align}
+  F_0&=\hat{Q}(\epsilon_0),\notag\\
+  F_1&=\hat{Q}_1(\epsilon_0)\hat{Q}(\epsilon_0),\notag\\
+  F_2&=\hat{Q}_2(\epsilon_0)\hat{Q}(\epsilon_0)\hat{Q}(\epsilon_0)+\hat{Q}_1(\epsilon_0)\hat{Q}_1(\epsilon_0)\hat{Q}(\epsilon_0),\notag\\
+  &\ldots\label{eqs:deg-kk-fseries}
+\end{align}
+$F_i$ 满足的规律是 \cite{1974krenciglowa}：$F_i$ 的每一项都有 $i+1$ 个 $\hat{Q}$，且每一项 $\hat{Q}$ 的阶数之和均为 $i$；除了 $F_0$ 之外，$F_i$ 每一项从左到右的第一个 $\hat{Q}$ 必须是某阶导数，不能是零阶，最后一个 $\hat{Q}$ 必须是零阶，如果一个 $\hat{Q}$ 是 $k$ 阶导数，那么这个 $\hat{Q}_k$ 的右侧必须有至少 $k$ 个零阶 $\hat{Q}$，而这 $k$ 个零阶 $\hat{Q}$ 不一定是连着的。以 $F_3$ 为例，
+\begin{equation}
+  F_3=\hat{Q}_3\hat{Q}\hat{Q}\hat{Q}+\hat{Q}_2\hat{Q}_1\hat{Q}\hat{Q}+\hat{Q}_2\hat{Q}\hat{Q}_1\hat{Q}+\hat{Q}_1\hat{Q}_2\hat{Q}\hat{Q}+\hat{Q}_1\hat{Q}_1\hat{Q}_1\hat{Q},
+\end{equation}
+比如 $\hat{Q}_1\hat{Q}_2\hat{Q}\hat{Q}$ 这一项，$\hat{Q}_2$ 的右侧必须有至少两个 $\hat{Q}$，因此不会有 $\hat{Q}_1\hat{Q}\hat{Q}_2\hat{Q}$ 的项。
+
+还有一种 $H_1^\text{eff}$ 的写法是 \cite{2014tsunoda,2014dong}
+\begin{equation}
+  H_1^\text{eff} = \hat{Q}(\epsilon_0) - \hat{Q}'(\epsilon_0) \int \hat{Q}(\epsilon_0) + \hat{Q}'(\epsilon_0) \int \hat{Q}(\epsilon_0) \int \hat{Q}(\epsilon_0)-\hat{Q}'(\epsilon_0) \int \hat{Q}(\epsilon_0) \int \hat{Q}(\epsilon_0)\int\hat{Q}(\epsilon_0) \dots \label{eqs:deg-iter-qfold}
+\end{equation}
+其中 $\hat{Q}'=\hat{Q}-PH_1P$ \cite{2014dong}，而这个公式在 \cite{2012coraggio} 以及 Coraggio 一系列算衰变的文章中都写错了，如果想让等号左边为 $H^\text{eff}$ 而不是 $H_1^\text{eff}$，$F_0$ 应为 $PH_0P+\hat{Q}$ \cite{1974krenciglowa}。记号
+\begin{equation}
+  \hat{Q}_1 \hat{Q} = -\hat{Q} \int \hat{Q}
+\end{equation}
+可以理解为积分号前面的 $\hat{Q}$ 求一阶导数，但这么理解的话 $\hat{Q}'$ 即使加上 $PH_1P$ 也不会对求导有影响，不知道为什么非要用 $\hat{Q}'$ 写 \ref{eqs:deg-iter-qfold}。
+
+\cite{1983suzuki} 给出了另一个精确解的公式为
+\begin{equation}
+  H_1^\text{eff}=\sum_{k=1}^\infty\sum_{m_1,m_2,\ldots,m_k=0}^\infty f(m_1,m_2,\ldots,m_k)\hat{Q}_{m_1}\hat{Q}_{m_2}\ldots\hat{Q}_{m_k},
+\end{equation}
+其中
+\begin{equation}
+  f(m_1,m_2,\ldots,m_k)=
+  \begin{cases}
+    \delta_{m_1,0},&k=1,\\
+    \delta_{m_1,1}\delta_{m_2,0},&k=2,\\
+    \delta_{(m_1+\ldots+m_k),k-1}\delta_{m_k,0}\prod\limits_{i=1}^{k-2}\eta(i-\sum\limits_{j=1}^im_{k-j}),&k\ge3,
+  \end{cases}
+\end{equation}
+而 $\eta(x)$ 为阶梯函数，
+\begin{equation}
+  \eta(x)=
+  \begin{cases}
+    1,&x\ge0,\\
+    0,&x<0.
+  \end{cases}
+\end{equation}
+\cite{1984suzuki-deg} 指出系数 $f(m_1,m_2,\ldots,m_k)$ 非 0 时恰好等价于 \cite{1974krenciglowa} 给出的规则。
+这虽然是精确解，但没办法用于计算，因为随着 $F_i$ 阶数 $i$ 的增加，需要乘起来的 $\hat{Q}$-box 个数太多了，无法在可接受的时间内算出来。
+
+用不含时微扰论直接得到的是 \ref{eqs:deg-iter}，而后续的 KK 与 LS 迭代是对 \ref{eqs:deg-iter} 的计算方法，但从逻辑上来说，更早的推导则是含时折叠图理论，折叠图得出的直接结果是 \ref{eqs:deg-iter-qfold}，且等价于 KK 方法得到的精确解 \ref{eqs:deg-kk-fseries}。这也是 KK 方法也被称为折叠图（FD）方法的原因 \cite{1995jensen}，折叠图这个术语最初是来自于含时微扰的，但不含时微扰加上 KK 迭代可以得到与含时微扰一样的折叠图求和。不过历史上 KK 迭代最初是为含时微扰设计的 \cite{1974krenciglowa}，含时微扰得到的折叠图的直接相加无法计算，也需要通过 KK 迭代将折叠图部分相加。
+
+% 这部分理论上没什么问题，但既没在文献中找到过，实际计算效果也不好，暂时不理会了。
+% 从后文有效算符的讨论中发现，KK 方法可以直接用于 EKKS 的级数求和中，为了方便计算，将 \ref{eqs:deg-kk-fseries} 的级数写为递推的形式，
+% \begin{align}
+%   F_0&=\hat{Q},\notag\\
+%   F_1&=\hat{Q}_1F_0,\notag\\
+%   F_2&=\hat{Q}_1F_1+\hat{Q}_2F_0F_0,\notag\\
+%   F_3&=\hat{Q}_1F_2+\hat{Q}_2(F_1F_0+F_0F_1)+\hat{Q}_3F_0F_0F_0,\notag\\
+%   &\ldots
+% \end{align}
+% 递推式可以统一写成
+% \begin{equation}
+%   F_n=\sum_{k=1}^n\sum_{m_1+m_2+\ldots+m_k=n-k}\hat{Q}_kF_{m_1}F_{m_2}\ldots F_{m_k},\quad n\ge1.
+% \end{equation}
+% 这个递推式看上去很对，但在 $F_5$ 出现了问题。根据 \cite{1974krenciglowa} 给出的规则，允许 $F_5$ 出现 $\hat{Q}_1\hat{Q}\hat{Q}_2\hat{Q}_2\hat{Q}\hat{Q}$ 这一项，但代入逐项计算却找不到这一项，将折叠算符理解为求导数，也求不出这一项（当然理解成求导数是不对的，从 $F_2$ 推 $F_3$ 有重复的项，不知道为什么结果中系数都是 1，但是该有的项都有）。倾向于认为 \cite{1974krenciglowa} 等参考文献中的规则是不完整的。实际计算发现根据以上规则把所有可能的组合列举出来的方式计算实在太慢了，不如用递推；另外，单粒子能的收敛需要 15 个 $F_n$ 以上，两体矩阵的收敛甚至需要 30 个以上，这也很影响计算的速度。因此对 $\hat{Q}$-box 的高阶导数也进行截断，即使收敛需要 $F_{30}$ 这样的高阶项，也只算到 $n_d$ 阶数的导数（可以取 $n_d=10$ 或 15，需要注意代码中设置 ND 是从 0 阶求到 ND-1 阶），这样递推式就要进行截断，
+% \begin{equation}
+%   \widetilde{F}_n=\sum_{k=1}^{n'}\sum_{m_1+m_2+\ldots+m_k=n-k}\hat{Q}_k\widetilde{F}_{m_1}\widetilde{F}_{m_2}\ldots\widetilde{F}_{m_k},\quad n'=\min(n,n_d),\quad n\ge1,
+% \end{equation}
+% 截断之后至少不会比原来的 EKKS 差，因为 EKKS 也只求了一定阶数的导数，如果把导数截断的阶数设置成一样，理论上应该也得出一样的结果。
+
+
+\section{LS 方法}
+从 \ref{eqs:deg-iter} 直接解出
+\begin{equation}
+  H_1^{\text{eff}}(\omega) = \left( 1 + P H_1 Q \frac{1}{\epsilon_0 - Q H Q}\omega \right)^{-1} \hat{Q}(\epsilon_0),
+\end{equation}
+写为迭代的形式
+\begin{equation}
+  H_1^{\text{eff}}(\omega_n) = \left( 1 + P H_1 Q \frac{1}{\epsilon_0 - Q H Q}\omega_{n-1} \right)^{-1} \hat{Q}(\epsilon_0),
+\end{equation}
+以及
+\begin{equation}
+  \omega_n = Q \frac{1}{\epsilon_0 - QHQ} Q H_1 P - Q \frac{1}{\epsilon_0 - QHQ} \omega_{n-1} H_1^{\text{eff}}(\omega_n),
+\end{equation}
+这里把 $H_1^{\text{eff}}(\omega_n)$ 写在右边，是因为这个迭代过程是由 $\omega_{n-1}$ 算 $H_1^{\text{eff}}(\omega_n)$，再由 $H_1^{\text{eff}}(\omega_n)$ 算 $\omega_n$。初值取 $\omega_0=0$，因此 $H_1^{\text{eff}}(\omega_1)=\hat{Q}(\epsilon_0)$，得到 
+\begin{equation}
+  \omega_1=Q \frac{1}{\epsilon_0 - QHQ} Q H_1 P,
+\end{equation}
+同样的操作得到
+\begin{align}
+  H_1^{\text{eff}}(\omega_2) = \left( 1 + P H_1 Q \frac{1}{\epsilon_0 - Q H Q}Q \frac{1}{\epsilon_0 - QHQ} Q H_1 P \right)^{-1} \hat{Q}(\epsilon_0)=\frac1{1-\hat{Q}_1(\epsilon_0)}\hat{Q}(\epsilon_0),
+\end{align}
+因此 
+\begin{equation}
+  H_1^\text{eff}(\omega_n)=\left(1-\hat{Q}_1(\epsilon_0)-\sum_{m=2}^{n-1}\hat{Q}_m(\epsilon_0)\prod_{k=n-m+1}^{n-1}H_1^\text{eff}(\omega_k) \right)^{-1}\hat{Q}(\epsilon_0),
+\end{equation}
+\cite{2012coraggio} 的式 (31) 也写错了。
+
+收敛的速度取决于 $\epsilon_0$，而且 $\epsilon_0$ 也是可以选取的。这是通过将 $H_0$ 取为 $P\tilde{H}_0P=(\epsilon_0+\epsilon')P$ 做到的，$\epsilon_0$ 为简并模型空间的非微扰能量，可以通过调整 $\epsilon'$ 以加快收敛速度，此时取 $\tilde{H}_1=H_1-\epsilon'P$ 即可保证结果不变 \cite{1994suzuki}。

@@ -1,0 +1,265 @@
+$\hat{Q}$-box 有效相互作用理论与 VS-IMSRG 等 Fock 空间方法最明显的区别是，在二次量子化的框架下，哈密顿量与其他算符的单体与两体部分被明确地提取出来，VS-IMSRG 等方法直接处理这些 Fock 空间的矩阵元，不涉及固定粒子数的空间，因此 Fock 空间的代数结构非常清晰。然而 $\hat{Q}$-box 这样作用于组态空间的方法在计算时必须手动指定单粒子空间与两粒子空间（更准确地说，是单价核子空间与两价核子空间），算符的单体、两体部分会对所有粒子数的组态空间都有作用，全部搅在一起，导致组态空间公式推导比较复杂。
+
+本章主要讨论在给定粒子数为 $A$ 的组态空间中计算算符矩阵元的代数，有两个在 $\hat{Q}$-box 中会直接用到的核心问题，一是哈密顿量的单体部分写在两粒子空间会怎么样；二是在第 \ref{chap:effop} 章推导有效算符时，会涉及标量算符 $\hat{Q}$ 与张量算符 $\hat{\Theta}$ 的乘积，这两个算符都有单体与两体部分，应该怎么相乘。在完成一般的公式推导后，具体以 $\hat{Q}$-box 计算有效相互作用为例，展示怎么分别处理有效相互作用的单体与两体部分。
+
+需要注意接下来要推导的算符相乘就是量子力学中最一般的、在同一个 Hilbert 空间的算符相乘。不要与张量积混淆，张量积涉及多个 Hilbert 空间，张量积的构建可以理解为将单粒子的角动量耦合为 $A$ 粒子空间的这个过程。本章讨论的是在已经耦合完毕的 $A$ 粒子空间的代数。
+
+\section{直积态与反对称态}
+在具体的公式推导之前，先讨论一下直积态与反对称态的联系。在 \ref{sec:2b-wf} 节定义两体波函数时，反对称态是从直积态反对称化得来的。直积态是两体 Hilbert 空间的完备基矢，但两体 Hilbert 空间并不是物理上研究的全同粒子组成的两粒子空间，正如 \ref{sec:hilbert} 节讨论的，物理上允许的 $A$ 体 Hilbert 空间 $\mathscr{H}_A$ 是 $(\mathscr{H}_1)^{\otimes A}$ 的子空间，$\mathscr{H}_A$ 由交换对称或反对称的映射投影出来。
+
+$(\mathscr{H}_1)^{\otimes A}$ 空间直积态基矢的完备关系为
+\begin{equation}
+  \sum_{\alpha_1,\alpha_2,\ldots,\alpha_A}|\alpha_1\alpha_2\ldots\alpha_A)(\alpha_1\alpha_2\ldots\alpha_A|=1,
+\end{equation}
+对于费米子体系，反对称态才是完备基矢，直积态则是超完备基矢。反对称态的完备性应写为
+\begin{equation}
+  \frac1{A!}\sum_{\alpha_1,\alpha_2,\ldots,\alpha_A}|\alpha_1\alpha_2\ldots\alpha_A\rangle\langle\alpha_1\alpha_2\ldots\alpha_A|=1.
+\end{equation}
+注意这里的求和是单粒子轨道的求和。在进行算符相乘的计算时，会在两个算符之间插入完备性关系，将算符乘积转换为矩阵相乘。如果不进行矩阵整体的乘法，而是对单粒子轨道求和，进行矩阵元的乘法，就会出现 $1/A!$ 的系数；如果直接进行矩阵乘法（本质是组态求和），则没有这个系数。因此，在 \ref{eqs:nondeg-iter-ekks} 等 EKK 方法的公式中出现的一系列 $H$ 的相乘，因为进行的是矩阵乘法，即使矩阵是反对称基矢下的，也不会多出任何系数。但 Goldstone 图的计算插入一系列中间态时，由于算图的本质是组态求和转为轨道求和，所以会多出一系列 $1/2$ 的系数，这就是 Goldstone 图计算规则中的同进同出的 $n_\text{ep}$ 对数的含义。
+
+由于直积态矩阵元的形式比反对称化后的更简单，我们更希望先对直积态矩阵元进行操作，最后再转换为反对称矩阵元。对于单个算符，这么做自然是可以的。接下来我们证明算符在直积态基矢下相乘，再反对称化的合法性。令 $\hat{h}=\hat{f}\hat{g}$，其直积态矩阵元为
+\begin{equation}
+  h_{\alpha\beta\gamma\delta}=(\alpha\beta|\hat{h}|\gamma\delta)=\sum_{\mu\nu}(\alpha\beta|\hat{f}|\mu\nu)(\mu\nu|\hat{g}|\gamma\delta)=\sum_{\mu\nu}f_{\alpha\beta\mu\nu}g_{\mu\nu\gamma\delta},
+\end{equation}
+而反对称矩阵元为
+\begin{align}
+  \langle\alpha\beta|\hat{h}|\gamma\delta\rangle&=\frac12\sum_{\mu\nu}\langle\alpha\beta|\hat{f}|\mu\nu\rangle\langle\mu\nu|\hat{g}|\gamma\delta\rangle\notag\\
+  &=\frac12\sum_{\mu\nu}(f_{\alpha\beta\mu\nu}-f_{\alpha\beta\nu\mu})(g_{\mu\nu\gamma\delta}-g_{\mu\nu\delta\gamma})\notag\\
+  &=\sum_{\mu\nu}(f_{\alpha\beta\mu\nu}g_{\mu\nu\gamma\delta}-f_{\alpha\beta\mu\nu}g_{\mu\nu\delta\gamma})\notag\\
+  &=h_{\alpha\beta\gamma\delta}-h_{\alpha\beta\delta\gamma},
+\end{align}
+这与直积态矩阵元直接反对称化的结果是一致的。该结论在后续 \ref{sec:op-product} 节会用到。
+
+\section{单体算符在两粒子空间的矩阵元}
+对单体算符 
+\begin{equation}
+  \hat{F}=\sum_{i=1}^A\hat{f}(i)
+\end{equation}
+可定义
+\begin{equation}
+  \hat{g}(i,j)=\frac1{A-1}(f(i)+f(j)),
+\end{equation}
+因此 $\hat{F}$ 可改写为
+\begin{equation}
+  \hat{F}=\sum_{i<j}^A\hat{g}(i,j),
+\end{equation}
+即为两体算符的形式。尤其是对于两粒子空间，$A=2$，这个由单体算符转换而来的两体算符在 Fock 空间的直积态矩阵元为
+\begin{align}
+  g_{\alpha\beta\gamma\delta}
+  &=(\phi_\alpha(1)\phi_\beta(2),\hat{g}(1,2)\phi_\delta(2)\phi_\gamma(1))\notag\\
+  &=f_{\alpha\gamma}\delta_{\beta\delta}+\delta_{\alpha\gamma}f_{\beta\delta}.
+\end{align}
+% 反对称化为 
+% \begin{equation}
+%   g_{\alpha\beta\gamma\delta}^\mathrm{AS}=g_{\alpha\beta\gamma\delta}-g_{\alpha\beta\delta\gamma}=f_{\alpha\gamma}\delta_{\beta\delta}-f_{\alpha\delta}\delta_{\beta\gamma}+f_{\beta\delta}\delta_{\alpha\gamma}-f_{\beta\gamma}\delta_{\alpha\delta}.
+% \end{equation}
+
+根据二次量子化的定义，非耦合表象的反对称矩阵元是
+\begin{equation}
+  (k_1m_1k_2m_2|\hat{g}|k_3m_3k_4m_4)=\langle k_1 m_1 | \hat{f} | k_3 m_3 \rangle \delta_{k_2 k_4} \delta_{m_2 m_4} + \delta_{k_1 k_3} \delta_{m_1 m_3} \langle k_2 m_2 | \hat{f} | k_4 m_4 \rangle,
+\end{equation}
+下标的 $\alpha$ 等希腊字母是 $m$-scheme 下的一个单粒子态，因此 $k$ 与 $m$ 均包含在这一个下标中。之前在二次量子化的程序中形式地定义了 $f_{\alpha\beta}$ 与 $g_{\alpha\beta\gamma\delta}$ 这样的矩阵元，具体到角动量的基矢下，$|\alpha\rangle=|k_\alpha m_\alpha\rangle$。Fock 空间的矩阵元是 $m$-scheme 的，因为只有 $m$-scheme 产生湮灭算符才是良定义的，为了突出是 $m$-scheme，这里不写 $f_{\alpha\beta}$，而是显式地将下标的量子数写出来。在之后会进一步定义 $j$-scheme 的单体矩阵元与两体矩阵元，与 \cite{jin-goldstone} 保持一致。
+
+将非耦合表象的反对称矩阵元转换到耦合表象下，
+\begin{align}
+  &\langle k_1k_2JM|\hat{g}|k_3k_4J'M'\rangle\notag\\
+  ={}& \sum_{m_1 m_2 m_3 m_4} C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_3 m_3 j_4 m_4} (k_1 m_1 k_2 m_2 | \hat{g} | k_3 m_3 k_4 m_4) \notag\\
+  ={}& \sum_{m_1 m_2 m_3 m_4} C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_3 m_3 j_4 m_4} \big( \langle k_1 m_1 | \hat{f} | k_3 m_3 \rangle \delta_{k_2 k_4} \delta_{m_2 m_4} + \delta_{k_1 k_3} \delta_{m_1 m_3} \langle k_2 m_2 | \hat{f} | k_4 m_4 \rangle \big),\label{eqs:op-1b-to-2b}
+\end{align}
+
+\textbullet 标量算符
+
+对于标量算符 $\hat{g}$，只有 $J=J',M=M'$ 的矩阵元才非 0，因此 
+\begin{align}
+  &(k_1k_2JM|\hat{g}|k_3k_4JM)\notag\\
+  ={}& \sum_{m_1 m_2 m_3 m_4} C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_3 m_3 j_4 m_4} \big( \langle k_1 m_1 | \hat{f} | k_3 m_3 \rangle\delta_{j_1j_3}\delta_{m_1m_3} \delta_{k_2 k_4} \delta_{m_2 m_4}\notag\\
+  &+ \delta_{k_1 k_3} \delta_{m_1 m_3} \langle k_2 m_2 | \hat{f} | k_4 m_4 \rangle\delta_{j_2j_4}\delta_{m_2m_4} \big)\notag\\
+  ={}&\sum_{m_1m_2}C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_1 m_1 j_2 m_2}(f_{k_1k_3}\delta_{k_2 k_4}+\delta_{k_1k_3}f_{k_2k_4})\notag\\
+  ={}&f_{k_1k_3}\delta_{k_2 k_4}+\delta_{k_1k_3}f_{k_2k_4},\label{eqs:scalar-1to2}
+\end{align}
+其中定义了 $j$-scheme 的单体矩阵元为
+\begin{equation}
+  f_{k_1k_2}=\langle k_1m_1|\hat{f}|k_2m_2\rangle\delta_{j_1j_2}\delta_{m_1m_2},
+\end{equation}
+当然，对于哈密顿量的单体部分连接的两个组态只能有 $n$ 不同，但这个定义对标量算符通用，因此没有写其他相同的量子数。
+
+利用 \ref{eqs:tensor-to-antisym}，转换到反对称波函数之间的矩阵元，
+\begin{align}
+  &\langle k_1 k_2 JM | \hat{g} | k_3 k_4 JM \rangle\notag\\
+  ={}& N_{k_1 k_2} N_{k_3 k_4} \big[f_{k_1 k_3} \delta_{k_2 k_4} + \delta_{k_1 k_3} f_{k_2 k_4}
+  - (-1)^{j_3 + j_4 - J} \big(f_{k_1 k_4} \delta_{k_2 k_3} + \delta_{k_1 k_4} f_{k_2 k_3}\big)\big],\label{eqs:scalar-1to2-as}
+\end{align}
+这就是单体标量算符在两粒子组态表象下的矩阵元。
+
+\textbullet 秩非 0 的张量算符 
+
+从 \ref{eqs:op-1b-to-2b} 出发，将其中的 $m$-scheme 算符矩阵元用 \ref{eqs:w-e-cg2} 替换，此时出现三个 CG 系数相乘的求和，以第一项为例，
+\begin{equation}
+  \sum_{m_1m_2m_3}C_{j_1m_1j_2m_2}^{JM}C_{j_3m_3j_2m_2}^{J'M'}\frac{(-1)^{k-j_3+j_1}}{\sqrt{2j_1+1}}C_{kqj_3m_3}^{j_1m_1}\langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4},
+\end{equation}
+插入 CG 系数的正交关系
+\begin{equation}
+  \sum_{J''M''}C_{kqJ'M'}^{J''M''}C_{kqJ'M'}^{J''M''}=1,
+\end{equation}
+取四个 CG 系数可以凑成 \ref{app:cg-to-6j}，同时把剩下的 CG 系数换为 $3j$ 符号 \ref{app:cg-to-3j}，得到
+\begin{align}
+  &(-1)^{k+j_2+j_3+J}\hat{j_1}\hat{J'}
+  \begin{Bmatrix}
+    k&j_3&j_1\\j_2&J&J'
+  \end{Bmatrix}
+  (-1)^{k-j_3+j_1}\hat{j_1}^{-1}(-1)^{k-J'+M}\hat{J}
+  \begin{pmatrix}
+    k&J'&J\\q&M'&-M
+  \end{pmatrix}
+  \langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  ={}&(-1)^{k+j_1+j_2+J-J'+M}\hat{J}\hat{J'}
+  \begin{Bmatrix}
+    k&j_3&j_1\\j_2&J&J'
+  \end{Bmatrix}
+  \begin{pmatrix}
+    k&J'&J\\q&M'&-M
+  \end{pmatrix}
+  \langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}.
+\end{align}
+同理求出第二项，得到 
+\begin{align}
+  (k_1k_2JM|\hat{g}^k|k_3k_4J'M')={}&(-1)^{J+M}
+  \begin{pmatrix}
+    k&J'&J\\q&M'&-M
+  \end{pmatrix}
+  \hat{J}\hat{J'}\notag\\
+  &\times\bigg[(-1)^{k+j_1+j_2+J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  &+(-1)^{k+j_1+j_4+J}
+  \begin{Bmatrix}
+    J&k&J'\\j_4&j_1&j_2
+  \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle\delta_{k_1k_3}\bigg].\label{eqs:direct-product-1to2}
+\end{align}
+这是直积态的耦合矩阵元，转换为反对称的耦合矩阵元使用 \ref{eqs:tensor-to-antisym} 即可。
+
+可以检验一下上述公式能否退化为标量算符的公式 \ref{eqs:scalar-1to2}。标量算符的 $k=0$，因此使用 \ref{app:6j-onej-0}，在约化矩阵元前就只剩下了 $1/\sqrt{2j_1+1}$ 与 $1/\sqrt{2j_2+1}$，与约化矩阵元合起来，就变成了 \ref{eqs:scalar-1to2} 的 $f_{k_1k_3},f_{k_2k_4}$。
+
+发现 \ref{eqs:direct-product-1to2} 的形式与 \ref{eqs:w-e-3j} 一致，因此可以直接提取出直积态矩阵元的约化矩阵元为
+\begin{align}
+  (k_1k_2J||\hat{g}^k||k_3k_4J')={}&\hat{J}\hat{J'}\bigg[(-1)^{k+j_1+j_2+J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  &+(-1)^{k+j_1+j_4+J}
+  \begin{Bmatrix}
+    J&k&J'\\j_4&j_1&j_2
+  \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle\delta_{k_1k_3}\bigg],\label{eqs:direct-product-1to2-reduced}
+\end{align}
+当然也可以使用 \ref{eqs:wigner-eckart-reverse} 来交叉验证公式的正确性。\ref{eqs:direct-product-1to2} 代入 \ref{eqs:w-e-reverse-3j2}，由 \ref{app:3j-ortho-summ1m2} 得到 
+\begin{align}
+  \sum_{MM'}(-1)^{J-M}
+  \begin{pmatrix}
+    J&k&J'\\-M&q&M'
+  \end{pmatrix}
+  (-1)^{J+M}
+  \begin{pmatrix}
+    k&J'&J\\q&M'&-M
+  \end{pmatrix}=\hat{k}^{-2},
+\end{align}
+同样可以得到 \ref{eqs:direct-product-1to2-reduced}。
+
+还有一种交叉验证的方法是直接将 \ref{eqs:op-1b-to-2b} 代入 \ref{eqs:wigner-eckart-reverse} 获得约化矩阵元。不过这种推导有些细节需要特别注意。先把 \ref{eqs:op-1b-to-2b} 代入 \ref{eqs:w-e-reverse-3j2}，因为这个形式的“逆向”Wigner-Eckart 定理也有 $q$ 指标的求和，更容易凑出 \ref{app:cg-to-6j} 的形式。将 \ref{eqs:w-e-reverse-3j2} 的 $3j$ 符号变为 CG 系数，计算 \ref{eqs:op-1b-to-2b} 的第一项，得到 
+\begin{align}
+  &\sum_{MM'q}(-1)^{J-M}(-1)^{k-J'+M}\hat{J}^{-1}C_{kqJ'M'}^{JM}\sum_{m_1m_2m_3}C_{j_1m_1j_2m_2}^{JM}C_{j_3m_3j_2m_2}^{J'M'}C_{kqj_3m_3}^{j_1m_1}\notag\\
+  &\times\frac{(-1)^{k-j_3+j_1}}{\sqrt{2j_1+1}}\langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  ={}&\sum_M(-1)^{J-J'-j_3+j_1}\hat{J}^{-1}\hat{j_1}^{-1}\sum_{m_1m_2m_3M'q}C_{kqj_3m_3}^{j_1m_1}C_{j_1m_1j_2m_2}^{JM}C_{j_3m_3j_2m_2}^{J'M'}C_{kqJ'M'}^{JM}\langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  ={}&\sum_M(-1)^{k+j_1+j_2+J'}\hat{J}^{-1}\hat{J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}
+  \langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  ={}&(-1)^{k+j_1+j_2+J'}\hat{J}\hat{J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}
+  \langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4},
+\end{align}
+最后一步非常关键，因为被求和的式子与 $M$ 无关，所以对 $M$ 求和需要乘上 $\hat{J}^2$，这就正好消去了 $\hat{J}^{-1}$。如果是用 \ref{eqs:w-e-reverse-cg} 或 \ref{eqs:w-e-reverse-3j1} 推导，在 $M$ 求和产生 $\hat{J}^2$ 的同时，还需要注意要想使用 \ref{app:cg-to-6j} 需要凑五个指标求和，尽管这些指标是互相依赖的，但也不能没有。更准确地说，这些指标的互相依赖只是为了使 CG 系数非 0，完全不管 CG 系数是否为 0 就把所有求和写出来才是最一般的写法。\ref{eqs:w-e-reverse-cg} 与 \ref{eqs:w-e-reverse-3j1} 没有对 $q$ 的求和，要想出现对 $q$ 的求和，需要除以 $\hat{k}^2$，这样系数就对了。
+
+总之，经过推导与检验，秩非 0 的张量算符单体算符在两粒子空间的直积态约化矩阵元是 \ref{eqs:direct-product-1to2-reduced}，并用 \ref{eqs:tensor-to-antisym} 反对称化，
+\begin{align}
+  \langle k_1k_2J||\hat{g}^k||k_3k_4J'\rangle={}&N_{k_1k_2}N_{k_3k_4}\hat{J}\hat{J'}\Bigg[\bigg((-1)^{k+j_1+j_2+J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle\delta_{k_2k_4}\notag\\
+  &+(-1)^{k+j_3+j_4+J}
+  \begin{Bmatrix}
+    J&k&J'\\j_4&j_1&j_2
+  \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle\delta_{k_1k_3}\bigg)\notag\\
+  &-(-1)^{j_3+j_4-J'}\bigg((-1)^{k+j_1+j_2+J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_4&j_2&j_1
+  \end{Bmatrix}\langle k_1||\hat{f}^k||k_4\rangle\delta_{k_2k_3}\notag\\
+  &+(-1)^{k+j_3+j_4+J}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_1&j_2
+  \end{Bmatrix}\langle k_2||\hat{f}^k||k_3\rangle\delta_{k_1k_4}\bigg)\Bigg].
+\end{align}
+
+% 在 $\hat{Q}$-box 代码中直接处理的都是 Kuo 约定的约化矩阵元，统一在计算完成后转回 Edmonds 约定。把 \ref{eqs:direct-product-1to2-reduced} 转为 Kuo 约定得到
+% \begin{align}
+%   (k_1k_2J||\hat{g}^k||k_3k_4J')_\mathrm{Kuo}={}&(-1)^{J-J'}\hat{J}\hat{J'}\bigg[(-1)^{k+j_2+j_3+J'}
+%   \begin{Bmatrix}
+%     J&k&J'\\j_3&j_2&j_1
+%   \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle_\mathrm{Kuo}\delta_{k_2k_4}\notag\\
+%   &+(-1)^{k+j_1+j_2+J}
+%   \begin{Bmatrix}
+%     J&k&J'\\j_4&j_1&j_2
+%   \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle_\mathrm{Kuo}\delta_{k_1k_3}\bigg]\notag\\
+%   ={}&(-1)^{k+j_2+j_3}\hat{J}\hat{J'}\bigg[(-1)^J
+%   \begin{Bmatrix}
+%     J&k&J'\\j_3&j_2&j_1
+%   \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle_\mathrm{Kuo}\delta_{k_2k_4}\notag\\
+%   &+(-1)^{J'}
+%   \begin{Bmatrix}
+%     J&k&J'\\j_4&j_1&j_2
+%   \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle_\mathrm{Kuo}\delta_{k_1k_3}\bigg].
+% \end{align}
+% 需要注意第二项相位的推导有些细节，
+% \begin{equation}
+%   (-1)^{k+j_1+j_4+J}(-1)^{j_4-j_2}=(-1)^{k+j_1-j_2+J+1}=(-1)^{k+j_1+j_2+J},
+% \end{equation}
+% 这里的 $j$ 全是单粒子角动量，是半整数，因此 $(-1)^{2j}=(-1)^1$。当然也可以将 \ref{eqs:w-e-kuo-3j} 变为逆，
+% \begin{equation}
+%   \langle\zeta_fj_f||T^k||\zeta_ij_i\rangle_\mathrm{Kuo}=\hat{k}^{-1}\sum_{m_im_fq}(-1)^{j_i-m_f+k}
+%   \begin{pmatrix}
+%     j_f&k&j_i\\-m_f&q&m_i
+%   \end{pmatrix}
+%   \langle\zeta_fj_fm_f|T^k|\zeta_ij_im_i\rangle,
+% \end{equation}
+% 并直接将 \ref{eqs:op-1b-to-2b} 代入，在 Kuo 约定下得到了同样的结果。
+
+
+\section{组态空间的 $\hat{Q}$-box} 
+\label{sec:qbox-1b-to-2b}
+
+形式理论推导出的一系列公式 \ref{eqs:nondeg-iter-ekks} 等需要写到固定粒子数的组态空间分别求解。在实际操作中分为了单体 $\hat{S}$-box 与两体 $\hat{Q}$-box 分别求解，且$\hat{S}$-box 实际上解了两次，一是在单粒子空间中求出的价空间单粒子能，二是在两粒子空间中求出的零体与一体部分，再用 $\hat{Q}$-box 减去 $\hat{S}$-box 得出纯两体部分。
+
+\subsection{有效相互作用的单体部分}
+先看在单粒子空间中求解的单体部分，是对角矩阵，对角元是价空间单粒子能。这是因为根据 j-scheme 的对称性，只有 $n$ 量子数不同的单粒子轨道之间才有单体矩阵元，而对于实空间的 MBPT，常用的模型空间即使很大（如 $sd,sdpf,psd$ 等）也不会有 $n$ 不同，其他量子数都相同的轨道。因此 \ref{eqs:nondeg-iter-ekks} 在单体组态表象下，其实就是代数方程而不是矩阵方程，对每条轨道都求解出一个单粒子能。在计算单体 Goldstone 图时，直接令进入的态等于出去的态也是这个原因。但是对于 GMBPT，一系列不同 $n$ 的轨道都会纳入计算，这时单体部分就不这么简单了。
+
+\subsection{有效相互作用的两体部分}
+两粒子空间中进行求解时，有效哈密顿量要减去单体部分原因可这样理解：如果只在两粒子空间求解 $\hat{Q}$-box 的 EKK，零体、单体与两体部分都包含在内——在两粒子空间中，零体矩阵元形如 $\langle ab|H|ab\rangle$，单体矩阵元形如 $\langle ab|H|ac\rangle$，两体矩阵元形如 $\langle ab|H|cd\rangle$。最终求出来的 $\langle ab|H|cd\rangle$ 是这些项之和。但是在 KSHELL 中使用这个有效哈密顿量时，需要处理的组态空间可以比两粒子多很多，在构建需要对角化的哈密顿量时，矩阵元不是包含零、一、二体的有效哈密顿量，而是需要将价空间单粒子能与两体矩阵元重新组合。因此仅仅求有效哈密顿量的这个整体是不够的，需要知道纯两体部分。EKKS 代码迭代完整的 EKK，再用只对单体图加一根外线的两体图算出来的 $\hat{Q}$-box 进行 EKK 迭代，两个相减得到有效相互作用的纯良题部分。单体图加一根外线的两体图可以认为是有效相互作用的单体部分作用到两粒子空间的结果。
+
+虽说如此，被减去的单体部分可以由价空间单粒子能计算出来，比如两粒子空间 $\langle ab|H|ab\rangle$ 这样的对角元，在组态相互作用的矩阵元中是 $\epsilon^\text{eff}_a+\epsilon^\text{eff}_b$。对完整的 $\hat{Q}$-box（\cite{2012coraggio} 给出的纯两体部分的图，与单体图加一根外线的两体图，这两部分加在一起是完整的 $\hat{Q}$-box） 进行 EKK 迭代之后，将这个有效哈密顿量减去价空间单粒子能组合出的对角部分（类似 $\epsilon^\text{eff}_a+\epsilon^\text{eff}_b$ 这种组合方式），然后减去这部分就可以得出纯两体的有效相互作用。因为 \ref{eqs:nondeg-iter-ekks} 迭代的哈密顿量一定是完整的，不能只取纯两体部分进行迭代，也不能从 $\hat{Q}(\epsilon)$ 中扣去单体部分。
+
+在 m-scheme 下，单体算符写在两粒子空间的结果很简单，用产生湮灭算符以及 Wick 收缩就可以得出结果，在 KSHELL 等 m-scheme 的壳模型中也是这么做的。但 MBPT 是在 j-scheme 下进行的，矩阵元的形式并没有这么显然。
+
+\subsection{$\hat{S}$-box 在两粒子空间的矩阵元}
+在实空间的 MBPT 中，只有 $k_1=k_2$ 单体矩阵元才非0，$f_{k_1k_1}$ 实际就是 $k_1$ 轨道的价空间单粒子能，这已经在单粒子空间的 EKKS 迭代中求解出来了。可以看出 \ref{eqs:scalar-1to2-as} 末态 $k_1,k_2$ 中至少有一条与初态轨道 $k_3,k_4$ 相同，否则该式为 0，这也很好理解，如果初态的两条轨道与末态都不一样，应该是纯粹的两体，不会有单体部分。将矩阵元具体写出
+\begin{equation}
+  \langle k_1 k_2 JM | \hat{f} | k_3 k_4 JM \rangle =
+  \begin{cases} 
+    f_{k_1k_1}+f_{k_2k_2}, & k_1=k_3\ne k_2=k_4, \\
+    2f_{k_1k_1}, & k_1=k_2=k_3=k_4.
+  \end{cases}\label{eqs:real-1b-to-2b}
+\end{equation}
+需要注意第二种情况，归一化系数为 $1/\sqrt{2}$，但 \ref{eqs:scalar-1to2-as} 中的第二项相因子为 -1（两条一样的 $j$-scheme 轨道耦合，不可能得到奇数的 $J$），因此会出现四个 $f_{k_1k_1}$，乘上归一化系数后，表现得与 $k_1=k_3\ne k_2=k_4$ 的情况一样。
+除了式中的这两种情况外，还有一种是 $k_1=k_4\ne k_2=k_3$，相当于初末态的轨道排序反了，会多一个相位，但是在代码中轨道顺序是确定的，不会有这种情况。因此实空间的 $\hat{S}$-box 在两粒子空间中只有对角的矩阵元才非 0。以上推导就证明了通过 $\hat{S}$-box 获得价空间单粒子能之后，在解 $\hat{Q}$-box 时并不需要对单体部分单独迭代一次再相减，而是可以将两体波函数的两条轨道的价空间单粒子能相加，得到要从 $\hat{Q}$-box 中扣除的单体部分。不过 $\hat{Q}$-box 仍需计算完整的 $\hat{Q}(\epsilon)$，并不是说价空间单粒子能就能代替 $\hat{Q}(\epsilon)$ 中单体图加一根外线的这部分两体图了。

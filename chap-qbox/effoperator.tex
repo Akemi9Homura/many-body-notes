@@ -1,0 +1,204 @@
+\section{$\hat{\Theta}$-box 方法}
+计算出体系的能谱之后，其他可观测量同样也是研究的目标。在有效哈密顿量的讨论中，要求模型空间的有效哈密顿量的本征值与原始哈密顿量相同，哈密顿量的本征值即为能量。本征值通过求解本征方程直接得到，而需要得到的可观测量其实是这个可观测量算符在某个本征波函数下的期望值（如半径），或者在两个波函数之间的矩阵元（如衰变），用 $\Theta$ 代表可观测量算符，需要计算的是
+\begin{equation}
+  \langle\widetilde{\Psi}_\alpha|\Theta|\Psi_\beta\rangle,
+\end{equation}
+这里并没有假设真实本征波函数 $|\Psi\rangle$ 是归一化的，用 $|\widetilde{\Psi}\rangle$ 表示对应的归一化波函数，即 $\langle\widetilde{\Psi}_\alpha|\Psi_\beta\rangle=\delta_{\alpha\beta}$，归一化的问题留待之后讨论。由于全空间的真实波函数 $|\Psi\rangle$ 混有 $Q$ 空间的成分，无法求出，能够求出的只有 $H^\text{eff}$ 的本征波函数 $|\phi\rangle$。因此还需要得出有效算符 $\Theta^\text{eff}$，使得
+\begin{equation}
+  \langle\widetilde{\Psi}_\alpha|\Theta|\Psi_\beta\rangle=\langle\widetilde{\phi}_\alpha|\Theta^\text{eff}|\phi_\beta\rangle,\label{eqs:effoperator def}
+\end{equation}
+需要注意 MBPT 只负责给出 $H^\text{eff}$ 以及 $\Theta^\text{eff}$ 这两个有效算符在模型空间的矩阵元，进行对角化，求出本征波函数等操作是由 KSHELL 或 GSM 等壳模型代码进行的。更严格地说，是 MBPT 在单体与两体空间中进行工作，然后直接将这个结果应用于更多体空间，壳模型代码就是用来对角化更多体、更大规模的矩阵的。这一点在后续“MBPT 的问题”中有进一步讨论。
+
+原始哈密顿量本征波函数的变换为 $|\Psi_\alpha\rangle\to X^{-1}|\Psi_\alpha\rangle$，为了计算上式右边的 $\Theta^\text{eff}$，需要将等式左边的 $|\Psi_\alpha\rangle$ 用 $|\phi_\alpha\rangle$ 表示，根据 \ref{eqs:full-space Psi} 与 \ref{eqs:q-space phi}，有
+\begin{equation}
+  |\Psi_\alpha\rangle=|\phi_\alpha\rangle+|\Phi_\alpha\rangle=(1+\omega)|\phi_\alpha\rangle=(P+\omega)|\phi_\alpha\rangle,
+\end{equation}
+相应的正交波函数为
+\begin{equation}
+  \langle\widetilde{\Psi}_\alpha|=\langle\widetilde{\phi}_\alpha|(P+\omega^\dagger\omega)^{-1}(P+\omega^\dagger),
+\end{equation}
+注意投影算符是厄米算符，因此 $\omega^\dagger=P\omega^\dagger Q$。由于 $P=\sum_\alpha|\phi_\alpha\rangle\langle\widetilde{\phi}_\alpha|$，因此从 \ref{eqs:effoperator def} 得出
+\begin{equation}
+  \Theta^\text{eff}=\sum_{\alpha\beta}|\phi_\alpha\rangle\langle\widetilde{\Psi}_\alpha|\Theta|\Psi_\beta\rangle\langle\widetilde{\phi}_\beta|,
+\end{equation}
+这是因为有效算符本身就是 $P$ 空间的，在左右乘上 $P$ 也不会有影响。将全空间波函数换为模型空间的，进一步得到
+\begin{equation}
+  \Theta^\text{eff}=P(P+\omega^\dagger\omega)^{-1}(P+\omega^\dagger)\Theta(P+\omega)P=(P+\omega^\dagger\omega)^{-1}(P+\omega^\dagger)\Theta(P+\omega),
+\end{equation}
+定义
+\begin{equation}
+  \hat{\Theta}=(P+\omega^\dagger)\Theta(P+\omega),
+\end{equation}
+这里加上标只是一个常用于文献中的记号，并没有实际的意义，真正的裸算符是不加上标的 $\Theta$。该式可展开为
+\begin{equation}
+  \hat{\Theta}=P \Theta P + P \Theta Q \omega + \omega^\dagger Q \Theta P + \omega^\dagger Q \Theta Q \omega,\label{eqs:hatTheta-expan}
+\end{equation}
+有效算符为
+\begin{equation}
+  \Theta^\text{eff}=(P+\omega^\dagger\omega)^{-1}\hat{\Theta},
+\end{equation}
+为了求出有效算符，就需要得到 $\omega^\dagger\omega$ 与 $\hat{\Theta}$。首先是 $\omega^\dagger\omega$，在 EKKS 的框架内，由 \ref{eqs:ekks-omega}，得到 
+\begin{align}
+  \omega^\dagger\omega&=\sum_{n=0}^\infty(-1)^n((\widetilde{H}^\text{eff})^\dagger)^nPH_1Q\frac{1}{(E-QHQ)^{n+1}}\sum_{m=0}^\infty(-1)^m\frac{1}{(E-QHQ)^{m+1}}QH_1P(\widetilde{H}^\text{eff})^m\notag\\
+  &=-\sum_{n=0}^\infty\sum_{m=0}^\infty((\widetilde{H}^\text{eff})^\dagger)^n\hat{Q}_{n+m+1}(E)(\widetilde{H}^\text{eff})^m,
+\end{align}
+其中 $\widetilde{H}^\text{eff}=H^\text{eff}-E$。而 $\hat{\Theta}$ 拆分出的四项可写为
+\begin{align}
+  \hat{\Theta}_{PP}&= P \Theta P,\\
+  \hat{\Theta}_{PQ}&= P \Theta Q \omega = \sum_{n=0}^{\infty} \hat{\Theta}_n (\widetilde{H}_{\text{eff}})^n,\\
+  \hat{\Theta}_{QP}&= \omega^\dagger Q \Theta P,\\
+  \hat{\Theta}_{QQ} &= \omega^\dagger Q \Theta Q \omega = \sum_{n=0}^{\infty}\sum_{m=0}^\infty((\widetilde{H}^\text{eff})^\dagger)^n\hat{\Theta}_{nm} (\widetilde{H}_{\text{eff}})^m,
+\end{align}
+其中
+\begin{align}
+  \hat{\Theta}_m&=\frac1{m!}\frac{\mathrm{d}^m\hat{\Theta}(\epsilon)}{\mathrm{d}\epsilon^m}\bigg|_{\epsilon=E},\\
+  \hat{\Theta}_{mn}&=\frac1{m!n!}\frac{\mathrm{d}^m}{\mathrm{d}\epsilon_1^m}\frac{\mathrm{d}^n}{\mathrm{d}\epsilon_2^n}\hat{\Theta}(\epsilon_1;\epsilon_2)\bigg|_{\epsilon_1=\epsilon_2=E},
+\end{align}
+是 $\hat{\Theta}$-box 的导数，而 $\hat{\Theta}$-box 定义为
+\begin{align}
+  \hat{\Theta}(\epsilon)&=P\Theta Q\frac1{\epsilon-QHQ}QH_1P,\\
+  \hat{\Theta}(\epsilon_1;\epsilon_2)&=PH_1Q\frac1{\epsilon_1-QHQ}Q\Theta Q\frac1{\epsilon_2-QHQ}QH_1P.
+\end{align}
+这里需要注意一个十分微妙的问题。在 \cite{1995suzukieffop,2020coraggio,2020coraggio-2vbetabeta} 等文章中给出的公式全把 \ref{eqs:hatTheta-expan} 的中间两项写为了 $\hat{\Theta}_{PQ}+h.c.$，但这是错误的。$\hat{\Theta}_{PQ}=P\Theta Q\omega$，而 $\hat{\Theta}_{QP}=\omega^\dagger Q\Theta P$，$\hat{\Theta}_{QP}$ 并不是 $\hat{\Theta}_{PQ}$ 的厄米共轭，这是因为对球张量算符，其厄米性并不能简单地用 $\Theta^\dagger=\Theta$ 来表示。
+
+秩为 $k$ 的张量算符有 $2k+1$ 个分量，因此不能像哈密顿量那样，矩阵表示是厄米矩阵就能描述其幺正性；而是需要对每个分量 $\hat{T}^k_q$ 单独定义其厄米性，
+\begin{equation}
+    (T^k_q)^\dagger=(-1)^qT^k_{-q},
+\end{equation}
+也就是说，球张量算符的 $q$ 分量并不是厄米矩阵，只有 $q=0$ 分量才是厄米矩阵。但在 $\hat{\Theta}$-box 公式中需要的全是约化矩阵元，不管是 Kuo 约定还是 Edmonds 约定，都能推导出约化矩阵元满足的关系为
+\begin{equation}
+    \langle\zeta_fj_f||\hat{T}^k||\zeta_ij_i\rangle=(-1)^{j_f-j_i}\langle\zeta_ij_i||T^k||\zeta_fj_f\rangle^*,
+\end{equation}
+对于实空间的计算，复共轭（星号）可以去掉。
+
+在有了这个公式之后，推导一下 $\hat{\Theta}_{QP}$ 的正确公式，
+\begin{align}
+    \hat{\Theta}_{QP}=\omega^\dagger Q\Theta P&=\sum_{n=0}^\infty(-1)^n((\widetilde{H}^\text{eff})^\dagger)^nPH_1Q\frac{1}{(E-QHQ)^{n+1}}Q\Theta P\notag\\
+    &=\sum_{n=0}^\infty((\widetilde{H}^\text{eff})^\dagger)^n\frac1{n!}\frac{\mathrm{d}^n}{\mathrm{d}\epsilon^n}\left[PH_1Q\frac1{\epsilon-QHQ}Q\Theta P\right]\bigg|_{\epsilon=E},
+\end{align}
+之前定义的 $\Theta$-box 是 $\Theta$ 在前 $H_1$ 在后，而 $\hat{\Theta}_{QP}$ 需要的则是 $H_1$ 在前 $\Theta$ 在后的形式，这一项自然可以通过写出 $H_1$ 在上 $\Theta$ 在下的 Goldstone 图求出来，也可以通过已定义的 $\hat{\Theta}(\epsilon)$ 表示出来，
+\begin{align}
+    \left\langle\zeta_fj_f\left|\left|PH_1Q\frac1{\epsilon-QHQ}Q\Theta P\right|\right|\zeta_ij_i\right\rangle&=\left\langle\zeta_fj_f\left|\left|\left(P\Theta^\dagger Q\frac1{\epsilon-QHQ}QH_1P\right)^\dagger\right|\right|\zeta_ij_i\right\rangle\notag\\
+    &=(-1)^{j_f-j_i}\langle\zeta_ij_i||\hat{\Theta}(\epsilon)||\zeta_fj_f\rangle^*.
+\end{align}
+总的来说，文献中给出的公式所有出现 $+h.c.$ 的地方，都要额外乘上左矢与右矢交换的系数。
+ 
+其实前面推导出的用 $\widetilde{H}^\text{eff}$ 表示的公式已经可以计算了，只需使用已经求出的有效哈密顿量以及新求的 $\hat{\Theta}$-box 就可以得出有效算符。但 \cite{1995suzukieffop} 的做法是继续将有效哈密顿量用 $\hat{Q}$-box 及其导数表示。问题在于 \cite{1995suzukieffop} 给出的是简并模型空间的结果，直接使用了 KK 方法的结论 \ref{eqs:deg-kk-fseries}，对于非简并模型空间的 EKKS，公式有所不同。
+
+为了借用 KK 的结果 \ref{eqs:deg-kk-fseries}，将 \ref{eqs:deg-kk} 改写为
+\begin{equation}
+  H_1^\text{eff}(\omega_n)=\hat{Q}(\epsilon_0)+\sum_{k=1}^\infty\hat{Q}_k(\epsilon_0)[H_1^\text{eff}(\omega_{n-1})]^k,
+\end{equation}
+迭代的首项取 $H_1^\text{eff}(\omega_0)=\hat{Q}(\epsilon_0)$，就可以将最终迭代结果写为 \ref{eqs:deg-kk-fseries}。而 EKKS 的迭代公式 \ref{eqs:nondeg-iter-ekks} 则改写为
+\begin{equation}
+  \widetilde{H}_n^\text{eff}=PH_0P-E+\hat{Q}(E)+\sum_{k=1}^\infty\hat{Q}_k(E)(\widetilde{H}_{n-1}^\text{eff})^k=\hat{Q}_0'(E)+\sum_{k=1}^\infty\hat{Q}_k(E)(\widetilde{H}_{n-1}^\text{eff})^k,
+\end{equation}
+其中 $\hat{Q}_0'(E)=PH_0P-E+\hat{Q}(E)$，这两个迭代公式的形式是一样的，因此将 EKKS 的迭代首项取为 $\widetilde{H}^\text{eff}_0=\hat{Q}_0'(E)$，恰好就是 EKKS 代码中有效哈密顿量的迭代实际取的 $H^\text{eff}_0=PH_0P+\hat{Q}(E)$。由于迭代公式的形式一致，只需要把 \ref{eqs:deg-kk-fseries} 中的 $\hat{Q}(\epsilon_0)$ 换为 $\hat{Q}_0'(E)$，即可得到 $\widetilde{H}^\text{eff}_\infty$，再将 $E$ 加回就是 EKKS 的结果。注意这里的推导不仅可用于 EKKS 框架下有效算符的导出，还提供了一种新的计算 EKKS 的方法。
+
+由此可计算
+\begin{align}
+  \omega^\dagger\omega={}&-\Big[\hat{Q}_1+(\hat{Q}_2\hat{Q}'+\hat{Q}'\hat{Q}_2+\hat{Q}_2\hat{Q}_1\hat{Q}'+\hat{Q}'\hat{Q}_1\hat{Q}_2)\notag\\
+  &+(\hat{Q}_3\hat{Q}'\hat{Q}'+\hat{Q}'\hat{Q}'\hat{Q}_3+\hat{Q}'\hat{Q}_3\hat{Q}')\Big]\notag\\
+  ={}&-\Big[\hat{Q}_1+(\hat{Q}_2\hat{Q}'+h.c.)+(\hat{Q}_2\hat{Q}_1\hat{Q}'+h.c.)+\hat{Q}'\hat{Q}_3\hat{Q}'+\ldots\Big],
+\end{align}
+上式的计算方法是分别令 $n+m=0,1,2,\ldots$ 再逐个计算，按照 $\hat{Q}$ 的个数分组。
+
+$(P+\omega^\dagger\omega)^{-1}$ 的计算则是把 $\omega^\dagger\omega$ 作为小量进行展开，
+\begin{align}
+  (P+\omega^\dagger\omega)^{-1}={}&P-\omega^\dagger\omega+(\omega^\dagger\omega)^2+\ldots\notag\\
+  ={}&P+\hat{Q}_1+(\hat{Q}_1\hat{Q}_1+\hat{Q}_2\hat{Q}'+\hat{Q}'\hat{Q}_2)+\ldots,
+\end{align}
+
+\section{有效算符的 Goldstone 图}
+接下来需要将前面推导的包含算符的公式用 Goldstone 图表达出来。操作流程与相互作用的部分类似，先在 $m$-scheme 下写出图的表达式，再转换到 $j$-scheme 下，不过秩非 0 的张量算符在转换的时候需要配合 Wigner-Eckart 定理，而且在 Kuo 的约定下，可以给出与相互作用一致的图计算规则。
+
+以 \cite{jin-goldstone} 中的单体算符分解规则为例，见图 \ref{fig:op1b-factorization}，$m$-scheme 的表达式为
+\begin{equation}
+  \langle a\alpha|\hat{O}^k_q|b\beta\rangle=\sum_{\gamma\delta}\langle a\alpha d\delta|\hat{V}|b\beta c\gamma\rangle\langle c\gamma|\hat{O}^k_q|d\delta\rangle,\label{eqs:op1b-factor-m}
+\end{equation}
+将 \ref{eqs:w-e-reverse-cg} 换为 Kuo 的约定为
+\begin{equation}
+  \langle\zeta_fj_f||\hat{O}^k||\zeta_ij_i\rangle_\mathrm{Kuo}=\sum_{m_im_f}(-1)^{j_f-m_i+k}C_{j_fm_fj_i-m_i}^{kq}\langle\zeta_fj_fm_f|\hat{O}^k_q|\zeta_ij_im_i\rangle,
+\end{equation}
+因此将 \ref{eqs:op1b-factor-m} 左右同乘 CG 系数并求和，再将右边的算符矩阵元也换为 Kuo 约定的约化矩阵元，得到 
+\begin{align}
+  \langle a\alpha||\hat{O}^k||b\beta\rangle_\mathrm{Kuo}&=\sum_{\alpha\beta\gamma\delta}(-1)^{a-\beta+k}C_{a\alpha b-\beta}^{kq}\langle a\alpha d\delta|\hat{V}|b\beta c\gamma\rangle (-1)^{d+\delta}C_{d-\delta c\gamma}^{kq} \langle c\gamma||\hat{O}^k_q||d\delta\rangle_\mathrm{Kuo}\notag\\
+  &=\sum_{\alpha\beta\gamma\delta}(-1)^{b-\beta}C_{b-\beta a\alpha}^{kq}(-1)^{d-\delta}C_{d-\delta c\gamma}^{kq}\langle a\alpha d\delta|\hat{V}|b\beta c\gamma\rangle \langle c\gamma||\hat{O}^k_q||d\delta\rangle_\mathrm{Kuo},
+\end{align}
+也就是 
+\begin{equation}
+  O^k_{ab}=R^k_{abcd}O^k_{cd},
+\end{equation}
+可以看出使用 Kuo 约定才能得到这么简单的图分解方式。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figure/op1b-factorization.png}
+  \caption{单体算符的分解规则。图取自 \cite{jin-goldstone}。}
+  \label{fig:op1b-factorization}
+\end{figure}
+
+还有一种分解规则是将单体算符插入到两体的相互作用图上，即图 \ref{fig:op1b-insert-2b}，相当于替换掉 $(V-U)$ 图的圈叉项。这类图分解为
+\begin{equation}
+  \Theta_{abcd}^{J_1J_2k}=\Theta_{abeb}^{J_1J_2k}V_{ebcd}^{J_2}
+\end{equation}
+是自然的，但关键问题是 $\Theta_{abeb}^{J_1J_2k}$ 的计算。该项其实就是单体的 $\hat{O}_{ae}^k$ 作用在两粒子空间的结果，\ref{eqs:direct-product-1to2-reduced} 已经推导了这一项，但 \ref{eqs:direct-product-1to2-reduced} 是 Edmonds 约定，而这里需要的是 Kuo 约定。经过转换，得到
+\begin{align}
+  (k_1k_2J||\hat{g}^k||k_3k_4J')_\mathrm{Kuo}={}&(-1)^{J-J'}\hat{J}\hat{J'}\bigg[(-1)^{k+j_2+j_3+J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle_\mathrm{Kuo}\delta_{k_2k_4}\notag\\
+  &+(-1)^{k+j_1+j_2+J}
+  \begin{Bmatrix}
+    J&k&J'\\j_4&j_1&j_2
+  \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle_\mathrm{Kuo}\delta_{k_1k_3}\bigg]\notag\\
+  ={}&(-1)^{k+j_2+j_3}\hat{J}\hat{J'}\bigg[(-1)^J
+  \begin{Bmatrix}
+    J&k&J'\\j_3&j_2&j_1
+  \end{Bmatrix}\langle k_1||\hat{f}^k||k_3\rangle_\mathrm{Kuo}\delta_{k_2k_4}\notag\\
+  &+(-1)^{J'}
+  \begin{Bmatrix}
+    J&k&J'\\j_4&j_1&j_2
+  \end{Bmatrix}\langle k_2||\hat{f}^k||k_4\rangle_\mathrm{Kuo}\delta_{k_1k_3}\bigg].\label{eqs:op1b-to-2b-kuo}
+\end{align}
+需要注意第二项相位的推导有些细节，
+\begin{equation}
+  (-1)^{k+j_1+j_4+J}(-1)^{j_4-j_2}=(-1)^{k+j_1-j_2+J+1}=(-1)^{k+j_1+j_2+J},
+\end{equation}
+这里的 $j$ 全是单粒子角动量，是半整数，因此 $(-1)^{2j}=(-1)^1$。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figure/op1b-insert.png}
+  \caption{单体算符插入两体图的分解规则。图取自 \cite{jin-goldstone}。}
+  \label{fig:op1b-insert-2b}
+\end{figure}
+
+图 \ref{fig:op1b-insert-2b} 的这种画法对应 \ref{eqs:op1b-to-2b-kuo} 的第一项，也就是 $\hat{f}$ 算符夹在 $k_1$ 与 $k_3$ 之间，因此 
+\begin{equation}
+  \Theta_{abeb}^{J_1J_2k}=(-1)^{k+b+e+J_1}\hat{J_1}\hat{J_2}
+  \begin{Bmatrix}
+    J_1&k&J_2\\e&b&a
+  \end{Bmatrix}O_{ae}^k,
+\end{equation}
+如果将单体算符接在右侧的粒子 $b$ 上，分解出来则是
+\begin{equation}
+  \Theta_{abae}^{J_1J_2k}=(-1)^{k+a+b+J_2}\hat{J_1}\hat{J_2}
+  \begin{Bmatrix}
+    J_1&k&J_2\\e&a&b
+  \end{Bmatrix}O_{be}^k.
+\end{equation}
+
+
+\section{组态空间中的算符相乘}
+有效算符部分涉及了一系列在两粒子空间中算符相乘的问题，需要在代码编写中仔细考虑。不管是 $\hat{Q}$-box 还是 $\hat{\Theta}$-box 都有单体与两体部分。$\hat{Q}$-box 中的算符都是哈密顿量，自然有单体与两体，而 $\hat{Q}$-box 的两体部分有两种图，也就是有两种来源，一种就是两个粒子腿的图，可以称为“纯两体”，另一种则是单体图加上一条外线，这在 \ref{sec:qbox-1b-to-2b} 节讨论过，是单体的 $\hat{Q}(\epsilon)$ 算符作用到两粒子空间的结果。$\hat{\Theta}$ 同理，尽管目前处理的是单体算符，但仍然会有两体的 $\hat{\Theta}$-box 图，类似 $\hat{Q}$-box 的 $(V-U)$ 图，将 $(V-U)$ 的圈叉换为单体算符即可。由此可以写出
+\begin{equation}
+  \hat{Q}=\hat{Q}^1+\hat{Q}^2,\quad\hat{\Theta}=\hat{\Theta}^1+\hat{\Theta}^2,
+\end{equation}
+上标表示单体与“纯两体”，为了方便后面的讨论，没把单体作用到两粒子空间的这部分两体纳入。在单粒子空间相乘，就是 $(\hat{Q}^1\hat{\Theta}^1)^1$，也就是矩阵直接相乘；而两体空间中则是
+\begin{equation}
+  (\hat{Q}\hat{\Theta})^2=(\hat{Q}^1\hat{\Theta}^1)^2+(\hat{Q}^1\hat{\Theta}^2+\hat{Q}^2\hat{\Theta}^1)^2+\hat{Q}^2\hat{\Theta}^2,
+\end{equation}
+其中单体乘两体，两体乘两体在考虑三粒子空间时会出现三体部分，这部分就不考虑了，而两体乘两体的两体部分也是矩阵直接相乘。为什么 EKKS 两体部分 $\hat{Q}$ 与 $\widetilde{H}^\text{eff}$ 相乘没有考虑这些呢？因为迭代的有效哈密顿量是单体转两体，再加纯两体的这部分，本身就是两粒子空间的，而$\hat{Q}$-box 的单体作用在两体的部分已经在 \ref{sec:qbox-1b-to-2b} 节中考虑了，相当于也是两粒子空间，因此可以直接矩阵相乘。
+
+下面讨论两粒子空间中单体乘单体、单体乘两体、两体乘两体的规则。因为金师兄的笔记中推导了这一些规则，所以这里也讨论下，直接将单体算符转到两体，与纯两体部分相加，再直接矩阵相乘应该也是可以的。

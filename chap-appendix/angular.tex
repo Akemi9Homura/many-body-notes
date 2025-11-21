@@ -1,0 +1,160 @@
+\section{CG 系数}
+\subsection{幺正性}
+\begin{align}
+  \sum_{J(M)}C_{j_1m_1j_2m_2}^{JM}C_{j_1m_1'j_2m_2'}^{JM}&=\delta_{m_1m_1'}\delta_{m_2m_2'}\label{app:cg-unitary-sumJM}\\
+  \sum_{m_1m_2}C_{j_1m_1j_2m_2}^{JM}C_{j_1m_1j_2m_2}^{J'M'}&=\delta_{JJ'}\delta_{MM'}\label{app:cg-unitary-summ1m2}
+\end{align}
+注意在幺正性中，参与耦合的两个角动量 $j_1,j_2$ 是固定的，不存在对它们的求和。\ref{app:cg-unitary-sumJM} 的 $M$ 求和加括号是因为 $m_1,m_2$ 固定，$M$ 其实也固定了。一个方便的记忆方法是求和的量是一样的，求和上面等式右边 $\delta$ 的指标就是下面的量，反之亦然。
+
+\subsection{对称性（“换底公式”）}
+\begin{align}
+  C_{j_1m_1j_2m_2}^{j_3m_3}&=(-1)^{j_1+j_2-j_3}C_{j_1-m_1j_2-m_2}^{j_3-m_3}=(-1)^{j_1+j_2-j_3}C_{j_2m_2j_1m_1}^{j_3m_3}\label{app:cg-changej1j2}\\
+  &=(-1)^{j_1-m_1}\hat{j}_3\hat{j}_2^{-1}C_{j_3m_3j_1-m_1}^{j_2m_2}=(-1)^{j_2+m_2}\hat{j}_3\hat{j}_1^{-1}C_{j_2-m_2j_3m_3}^{j_1m_1}\\
+  &=(-1)^{j_1-m_1}\hat{j}_3\hat{j}_2^{-1}C_{j_1m_1j_3-m_3}^{j_2-m_2}=(-1)^{j_2+m_2}\hat{j}_3\hat{j}_1^{-1}C_{j_3-m_3j_2m_2}^{j_1-m_1}\label{app:cg-changej1j2j3}
+\end{align}
+\ref{app:cg-changej1j2j3} 可以把在 CG 系数上下的角动量位置交换，因此我将其类比为“换底公式”。
+
+\section{Wigner-3$j$ 符号}
+$3j$ 符号顾名思义有三个角动量，分别是耦合前的两个与耦合后的一个，因此 $3j$ 符号与 CG 系数表达的物理一致，就是两个角动量的耦合。
+\subsection{基本性质}
+按顺序轮换列不变 \cite{book-zeng1}
+\begin{equation}
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&m_3
+  \end{pmatrix}=
+  \begin{pmatrix}
+    j_2&j_3&j_1\\m_2&m_3&m_1
+  \end{pmatrix}=
+  \begin{pmatrix}
+    j_3&j_1&j_2\\m_3&m_1&m_2
+  \end{pmatrix}\label{app:3j-loop}
+\end{equation}
+
+交换两列
+\begin{equation}
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&m_3
+  \end{pmatrix}
+  =(-1)^{j_1+j_2+j_3}
+  \begin{pmatrix}
+    j_2&j_1&j_3\\m_2&m_1&m_3
+  \end{pmatrix}\label{app:3j-change-column}
+\end{equation}
+
+\subsection{$3j$ 符号与 CG 系数的关系}
+$3j$ 符号转 CG 系数 \cite{book-zeng1}
+\begin{equation}
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&m_3
+  \end{pmatrix}
+  =(-1)^{j_1-j_2-m_3}\hat{j}_3^{-1}C_{j_1m_1j_2m_2}^{j_3-m_3}\label{app:3j-to-cg}
+\end{equation}
+
+CG 系数转 $3j$ 符号 
+\begin{equation}
+  C_{j_1m_1j_2m_2}^{j_3m_3}=(-1)^{j_1-j_2+m_3}\hat{j}_3  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&-m_3
+  \end{pmatrix}\label{app:cg-to-3j}
+\end{equation}
+
+\subsection{$3j$ 符号正交性}
+\begin{align}
+  \sum_{j_3m_3}\hat{j}_3^2
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&m_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1'&m_2'&m_3
+  \end{pmatrix}
+  &=\delta_{m_1m_1'}\delta_{m_2m_2'}\label{app:3j-ortho-sumjm}\\
+  \sum_{m_1m_2}
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&m_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    j_1&j_2&j_3'\\m_1&m_2&m_3'
+  \end{pmatrix}
+  &=\hat{j}_3^{-2}\delta_{j_3j_3'}\delta_{m_3m_3'}\delta(j_1j_2j_3)\label{app:3j-ortho-summ1m2}
+\end{align}
+这里的 $\delta(j_1j_2j_3)$ 含义是判断 $j_1,j_2,j_3$ 能否满足角动量耦合的三角关系，满足时为 1，不满足时为 0。\ref{app:3j-ortho-summ1m2} 还有一种等价的写法是
+\begin{equation}
+  \sum_{m_1m_2m_3}
+  \begin{pmatrix}
+    j_1&j_2&j_3\\m_1&m_2&m_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    j_1&j_2&j_3'\\m_1&m_2&m_3'
+  \end{pmatrix}
+  =\delta_{j_3j_3'}\delta_{m_3m_3'}\delta(j_1j_2j_3)\label{app:3j-ortho-summ1m2m3}
+\end{equation}
+\ref{app:3j-ortho-summ1m2m3} 在 \ref{eqs:w-e-reverse-3j1} 推出 \ref{eqs:w-e-reverse-3j2} 中用到。虽然左侧的 $m_1+m_2+m_3=0$ 的限制存在，取定 $m_1$ 与 $m_2$ 后，$m_3$ 已经被取定，左侧对 $m_3$ 求和额外加上的所有东西都是 0，但右侧对 $m_3$ 求和就是乘上 $2j_3+1$，因此 \ref{app:3j-ortho-summ1m2m3} 成立。
+
+\section{Wigner-6$j$ 符号}
+$6j$ 符号则是有六个角动量，表达的物理是三个角动量的耦合，不过需注意 $j_1$ 与 $j_2$ 先耦合为 $j_{12}$ 再与 $j_3$ 耦合，这与 $j_2$ 先与 $j_3$ 耦合为 $j_{23}$ 再与 $j_1$ 耦合是不一样的。
+
+\subsection{基本性质}
+三列可以任意排序 \cite{book-zeng2}
+\begin{equation}
+  \begin{Bmatrix}
+    j_1&j_2&j_3\\j_1'&j_2'&j_3'
+  \end{Bmatrix}
+  =\begin{Bmatrix}
+    j_a&j_b&j_c\\j_a'&j_b'&j_c'
+  \end{Bmatrix}
+\end{equation}
+
+上行中的任意两个数可以与下行的对应数对换
+\begin{equation}
+  \begin{Bmatrix}
+    j_1&j_2&j_3\\j_1'&j_2'&j_3'
+  \end{Bmatrix}
+  =\begin{Bmatrix}
+    j_1'&j_2'&j_3\\j_1&j_2&j_3'
+  \end{Bmatrix}
+\end{equation}
+
+\subsection{CG 系数与 $6j$ 符号的关系}
+\begin{align}
+  &\sum C_{j_1m_1j_2m_2}^{j_{12}m_{12}}C_{j_{12}m_{12}j_3m_3}^{jm}C_{j_2m_2j_3m_3}^{j_{23}m_{23}}C_{j_1m_1j_{23}m_{23}}^{j'm'}\notag\\
+  ={}&\delta_{jj'}\delta_{mm'}(-1)^{j_1+j_2+j_3+j}\hat{j}_{12}\hat{j}_{23}
+  \begin{Bmatrix}
+    j_1&j_2&j_{12}\\j_3&j&j_{23}
+  \end{Bmatrix}\label{app:cg-to-6j}
+\end{align}
+求和是对 $m_1,m_2,m_3,m_{12},m_{23}$ 进行的，$m,m'$ 固定。这个公式在使用时一个方便的方法是，寻找两种角动量耦合的顺序，一个是 $j_1$ 与 $j_2$ 先耦合为 $j_{12}$，再与 $j_3$ 耦合为 $j$，另一个是 $j_2$ 与 $j_3$ 先耦合为 $j_{23}$，再与 $j_1$ 耦合为 $j'$，根据这个顺序替换公式里的记号就方便了。
+
+\subsection{$6j$ 符号有一个数为 0}
+\begin{equation}
+  \begin{Bmatrix}
+    j_1&j_2&j_3\\j_4&j_5&0
+  \end{Bmatrix}
+  =\frac{(-1)^{j_1+j_2+j_3}\delta_{j_1j_5}\delta_{j_2j_4}}{\sqrt{(2j_1+1)(2j_2+1)}}\label{app:6j-onej-0}
+\end{equation}
+
+\section{Wigner $9j$ 符号}
+$9j$ 符号表达的是四个角动量的耦合，另外在 \cite{jin-goldstone} 中会用到归一化的 $9j$ 符号，定义为
+\begin{equation}
+  \begin{bmatrix}
+    j_1&j_2&j_{12}\\
+    j_3&j_4&j_{34}\\
+    j_{13}&j_{24}&J
+  \end{bmatrix}=\hat{j}_{12}\hat{j}_{13}\hat{j}_{23}\hat{j}_{24}
+  \begin{Bmatrix}
+    j_1&j_2&j_{12}\\
+    j_3&j_4&j_{34}\\
+    j_{13}&j_{24}&J
+  \end{Bmatrix}.
+\end{equation}
+
+\subsection{$9j$ 符号有一个数为 0}
+\begin{equation}
+  \begin{Bmatrix}
+    j_1&j_2&j_{12}\\
+    j_3&j_4&j_{34}\\
+    j_{13}&j_{24}&J
+  \end{Bmatrix}=\frac{(-1)^{j_2+j_3+j_{12}+j_{13}}\delta_{j_{12}j_{34}}\delta_{j_{13}j_{24}}}{\sqrt{(2j_{12}+1)(2j_{13}+1)}}
+  \begin{Bmatrix}
+    j_1&j_2&j_{12}\\
+    j_4&j_3&j_{13}
+  \end{Bmatrix}.
+\end{equation}

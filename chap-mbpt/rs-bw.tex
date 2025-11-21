@@ -1,0 +1,56 @@
+微扰理论在核物理中的应用主要有两种形态，一种与课本上的微扰理论相同，主要由 Tichai 等人研究 \cite{2010roth,2012langhammer,2016tichai,2016hu,2020tichai}，这种微扰不依赖于能量，称为 Rayleigh-Schrödinger (RS) 微扰。此外还有一种形式是通过 $\hat{Q}$-box 折叠图的方式得到壳模型的有效相互作用 \cite{1995jensen,2009coraggio,2012coraggio,2019stroberg,2020coraggio}，通过相似变换保证价空间的相互作用得到与完整的哈密顿量相同的本征值。\cite{2020tichai} 也指出这两种方法也分别对应了开壳核计算的两种方法。各种多体方法对闭壳核的计算都是比较直接的，比如 IMSRG，CC 等，计算闭壳核的版本都是更早发展的。这是因为闭壳核是一个单 Slater 行列式参考态，可以用单参考态方法解决。开壳核带来的问题是参考态不是一个单参考态，由于 $m$-scheme 下不同 $m$ 的轨道对应的能量是一样的，因此存在简并。运动方程（EOM）可以计算闭壳加减一两个核子的体系，但对于更重的开壳核就难以计算了。因此对开壳核的计算就发展出了两条路径，一种是将这些多体方法推广到价空间，目标是得到适用于价空间的有效相互作用，比如 VS-IMSRG，CCEI，SMCC 等，也包括 $\hat{Q}$-box 折叠图；另一种则是使用更一般的参考态，比如 MR-IMSRG，以及结合组态相互作用方法，以 NCSM 的结果作为参考态的多组态微扰理论（MCPT）与 IM-NCSM。此外还有使用粒子数破缺参考态的 Bogoliubov MBPT（BMBPT），这里就不详细讨论了。
+
+\cite{2023li} 指出 BH 形式的有效哈密顿量依赖于能量，称为 Brillouin-Wigner (BW) 微扰。而 $\hat{Q}$-box 折叠图方法是为了消除有效哈密顿量的能量依赖，对 BW 微扰的 BH 哈密顿量进行泰勒展开，这样就得到了各阶 $\hat{Q}$-box，而 $\hat{Q}$-box 的计算需将哈密顿量分为非微扰与微扰部分，并微扰展开为一系列 Goldstone 图，正是这一点使得 $\hat{Q}$-box 折叠图方法成为了 MBPT 的一种变体。除了图展开，其他的操作都是严格的，并不涉及微扰。
+
+\section{$\hat{Q}$-box 是哪种微扰}
+$\hat{Q}$-box 是 RS 微扰还是 BW 微扰呢？BW 微扰的出发点是能量依赖的 Bloch-Horowitz 哈密顿量 \cite{2023li}，
+\begin{equation}
+  H^{\mathrm{BH}}(E_k)=PHP+PH_1Q\frac{1}{E_k-QHQ}QH_1P,\label{eqs:BH-hamiltonian}
+\end{equation}
+$E_k$ 是原始哈密顿量的未知本征值，需要迭代计算是 BW 微扰的一个问题，此外由于 BH 哈密顿量是依赖于 $E_k$ 的，也就是说一个 $E_k$ 就对应一个 $P$ 空间的有效相互作用，因此并不能像 $\hat{Q}$-box 那样得出一个对应一组本征值的有效相互作用。不过这也是显然的，从后文 BH 哈密顿量的推导中看出，与解耦条件无关，仅仅是对 $E_k$ 这一个本征值方程的变形，因此迭代的最终目的只是求 $E_k$。
+
+不过如果能从 BH 哈密顿量中消去 $E_k$ 依赖，这个有效哈密顿量也是适用于多个本征值的。以任取的起点能量 $\mathcal{E}_0$ 为中心对 BH 哈密顿量进行泰勒展开，
+\begin{equation}
+  H^{\mathrm{eff}}=H^{\mathrm{BH}}(\mathcal{E}_0)+\sum_{m=1}^\infty\frac{1}{m!}\left[\frac{\mathrm{d}^m}{\mathrm{d}\omega^m}H^{\mathrm{BH}}(\omega)\right]_{\omega=\mathcal{E}_0}(H^{\mathrm{eff}}-\mathcal{E}_0)^m,\label{eqs:BH-to-qbox}
+\end{equation}
+为了得到上式，在展开之后做了一个替换，左侧的 $H^\mathrm{BH}(E_k)$ 换为 $H^\text{eff}$，右侧的幂次本应为 $(E_k-\mathcal{E}_0)^m$，但可以在等式的左右作用波函数，由 $H^\text{eff}$ 满足的本征值方程，可以把右侧的 $E_k$ 替换为 $H^\text{eff}$。这个结果与从解耦条件推出的 $\hat{Q}$-box 公式是完全一样的。总之，在公式形式上，$\hat{Q}$-box 与 BW 微扰有一点区别，但本质是一样的。
+
+\section{两种微扰的区别}
+RS 微扰与 BW 微扰在结果上的区别是什么？
+% 考虑核芯上填充一个核子的情况能够比较清晰地比较两者。在 RS 微扰中，虽然这是一个开壳核，但组态空间也只是 $M=1/2$ 这一个子空间，因此在模型空间的每条轨道上填充一个核子的组态可以作为单参考 RS 微扰的参考态，不会出现简并问题导致单参考理论失效。这样求出来的 RS 微扰能量应该是核芯加单核子体系的总能量，减去核芯的能量就可以得到单粒子能。对闭壳核的分析也是一样的。
+前面说过 $\hat{Q}$-box 本质是 BW 微扰，但通过泰勒展开消除了能量依赖，那这样的 $\hat{Q}$-box 会变成 RS 微扰吗？或者说，消除了能量依赖的 BW 微扰会等价于 RS 微扰吗？答案是否定的。接下来讨论 RS 微扰与 BW 微扰的联系。看单参考态的 RS 微扰公式，即使将 RS 微扰能量分母中的参考态零阶能量取为 BW 微扰的起点能量也是没有问题的，但这样 RS 微扰的各阶能量和会变为 $H^\text{BH}(\mathcal{E}_0)$，这与迭代出的 BW 微扰能量不会一样。
+
+从 BW 微扰可以推出 RS 微扰，可以更直接地看到区别。BH 哈密顿量的迭代过程可以认为是求解方程
+\begin{equation}
+  f(E) = E,
+\end{equation}
+其中
+\begin{equation}
+  f(E) = E^{(0)} + E^{(1)} + \sum_{a\ne 0}\frac{V_{0a}V_{a0}}{E-E_a^{(0)}} + \sum_{a,b\ne0}\frac{V_{0a}V_{ab}V_{b0}}{(E-E_a^{(0)})(E-E_b^{(0)})}+\ldots,
+\end{equation}
+其中 0 代表要求的基态，
+\begin{equation}
+  E^{(0)} = \langle\Phi_0|H_0|\Phi_0\rangle,\quad E^{(1)} = \langle\Phi_0|V|\Phi_0\rangle,
+\end{equation}
+为了记号方便，将 $H_1$ 写为 $V$。
+这个代数方程是从 BH 哈密顿量在模型空间中的本征值方程 \ref{eqs:BH-hamiltonian-eigen} 获得的，由于是单参考态（闭壳核），模型空间只有一维，因此可以转化为代数方程。从这里也可以看出 BW 微扰与 RS 微扰的区别，RS 微扰会将能量与波函数均划分为各阶微扰项，但 BW 微扰就没有波函数的微扰修正这个概念（其实能量微扰也没有，有微扰的只是 $\hat{Q}$-box），只是模型空间的内的波函数。可以证明，Goldstone 图就是 $f(E)$ 各项将 $a$ 取为所有使矩阵元不为 0 的中间态的结果。
+
+如前所述，BW 微扰中没有微扰能量与波函数的概念，$f(E)$ 中的微扰能量只起到记号的作用。但 RS 微扰中，目标能量 $E$ 需要写为
+\begin{equation}
+  E = E^{(0)} + E^{(1)} + E^{(2)} + E^{(3)} + \ldots,
+\end{equation}
+将分母上的 $E$ 展开，按照 $V$ 的个数分别组织在一起，具体来说是把每一项都看作 $E$ 的函数，展开的幂次是 $(E-E^{(0)})^k=(E^{(1)}+E^{(2)}+E^{(3)}+\ldots)^k$。因此 
+\begin{align}
+  f(E) ={}& E^{(0)} + E^{(1)} + \sum_{a\ne0}\left[\frac{V_{0a}V_{a0}}{E^{(0)}-E_a^{(0)}}-\frac{V_{0a}V_{a0}}{(E^{(0)}-E_a^{(0)})^2}E^{(1)}\right]\notag\\
+  &+\sum_{a,b\ne0}\left[\frac{V_{0a}V_{ab}V_{b0}}{(E^{(0)}-E_a^{(0)})(E^{(0)}-E_b^{(0)})}+\ldots\right],
+\end{align}
+而 $f(E)=E$，因此
+\begin{align}
+  E^{(2)}&=\sum_{a\ne0}\frac{V_{0a}V_{a0}}{E^{(0)}-E_a^{(0)}},\\
+  E^{(3)}&=\frac{V_{0a}V_{ab}V_{b0}}{(E^{(0)}-E_a^{(0)})(E^{(0)}-E_b^{(0)})} - E^{(1)}\frac{V_{0a}V_{a0}}{(E^{(0)}-E_a^{(0)})^2},
+\end{align}
+可以看出 RS 微扰的三阶能量不等价于 Goldstone 图，即使按照 \cite{2009coraggio} 的做法，把 $E^{(1)} = V_{00}$ 放进 $H_0$ 中，对 $V$ 重定义，也只能解决三阶多出来的这一项，四阶能量还是会出现单独的、无法包含在 Goldstone 图中的 $E^{(2)}$ 项。
+ 
+以上讨论说明，在公式形式上，\underline{$\hat{Q}$-box 与 BW 微扰有一些区别，但完全不是 RS 微扰}。如果 $\hat{Q}$-box 的泰勒展开收敛，结果与 BW 微扰相同，因此 \cite{2023li} 说的泰勒展开后的 $\hat{Q}$-box 是 RS 微扰是错误的。不过展开为 RS 微扰结果应该不会与 $\hat{Q}$-box 差太多。
+
+BW 微扰的实际应用不多，\cite{2023li,2024li-closed,2024li-open} 发展的 BW 微扰计算闭壳核与开壳核，其动机是 RS 微扰的逐阶收敛性是不明确的。而 \cite{2016tichai} 则用 RS 微扰将闭壳核的能量算到了 30 阶来研究收敛性问题，使用的是 \cite{2010roth,2012langhammer} 提出的可以达到高阶的递推方法。\cite{2016tichai} 在开头指出，MBPT 微扰级数的收敛性不明确，甚至不认为 MBPT 是一种 \textit{ab initio} 方法，尤其是 \cite{2010roth,2012langhammer} 在 HO 下进行 HO-MBPT 的高阶计算，发现是发散的。不过发散不代表着没有意义，可以通过 Pad{\'e} 近似恢复微扰序列，这就是 \cite{2010roth,2012langhammer} 的工作，其中 \cite{2010roth} 计算闭壳核，\cite{2012langhammer} 计算开壳核。而 \cite{2016tichai} 则是进一步用 HF 基计算，得出的结论是改用 HF 基可以克服 HO-MBPT 收敛性的问题，另外通过增大 SRG 参数，进一步软化核力也可以提高收敛性；当使用更硬的核力时，HF-MBPT 也会不收敛，这可以解释为更硬的核力导致非微扰的 HF 基对基态的近似更不好。HF 基与 HO 基收敛性的差别，说明了 MBPT 的逐阶收敛对哈密顿量的划分很敏感——划分指的是将哈密顿量划分出非微扰部分。\cite{2016tichai} 的讨论说明了 HF-MBPT 可以认为是 \textit{ab initio} 方法。

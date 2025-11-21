@@ -1,0 +1,328 @@
+\section{二次量子化}
+\subsection{Hilbert 空间}
+\label{sec:hilbert}
+在讨论多体问题之前，需要先理解单体。单体波函数存在于 Hilbert 空间中，Hilbert 空间是量子力学中的叫法，其严格的含义是平方可积（$L_2$）的复线性内积空间，其维数可以是有限的也可以是无限的。而在数学中 Hilbert 空间通常被认为是欧几里得空间（有限维实内积空间）向无限维的推广。应该指出，这里讨论的波函数是 $\psi(q)$，$q$ 只是一个粒子的所有坐标（比如空间坐标与自旋坐标），所以此时定义的 Hilbert 空间只是一体的 Hilbert 空间，可记为 $\mathscr{H}_1$。$\mathscr{H}_1$ 的定义相当于核物理中单粒子基的取定，其基矢就是单粒子基。
+
+接下来定义 $A$ 体 Hilbert 空间 $\mathscr{H}_A$，也就是需要给出空间的基矢。我们遵循这样的逻辑：在 $\mathscr{H}_1$ 的单粒子哈密顿量为 $H^{[1]}$（这种记法是为了防止与微扰理论中的 $H_0$ 与 $H_1$，以及 $H$ 的幂次混淆），先假设 $A$ 体系统无相互作用，那么
+\begin{equation}
+  H^{[A]}(q_1,\ldots,q_A)=\sum_{i=1}^AH^{[1]}(q_i),
+\end{equation}
+设 $H^{[1]}(q)$ 的本征方程为
+\begin{equation}
+  H^{[1]}(q)\varphi_k(q)=\epsilon_k\varphi_k(q),
+\end{equation}
+则 $H^{[A]}(q_1,\ldots,q_A)$ 的本征函数为
+\begin{equation}
+  \psi_{i_1\ldots i_A}(q_1,\ldots,q_A) = \varphi_{k_{i_1}}(q_1)\ldots\varphi_{k_{i_A}}(q_A),
+\end{equation}
+虽然做了无相互作用这个不物理的假设，不过这么做的目的是获得一组正交完备的多体基 $\psi_{i_1\ldots i_A}(q_1,\ldots,q_A)$，这组本征函数是 $(\mathscr{H}_1)^{\otimes A}$ 的基矢。
+
+在这里简单复习一下直和与张量积的概念，对于两个线性空间 $\mathscr{A}$ 与 $\mathscr{B}$，维数分别为 $M_A,M_B$，基矢分别为 $\{\vec{a}_i\},\{\vec{b}_j\}$，直和 $\mathscr{A}\oplus\mathscr{B}$ 维数为 $M_A+M_B$，基矢为 $\{(\vec{a}_i,\vec{0})\},\{(\vec{0},\vec{b}_j)\}$，而张量积 $\mathscr{A}\otimes\mathscr{B}$ 维数为 $M_AM_B$，基矢为 $\{\vec{a}_i\vec{b}_j\}$。举一个形象的例子，有两个势阱，对应的单体 Hilbert 空间分别为 $\mathscr{H}_A$ 与 $\mathscr{H}_B$，如果只有一个粒子，要么在势阱 $A$ 要么在势阱 $B$，总的 Hilbert 空间是 $\mathscr{H}_A\oplus\mathscr{H}_B$，而如果有两个粒子分别处于 $A$ 与 $B$，那么总的 Hilbert 空间则是 $\mathscr{H}_A\otimes\mathscr{H}_B$。
+
+不过物理上允许的 $A$ 体 Hilbert 空间是 $(\mathscr{H}_1)^{\otimes A}$ 的子空间，这是因为量子力学处理的粒子是全同的，因此对两个全同粒子进行交换时，体系的可观测量是不会改变的。这种交换对称性的要求对波函数的限制是，波函数必须为交换对称的或交换反对称的。换句话说，物理上允许的 $A$ 体 Hilbert 空间 $\mathscr{H}_A$ 由一个交换对称或反对称的映射 $\mathcal{S}$ 得到，
+\begin{equation}
+  \mathcal{S}:(\mathscr{H}_1)^{\otimes A}\mapsto\mathscr{H}_A,\quad |\varphi_1\rangle\otimes\ldots\otimes|\varphi_A\rangle\mapsto|\varphi_1,\ldots,\varphi_A\rangle,
+\end{equation}
+这里要额外提一句，写成 Dirac 符号之后就脱离了具体的表象，前面写出的 $\varphi(q)$ 应该是 $\langle q|\varphi\rangle$。
+
+\subsection{Fock 空间}
+以上在 $q$ 表象下的处理仍不让人满意，这是因为在 $q$ 表象下就必须先对粒子编号，再将张量积波函数叠加起来构建满足对称性要求的波函数。但实际上由于粒子是全同的，只需要知道处于每个单粒子态 $\varphi_k$ 上粒子的数目 $n_k$，就足够确定全同粒子体系的量子态了。此时使用的表象称为占据数表象，也叫 Fock 表象，$\mathscr{H}_A$ 的基矢为 
+\begin{equation}
+  |n_1\ldots n_m\rangle,\quad n_1+\ldots+n_m=A,
+\end{equation} 
+$m$ 为 $\mathscr{H}_1$ 的维数。
+
+可以看到这组基矢对总粒子数施加了限制，不过这个限制可以放松。这是出于两方面的考虑，在量子场论中有粒子的产生与湮灭，体系的粒子数就不守恒，放松这个限制是自然的；而在非相对论量子力学中，虽然粒子数守恒，但也会放松这个限制，
+
+Fock 空间不固定粒子数，是所有粒子数为 $A$ 的 Hilbert 空间的直和。
+\begin{equation}
+  \mathscr{F} = \bigoplus_{A=0}^\infty\mathscr{H}_A, 
+\end{equation}
+在通常的核结构研究中，原子核的核子数不会改变，也就是 Fock 空间不同粒子数的子空间之间没有相互作用，因此可以将 Fock 空间 $\mathscr{F}$ 投影到某个核子数 $A$ 的子空间处理，也就是 $A$ 体 Hilbert 空间 $\mathscr{H}_A$（对给定质子数与中子数的特定原子核，还需要进一步取 $\mathscr{H}_A$ 的子空间）。尽管不涉及粒子数的变化，但仍然引入二次量子化与 Fock 空间的概念，是因为二次量子化的公式形式比 $A$ 体 Hilbert 空间要简单很多，只需要一体、二体（以及三体）的信息就能表达出更多体的信息。$A$ 体 Hilbert 空间的基矢是 $A$ 个产生算符作用于真空态 $|0\rangle$，也称为组态空间，组态空间（组态基下的）哈密顿量 $H^{[A]}$ 就是二次量子化的哈密顿量 $H$ 写在这组基矢下的结果，这就是组态相互作用的公式 \ref{eqs:ci-0}、\ref{eqs:ci-1} 与 \ref{eqs:ci-2} 所做的事情。将 $H^{[A]}$ 的粒子数写为上标并加中括号，是为了防止与微扰理论中的 $H_0$ 与 $H_1$，以及 $H$ 的幂次混淆。而二次量子化的哈密顿量 $H$ 就是输入的核力。
+
+只要是涉及到组态的多体方法，最终都需要在 $A$ 体 Hilbert 空间中处理，比如组态相互作用壳模型（CISM），无核芯壳模型（NCSM），以及一系列后 HF 方法，包括计算闭壳核的 MBPT，IMSRG，CC，以及推导壳模型有效相互作用的 $\hat{Q}$-box，VS-IMSRG，SMCC。在有效相互作用理论中，将核芯的质量数记为 $A_c$，原则上需要对 $A-A_c$ 体 Hilbert 空间的哈密顿量进行相似变换，在 $j$-scheme 下基矢就是 $A-A_c$ 个角动量的耦合形成的多体波函数。实际计算中进行这么多个角动量的耦合是不可能的，在 $m$-scheme 下计算量又过大，因此 $\hat{Q}$-box 只处理单体与两体，本质上是一个 valence cluster expansion（VCE）方法。而 VS-IMSRG 与 SMCC 这两种方法在 Fock 空间中进行，直接对二次量子化后的 Fock 空间矩阵元进行操作，巧妙地避免了显式处理 $A-A_c$ 体 Hilbert 空间的困难，但代价是更大的计算量。关于这些方法的比较将会在第 \ref{chap:comparison} 章详细讨论。
+
+对一次量子化与二次量子化做一个简单地总结。一次量子化是从经典力学量子化到量子力学的这个过程，处理的是单体问题，关注的重点是波函数。二次量子化则是处理多体问题的一种方法，其根源来自于量子体系粒子的全同性，如果想沿用一次量子化的方式用多体波函数去描述体系，就需要显式地对粒子进行编号再对称或反对称化，所以只进行一次量子化的坐标表象不适合描述量子多体体系。而二次量子化把波函数与算符全部写到占据数表象下。实际上两者并不是先后的关系，更合适的叫法是“第一类量子化”与“第二类量子化”，本质是对场的量子化，“第一类量子化”看上去只量子化了波函数，但波函数也是来自于场的，场才是最本质的东西。不过在非相对论的核多体问题中并不需要考虑那么复杂，就用单体与多体问题理解一次量子化与二次量子化即可。
+
+下面讨论的二次量子化的方法，本质是把一次量子化的算符从最自然的坐标或动量表象写到占据数表象下的过程。虽然通常将这个空间称为 Fock 空间，但选取的单粒子基矢也肯定是坐标或动量的函数，坐标或动量依赖只是被编码进了基矢之内。
+
+\subsection{算符的二次量子化}
+直接引用曾谨言量子力学的结论，（多体系统的）单体算符的一次量子化形式为
+\begin{equation}
+  \hat{F}=\sum_{a=1}^N\hat{f}(a),
+\end{equation}
+也就是每个粒子单体算符之和。这里括号中的 $a$ 是粒子 $a$ 对应的一组坐标，写为 $q_a$ 更容易理解。在粒子数表象中可写为
+\begin{equation}
+  \hat{F}=\sum_{\alpha\beta}f_{\alpha\beta}a_\alpha^\dagger a_\beta,\quad f_{\alpha\beta} = (\phi_\alpha,\hat{f}\phi_\beta),\label{eqs:second-quantum-1b}
+\end{equation}
+$f_{\alpha\beta}$ 是单体算符夹在单粒子波函数之间的矩阵元。这里省略了单体算符的坐标。
+
+（多体系统的）两体算符的一次量子化形式为
+\begin{equation}
+  \hat{G}=\sum_{a<b}^N\hat{g}(a,b),
+\end{equation}
+二次量子化形式为
+\begin{equation}
+  \hat{G}=\frac12\sum_{\alpha\beta\gamma\delta}g_{\alpha\beta\gamma\delta}a_\alpha^\dagger a_\beta^\dagger a_\delta a_\gamma,
+\end{equation}
+其中 
+\begin{equation}
+  g_{\alpha\beta\gamma\delta}=(\phi_\alpha(1)\phi_\beta(2),\hat{g}(1,2)\phi_\delta(2)\phi_\gamma(1)),\label{eqs:second-quantum-2b}
+\end{equation}
+需区分希腊字母指标与数字指标，希腊字母代表的是单粒子态的指标，而数字则具体指出是哪个粒子，这两者没有关系。曾谨言证明二次量子化的形式确实是这样的方式为，在占据数表象下求二次量子化算符的对角元与非对角元，再用 Slater 行列式显式地计算一次量子化算符的对角元与非对角元，发现两者一样，这就证明了二次量子化形式的正确性。
+
+在核物理中最常见的是哈密顿量的二次量子化。一次量子化的哈密顿量包括单体的动能 $\hat{T}(i)$，可能的外势场 $\hat{V}(i)$，以及核子之间的两体相互作用 $\hat{V}(i,j)$，即
+\begin{equation}
+  \hat{H}=\sum_{i=1}^A(\hat{T}(i)+\hat{V}(i))+\sum_{i<j}^A\hat{V}(i,j),
+\end{equation}
+二次量子化的哈密顿量为
+\begin{equation}
+  \hat{H}=\sum_{\alpha\beta}h_{\alpha\beta}a_\alpha^\dagger a_\beta + \frac12\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma,
+\end{equation}
+其中 
+\begin{equation}
+  h_{\alpha\beta}=(\phi_\alpha,(\hat{T}+\hat{V})\phi_\beta),\quad V_{\alpha\beta\gamma\delta}=(\phi_\alpha(1)\phi_\beta(2),\hat{V}(1,2)\phi_\delta(2)\phi_\gamma(1)),
+\end{equation}
+这里的 $\phi_\alpha(1)\phi_\beta(2)$ 是两粒子的直积态，没有反对称化。直积态定义为
+\begin{equation}
+  |\alpha\beta)=\phi_\alpha(1)\phi_\beta(2),
+\end{equation}
+这并不是 Slater 行列式，也就不是 Fock 空间的基矢。需要将直积态进一步反对称化为
+\begin{equation}
+  |\alpha\beta\rangle=\frac1{\sqrt{2}}\begin{vmatrix}
+    \phi_\alpha(1)&\phi_\alpha(2)\\
+    \phi_\beta(1)&\phi_\beta(2)
+  \end{vmatrix}
+  =\frac1{\sqrt{2}}(|\alpha\beta)-|\beta\alpha))=a_\alpha^\dagger a_\beta^\dagger|0\rangle,
+\end{equation}
+这才是 Fock 空间的基矢。在区分了直积态与反对称态之后，二次量子化的矩阵元为
+\begin{equation}
+  V_{\alpha\beta\gamma\delta}=(\alpha\beta|\hat{V}|\gamma\delta),
+\end{equation}
+且满足 $V_{\alpha\beta\gamma\delta}=V_{\beta\alpha\delta\gamma}$，这相当于把粒子 1 与 2 对换，结果是一样的。
+实际计算中会进一步定义反对称的矩阵元
+\begin{equation}
+  V^\text{AS}_{\alpha\beta\gamma\delta}=\langle\alpha\beta|\hat{V}|\gamma\delta\rangle=\frac12[(\alpha\beta|-(\beta\alpha|]\hat{V}[|\gamma\delta)-|\delta\gamma)]=V_{\alpha\beta\gamma\delta}-V_{\alpha\beta\delta\gamma},
+\end{equation}
+反对称矩阵元的性质为
+\begin{equation}
+  V^\text{AS}_{\alpha\beta\gamma\delta}=-V^\text{AS}_{\beta\alpha\gamma\delta}=-V^\text{AS}_{\alpha\beta\delta\gamma}=V^\text{AS}_{\beta\alpha\delta\gamma}.
+\end{equation}
+由此二次量子化的哈密顿量变为
+\begin{equation}
+    \hat{H}=\sum_{\alpha\beta}h_{\alpha\beta}a_\alpha^\dagger a_\beta + \frac14\sum_{\alpha\beta\gamma\delta}V^\text{AS}_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma,\label{eqs:h-fock}
+\end{equation}
+将反对称矩阵元代入，并把 $\delta$ 与 $\gamma$ 指标对换，湮灭算符的反对易关系会多一个负号，将 1/4 的系数消为 1/2。在之后的推导中，将反对称矩阵元的上标 AS 忽略，默认所用的矩阵元全是反对称的。
+
+不过这里需要额外提一句，之后会计算的 $\hat{V}$ 的矩阵元，以及计算 Goldstone 图耦合的文章 \cite{jin-goldstone} 中定义的单体算符 $U$ 与两体算符 $V$ 的 $j$-scheme 矩阵元都只是 \ref{eqs:h-fock} 中产生湮灭算符的系数，这可以称为 Fock 空间的矩阵元，但更正确的理解是这些矩阵元是多体 Hilbert 空间的 building block，多体 Hilbert 空间的矩阵元是用这些 Fock 空间的矩阵元拼起来的。壳模型对角化需要处理不同粒子数的组态空间，因此任何有效相互作用理论输出的都不应该是 Hilbert 空间组态之间的矩阵元，而必须是 Fock 空间的矩阵元，这样才能让壳模型拼成任意粒子数 Hilbert 空间的组态相互作用矩阵元。然而，因为 $\hat{Q}$-box 是在组态空间中进行的方法，所以实际求解时还是会把单体与两体的 Fock 空间矩阵元混在一起一块相似变换，在代码中体现为需要将 $\hat{S}$-box 与 $\hat{Q}$-box 加起来一块进行变换，变换后需要额外将 Fock 空间矩阵元再提取出来。之所以要把 $\hat{S}$-box 与 $\hat{Q}$-box 手动加起来，是因为在计算 $\hat{S}$-box 与 $\hat{Q}$-box 时用 Fock 空间矩阵元，以 Goldstone 图计算 $\hat{S}$-box 与 $\hat{Q}$-box，而没有用到 \ref{eqs:ci-0}、\ref{eqs:ci-1}、\ref{eqs:ci-2} 这些用 Fock 空间矩阵元拼 Hilbert 空间矩阵元的组态相互作用公式。这部分操作在 \ref{sec:qbox-1b-to-2b} 中有详细描述。这里只需要记住，之后讨论的所有算符的变换都是对于 Fock 空间矩阵元而言的，这部分其实没有包含多体的信息，多体的信息被包含在产生湮灭算符里；只有在 $\hat{Q}$-box 进行相似变换时才会对总的、多体的 $H$ 进行处理。
+
+\section{角动量耦合}
+前面提到的直积态是一般的讨论，而在原子核的实际计算中，角动量及其耦合是非常重要的概念。描述单粒子态的量子数包括 $n,l,j,m,t_z$，单粒子态最详细的写法为 $|nljt_zm\rangle$，但在研究角动量耦合时，$n,l,t_z$ 这些量子数并不重要，用 $\zeta$ 代表这些量子数，可以把单粒子态写为 $|\zeta_ij_im_i\rangle$。还有一种写法是用 $k$ 代表 $\zeta$ 与 $j$，将单粒子态写为 $|km\rangle$，$k$ 相当于代码中 $j$-scheme 单粒子轨道的唯一编号，这种写法更加简洁，不过需要注意在角动量耦合时 $k_\alpha$ 对应的角动量就是 $j_\alpha$。在后续推导中使用的基本就是这种记法。
+
+这里还要再提一句 channel 的概念。Channel 与哈密顿量的对称性密切相关，哈密顿量的对称性包含角动量、同位旋与宇称三种。角动量的对称性指的是 $[\bm{J},H]=0$，而从这个对易关系出发可以推出 $[J_z,H]=0$ 与 $[J^2,H]=0$，前者决定了 $m$ 量子数是个好量子数，后者则决定了单粒子基对于 $m$ 量子数是 $2j+1$ 简并的，可以只记录一条单粒子轨道，这就是 $j$-scheme。而由 Wigner-Eckart 定理可知，不可约张量算符的矩阵元可以写成与 $m$ 量子数无关的约化矩阵元，对量子数 $m$ 的依赖关系完全由一个 CG 系数承担，因此可以忽略 $m$ 量子数，只记录约化矩阵元。另外，哈密顿量的同位旋、宇称对称性说明其不会改变粒子类型与宇称，这是显然的。
+
+对于单粒子态，$H$ 不会改变 $t_z$，而 $H$ 是秩为 0 的标量算符，也不会改变 $j$。$j=l\pm1/2$，对于同一个 $j$，两个 $l$ 一定是不同宇称，因此 $l$ 也必须相同。总之，$H$ 夹在两个单粒子态之间，只有 $l,j,t_z$ 全相同矩阵元才非 0。因此，可将 $l,j,t_z$ 相同的一系列 $j$-scheme 轨道称为一个 channel，也就是只有 $n$ 不一样的一套单粒子轨道为一个单粒子 channel。哈密顿量的单体部分是按照 channel 分块的，channel 之间没有相互作用。同样两粒子态也可以分两粒子的 channel，按照 $J,P,T_z$ 三个量子数标记，这时就没有轨道角动量的概念了。
+
+不过秩非 0 的张量算符，因为角动量是能被算符改变的，所以就没有这么好的 channel 定义了。
+
+\subsection{两体波函数}
+\label{sec:2b-wf}
+直积态属于非耦合表象 
+\begin{equation}
+  |k_1m_1k_2m_2)=\phi_{k_1m_1}(1)\otimes\phi_{k_2m_2}(2)
+\end{equation}
+写为耦合表象，
+\begin{equation}
+  |k_1k_2JM)=\sum_{m_1m_2}C^{JM}_{j_1m_1j_2m_2}|k_1m_1k_2m_2),\label{eqs:couple}
+\end{equation} 
+这里的 $k_\alpha=n_\alpha l_\alpha j_\alpha t_{z\alpha}$，因而耦合表象下算符 $\hat{O}$ 在直积态间的矩阵元为
+\begin{equation}
+  (k_1 k_2 JM | \hat{O} | k_3 k_4 J'M')
+  =\sum_{m_1 m_2 m_3 m_4} C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_3 m_3 j_4 m_4} (k_1 m_1 k_2 m_2 | \hat{O} | k_3 m_3 k_4 m_4),\label{eqs:couple-matrix}
+\end{equation}
+
+接下来要把两体波函数反对称化。非耦合表象的反对称两体波函数定义很简单，就是最一般的反对称化程序，
+\begin{equation}
+  |k_1m_1k_2m_2\rangle=\frac{1}{\sqrt{2}}\left[|k_1m_1k_2m_2)-|k_2m_2k_1m_1)\right],\label{eqs:uncouple-as}
+\end{equation}
+\ref{eqs:couple} 与 \ref{eqs:uncouple-as} 都是量子力学课本中的常见表达方式，但量子力学课本中没讲过怎么把耦合表象的 \ref{eqs:couple} 反对称化。类似 \ref{eqs:couple} 的定义方式，多一个归一化因子，
+\begin{equation}
+  |k_1k_2JM\rangle=N_{k_1k_2}\sum_{m_1m_2}C^{JM}_{j_1m_1j_2m_2}|k_1m_1k_2m_2\rangle,\label{eqs:couple-as},
+\end{equation}
+把归一化因子求出来即可，
+\begin{align}
+  1 &= \langle k_1 k_2 JM | k_1 k_2 JM \rangle \notag\\
+  &= N^2_{k_1 k_2} \sum_{m_1 m_2 m_1' m_2'} C^{JM}_{j_1 m_1 j_2 m_2} C^{JM}_{j_1 m_1' j_2 m_2'} \langle k_1 m_1 k_2 m_2 | k_1 m_1' k_2 m_2' \rangle \notag\\
+  &= N^2_{k_1 k_2} \sum_{m_1 m_2 m_1' m_2'} C^{JM}_{j_1 m_1 j_2 m_2} C^{JM}_{j_1 m_1' j_2 m_2'} \notag\\
+  &\times \frac{1}{2} \big\{ (k_1 m_1 k_2 m_2 | k_1 m_1' k_2 m_2') - (k_1 m_1 k_2 m_2 | k_2 m_2' k_1 m_1')\notag\\
+  &- (k_2 m_2 k_1 m_1 | k_1 m_1' k_2 m_2') + (k_2 m_2 k_1 m_1 | k_2 m_2' k_1 m_1') \big\} \notag\\
+  &= N^2_{k_1 k_2} \sum_{m_1 m_2 m_1' m_2'} C^{JM}_{j_1 m_1 j_2 m_2} C^{JM}_{j_1 m_1' j_2 m_2'} \big\{ \delta_{m_1 m_1'} \delta_{m_2 m_2'} - \delta_{k_1 k_2} \delta_{m_1 m_2'} \delta_{m_2 m_1'} \big\} \notag\\
+  &= N^2_{k_1 k_2} \sum_{m_1 m_2} \big\{ C^{JM}_{j_1 m_1 j_2 m_2} C^{JM}_{j_1 m_1 j_2 m_2} - \delta_{k_1 k_2} C^{JM}_{j_1 m_1 j_2 m_2} C^{JM}_{j_1 m_2 j_2 m_1} \big\} \notag\\
+  &= N^2_{k_1 k_2} \big\{ 1 - \delta_{k_1 k_2} (-1)^{J - 2j_1} \big\} = N^2_{k_1 k_2} \big[ 1 + (-1)^J \delta_{k_1 k_2} \big].\label{eqs:couple-as-norm}
+\end{align}
+倒数第二行用了 CG 系数的性质
+\begin{equation}
+  C^{JM}_{j_1m_1j_2m_2}=(-1)^{j_1+j_2-J}C^{JM}_{j_2m_2j_1m_1} \label{eqs:cg-property}
+\end{equation}
+以及隐含在 $\delta_{k_1k_2}$ 中的 $j_1=j_2$。
+
+定义出反对称的耦合表象两体波函数后，也可以写出在这组基下的矩阵元，
+\begin{align}
+  &\langle k_1 k_2 JM | \hat{O} | k_3 k_4 J'M' \rangle \notag\\
+  \equiv{}& N_{k_1 k_2} N_{k_3 k_4} \sum_{m_1 m_2 m_3 m_4} C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_3 m_3 j_4 m_4} \langle k_1 m_1 k_2 m_2 | \hat{O} | k_3 m_3 k_4 m_4 \rangle,\label{eqs:couple-matrix-as}
+\end{align}
+与直积态的耦合表象下的矩阵元 \ref{eqs:couple-matrix} 的关系为 
+\begin{align}
+  &\langle k_1 k_2 JM | \hat{O} | k_3 k_4 J'M' \rangle \notag\\
+  ={}& N_{k_1 k_2} N_{k_3 k_4} \sum_{m_1 m_2 m_3 m_4} C^{JM}_{j_1 m_1 j_2 m_2} C^{J'M'}_{j_3 m_3 j_4 m_4}\notag \\
+  \times{}& \big[(k_1 m_1 k_2 m_2 | \hat{O} | k_3 m_3 k_4 m_4) - (k_1 m_1 k_2 m_2 | \hat{O} | k_4 m_4 k_3 m_3)\big] \notag\\
+  ={}& N_{k_1 k_2} N_{k_3 k_4} \big[(k_1 k_2 JM | \hat{O} | k_3 k_4 J'M') - (-1)^{j_3 + j_4 - J'} (k_1 k_2 JM | \hat{O} | k_4 k_3 J'M')\big],\label{eqs:tensor-to-antisym}
+\end{align}
+同样用到了 CG 系数的性质 \ref{eqs:cg-property} 以及非耦合表象直积态的交换对称性 $|k_1m_1k_2m_2)=|k_2m_2k_1m_1)$。
+
+以 $sd$ 壳的中子-中子 channel 为例，观察每个 channel 是由哪些轨道耦合出来的。
+
+$J=0,P=+1:\nu(0d5/2)^2,\nu(1s1/2)^2,\nu(0d3/2)^2,\text{size}=3$。
+
+$J=1,P=+1:\nu(0d5/2)\nu(1s1/2),\nu(0d5/2)\nu(0d3/2),\text{size}=2$。这里要注意两条完全相同的单粒子轨道耦合不出奇数的 $J$，一方面可以从泡利不相容原理理解，另一方面可以根据 j-scheme 的两体波函数的归一化系数 \ref{eqs:couple-as-norm} 看出来。
+
+$J=2,P=+1:\nu(0d5/2)\nu(1s1/2),\nu(0d5/2)\nu(0d3/2),\nu(0d3/2)\nu(1s1/2),\nu(0d5/2)^2,\nu(0d3/2)^2,\\\text{size}=5$。
+
+$J=3,P=+1:\nu(0d5/2)\nu(1s1/2),\nu(0d5/2)\nu(0d3/2),\text{size}=2$。
+
+$J=4,P=+1:\nu(0d5/2)^2,\nu(0d5/2)\nu(0d3/2),\text{size}=2$。
+
+\subsection{Wigner-Eckart 定理}
+$j$-scheme 能大量地节省存储空间，但从 $m$ 量子数简并只能直观地看出来单粒子轨道可以只储存一条，矩阵元与 $m$ 量子数无关的性质还需要 Wigner-Eckart 定理才能得到，并不是那么显然。
+
+Wigner-Eckart 定理对约化矩阵元有不同的记法，首先是曾谨言以及 Edmonds 的记号
+\begin{subequations}\label{eqs:wigner-eckart}
+\begin{align}
+  \langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle
+  &=\frac1{\sqrt{2j_f+1}}C_{j_im_ikq}^{j_fm_f}\langle\zeta_fj_f||T^k||\zeta_ij_i\rangle\label{eqs:w-e-cg1}\\
+  &=\frac{(-1)^{k-j_i+j_f}}{\sqrt{2j_f+1}}C_{kqj_im_i}^{j_fm_f}\langle\zeta_fj_f||T^k||\zeta_i j_i\rangle\label{eqs:w-e-cg2}\\
+  &=(-1)^{j_f-m_f}
+  \begin{pmatrix}
+    j_f&k&j_i\\-m_f&q&m_i
+  \end{pmatrix}\langle\zeta_fj_f||T^k||\zeta_i j_i\rangle,\label{eqs:w-e-3j}
+\end{align}
+\end{subequations}
+
+这里注意两个问题，一是 CG 系数的三种记号，分别是 $C_{j_1m_1j_2m_2}^{JM}=\langle j_1m_1j_2m_2|JM\rangle=C_{m_1m_2M}^{j_1j_2J}$，第二种在推公式的时候最好理解，但是看上去比较费事，容易与波函数搞混，因此这里统一采用第一种记号。二是 Edmonds 约定的相位问题，看上去与 \ref{eqs:cg-property} 交换耦合的相位并不一样，这是因为此处的讨论仅限于整数秩的张量算符，$j_i$ 与 $k$ 耦合为 $j_f$，因此 $j_i,j_f$ 或全为整数，或全为半整数，则 $j_i-j_f$ 必为整数，就可以把相位换为 Edmonds 的写法。
+
+通过 \ref{eqs:wigner-eckart} 能够很方便地从角动量耦合的角度理解为什么标量算符 $H$ 不会改变角动量，又因为 CG 系数隐含的要求 $m_i+q=m_f$，$H$ 也不会改变 $m$ 量子数。因此哈密顿量的两体部分的矩阵元是
+\begin{equation}
+  \langle k_1k_2JM|\hat{V}|k_3k_4JM\rangle=\frac1{\sqrt{2J+1}}\langle k_1k_2J||\hat{V}||k_3k_4J\rangle,
+\end{equation}
+不过核力文件存储的反而不是约化矩阵元 $\langle k_1k_2J||\hat{V}||k_3k_4J\rangle$，而是 $\langle k_1k_2JM|\hat{V}|k_3k_4JM\rangle$，这是因为标量算符 $H$ 的 Wigner-Eckart 定理结构非常简单，在非耦合表象与耦合表象转换时，用 $\langle k_1k_2JM|\hat{V}|k_3k_4JM\rangle$ 计算并不会带来什么麻烦，反而少算一个 $1/\sqrt{2J+1}$ 的系数更加简单。不过对于秩非 0 的张量算符，实际处理的就都是约化矩阵元了。
+
+为了方便地从 $m$-scheme 矩阵元逆向得到约化矩阵元，推导一下 Wigner-Eckart 定理的逆变换。显然需要使用 CG 系数的幺正性消去等式右边的 CG 系数。观察等式可知需要求和的应该是 $m_i,m_f$，但是它们分别处于 CG 系数的上面与下面，无法直接使用 \ref{app:cg-unitary-summ1m2}，因此这里使用 CG 系数的“换底公式” \ref{app:cg-changej1j2j3} 将 $m_i,m_f$ 全拉到 CG 系数的下面，有 
+\begin{align}
+  \langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle
+  =(-1)^{j_i-m_i}\hat{k}^{-1}C_{j_fm_fj_i-m_i}^{kq}\langle\zeta_fj_f||T^k||\zeta_ij_i\rangle,
+\end{align}
+由此在左右两侧同乘 $C_{j_fm_fj_i-m_i}^{kq}$ 并对 $m_i,m_f$ 求和，得到
+\begin{subequations}\label{eqs:wigner-eckart-reverse}
+\begin{align}
+  \langle\zeta_fj_f||T^k||\zeta_ij_i\rangle&=\hat{k}\sum_{m_im_f}(-1)^{j_i-m_i}C_{j_fm_fj_i-m_i}^{kq}\langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle\label{eqs:w-e-reverse-cg}\\
+  &=\hat{k}^2\sum_{m_im_f}(-1)^{j_f-m_f}
+  \begin{pmatrix}
+    j_f&k&j_i\\-m_f&q&m_i
+  \end{pmatrix}\langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle\label{eqs:w-e-reverse-3j1}\\
+  &=\sum_{m_im_fq}(-1)^{j_f-m_f}
+  \begin{pmatrix}
+    j_f&k&j_i\\-m_f&q&m_i
+  \end{pmatrix}\langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle,\label{eqs:w-e-reverse-3j2}
+\end{align}
+\end{subequations}
+在 CG 系数转换为 $3j$ 符号时，用到了 $q=m_f-m_i$ 且 $q$ 为整数的条件。得到 \ref{eqs:w-e-reverse-3j2} 用到的 $3j$ 符号正交关系为 \ref{app:3j-ortho-summ1m2m3}。
+
+另外，当考虑两体算符时，需要在角动量耦合表象下使用 Wigner-Eckart 定理，此时就有直积态与反对称态两种矩阵元。一个直观的理解是 \ref{eqs:wigner-eckart} 等号左右都用直积态，就得到直积态的约化矩阵元；左右都用反对称态，就是反对称态的约化矩阵元。\ref{eqs:wigner-eckart} 用直积态矩阵元应该是自然的，反对称态矩阵元的 Wigner-Eckart 定理用 \ref{eqs:tensor-to-antisym} 可以直接得出，形式与 \ref{eqs:wigner-eckart} 一样，只需把矩阵元换为反对称的即可。
+
+除了 Edmonds 之外，在 $\hat{Q}$-box 中 Kuo 采取了不同的约化矩阵元的规定，
+\begin{equation}
+  \langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle=(-1)^{k-q}(-1)^{j_f-m_f}C_{j_im_ij_f-m_f}^{k-q}\langle\zeta_fj_f||T^k||\zeta_ij_i\rangle_\mathrm{Kuo},
+\end{equation}
+前面的相位可以吸收进 CG 系数中，使定义更加清晰，
+\begin{equation}
+    \langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle=(-1)^{j_i+m_i}C_{j_i-m_ij_fm_f}^{kq}\langle\zeta_fj_f||T^k||\zeta_ij_i\rangle_\mathrm{Kuo},\label{eqs:w-e-kuo}
+\end{equation}
+转为 $3j$ 符号，
+\begin{equation}
+    \langle\zeta_fj_fm_f|T^k_q|\zeta_ij_im_i\rangle=(-1)^{j_i-m_f+k}\hat{k}
+    \begin{pmatrix}
+      j_f&k&j_i\\-m_f&q&m_i
+    \end{pmatrix}
+    \langle\zeta_fj_f||T^k||\zeta_ij_i\rangle_\mathrm{Kuo},\label{eqs:w-e-kuo-3j}
+\end{equation}
+与 Edmonds 约定 \ref{eqs:w-e-3j} 的 $3j$ 符号一致，可以很简单地约去，得到Kuo 的约定与 Edmonds 满足的关系为
+\begin{equation}
+  \langle\zeta_fj_f||T^k||\zeta_ij_i\rangle_\mathrm{Edmonds}=(-1)^{j_i-j_f+k}\hat{k}\langle\zeta_fj_f||T^k||\zeta_ij_i\rangle_\mathrm{Kuo},
+\end{equation}
+接下来 Edmonds 约定就不写下标了。Kuo 新定义的目的是为了简化 Goldstone 图的计算，这一点在第 \ref{chap:effop} 章会更加仔细地论述。
+
+\subsection{$m$-scheme 与 $j$-scheme 的转换}
+虽然这一小节标题叫 $m$-scheme 与 $j$-scheme 的转换，但实际上接下来推导的反而是耦合表象与非耦合表象的转换。为什么要说这种转换是 $m$-scheme 与 $j$-scheme 的转换呢？这就要回到 $j$-scheme 的定义，包含这些因素：单粒子轨道简并，因此只存 $2j+1$ 条轨道中的一条；且 Wigner-Eckart 定理保证只需存 $m$ 量子数无关的约化矩阵元即可。严格来说，前者虽然很自然，但从逻辑上来说后者反而是决定性因素，最终需要的就是矩阵元，只有矩阵元与 $m$ 量子数无关，基矢才能放心地只保存一条。对于单体来说没有什么转换，简单地把 $m$ 去掉即可。但对于两粒子空间，其实有三个波函数，分别是 $|k_1m_1k_2m_2\rangle$，$|k_1k_2JM\rangle$ 与 $|k_1k_2J\rangle$。这里说的 $m$-scheme 与 $j$-scheme 的转换，本质其实是非耦合表象 $|k_1m_1k_2m_2\rangle$ 与耦合表象 $|k_1k_2JM\rangle$ 的转换。这是因为耦合表象基矢 $|k_1k_2JM\rangle$ 虽然带着 $M$，但用这组基矢算的（约化）矩阵元是 $j$-scheme 的。
+
+或者说，定义非耦合表象的直积态才是 $m$-scheme，角动量耦合后的耦合表象是 $j$-scheme。耦合的本质是为了用 Wigner-Eckart 定理，可以看到 \ref{eqs:wigner-eckart} 两侧的波函数都各只有一个 $j$，因此如果想使用 Wigner-Eckart 定理，就必须要耦合到只有一个总角动量的多粒子态才可以，在非耦合表象（$m$-scheme）下无法使用。通过这里的辨析，才能确信角动量耦合与 $j$-scheme 确实能够减少基矢的维数与算符矩阵元占用的内存。在接下来的推导中，$j$-scheme 的两体波函数虽然带着 $M$，但实际上只存了一条。
+
+
+\section{谐振子基}
+核力是写在 $j$-scheme 的谐振子基下的，多体方法可以直接在 HO 基下进行操作，也可以将 HO 基转为 HF 基进行计算。
+
+谐振子势求出本征波函数就是谐振子基，根据量子力学中最一般的求法，取对易力学量完全集为 $(H,l^2,l_z)$，求出的本征态由 $n,l,m$ 三个量子数标记，$m$ 为 $2l+1$ 重简并，而 $N=2n+l$ 决定能量，一个 $N$ 对应一个主壳层，这样就出现了 $0s$ 壳，$0p$ 壳，$1s0d$ 壳，$1p0f$ 壳等。
+
+但原子核有强烈的自旋-轨道耦合，因此需要将 $nl$ 标记的子空间进一步细分，通过引入 $j$ 量子数，将 CSCO 取为 $(H,l^2,j^2,j_z)$，波函数由 $n,l,j,m$ 四个量子数标记，$m$ 为 $2j+1$ 重简并。应注意在同一个主壳层内这组基矢的能量仍然是简并的，只是为了实际需要，按照原子核的实际对称性取的这组 CSCO。壳模型中的轨道通常指的就是 HO 基（当然如果多体方法是 HF 基，壳模型对角化的矩阵元也在 HF 基下）。
+
+\section{哈密顿量}
+
+接下来具体到原子核这个体系，讨论实际会用到的原子核的内禀哈密顿量。坐标或动量空间中的一次量子化哈密顿量写为
+\begin{equation}
+  H = T_{\mathrm{rel}} + V = \sum_{i=1}^{A} \frac{p_{i}^{2}}{2m} - \frac{P^{2}}{2M} + \sum_{i<j} V(i, j),\label{eqs:intrinsic-H}
+\end{equation}
+其中 \(\bm{P}=\sum_{i=1}^A\bm{p}_i\) 是质心动量，必须要减去，否则质心运动的能量会污染原子核的能谱。不过这还不足以把质心运动完全去掉，因为实际得到的波函数有 \(3A\) 个坐标分量，原则上可以分离变量，把 3 个质心运动的坐标分离出来，不管质心如何运动都不会影响原子核的内禀波函数。但实际上并不能做到这一点，因此实际的处理是 Lawson 方法，引入谐振子形式的质心运动，
+\begin{equation}
+    H = T_{\mathrm{rel}} + V +\beta\left(\frac{P^2}{2M}+\frac12M\Omega^2R^2-\frac32\hbar\Omega\right),\label{eqs:intrinsic-H-betaCM}
+\end{equation}
+并调节 \(\beta\) 使能量随着 \(\beta\) 基本不变，此时可以认为质心不激发，已经消去了质心运动的影响。
+
+首先对哈密顿量 \ref{eqs:intrinsic-H-betaCM} 进行化简，来更方便看到需要计算哪些量。相对质心的动能化简为
+\begin{equation}
+  T_\text{rel}=\left(1-\frac1A\right)\sum_{i=1}^A\frac{p_i^2}{2m}-\frac1{mA}\sum_{i<j}\bm{p}_i\cdot\bm{p}_j,
+\end{equation}
+同样的方式化简质心的动量 \(\bm{P}=\sum_{i=1}^A\bm{p}_i\) 与坐标 \(\bm{R}=\frac1A\sum_{i=1}^A\bm{r}_i\)，得到
+\begin{align}
+  H = & -\frac{3}{2} \beta \hbar \Omega + \left(1 - \frac{1 - \beta}{A}\right) \sum_{i}^{A} \frac{\bm{p}_{i}^{2}}{2m} + \frac{\beta}{2A} m \Omega^{2} \sum_{i=1}^A \bm{r}_{i}^{2}\notag\\
+  & + \frac{\beta - 1}{mA} \sum_{i<j} \bm{p}_{i} \cdot \bm{p}_{j} + \beta \frac{m \Omega^{2}}{A} \sum_{i<j} \bm{r}_{i} \cdot \bm{r}_{j} + \sum_{i<j} V_{ij}^{NN},
+\end{align}
+第一行是零体与单体算符，第二行是两体算符。不过需注意原则上属于核力的成分只有 \(V_{ij}^{NN}\)，这就是通常说的两体核力（相互作用）。注意到哈密顿量的单体与两体部分还有很多来自于动能的贡献，这是可以直接计算的，并不用存到核力文件中。不同的核力格式存了哈密顿量的哪些部分不太一样。以 Oslo 格式为例，它除了两体核力之外还有 Hcom，rirj 与 pipj 三列。先将哈密顿量写为
+\begin{align}
+  H_\text{Oslo} = & -\frac{3}{2}\beta\hbar\Omega + \left(1-\frac{1}{A}+\frac{\beta}{A}\right)\sum_{i=1}^{A}\left(\frac{p_{i}^{2}}{2m}+\frac{1}{2}m\Omega^{2}r_{i}^{2}\right) \notag \\
+  & +\frac{\beta-1}{A}\sum_{i<j}\left(\frac{\bm{p}_{i}\cdot\bm{p}_{j}}{m}+m\Omega^{2}\bm{r}_{i}\cdot\bm{r}_{j}\right) -\frac{1}{A}\sum_{i<j}\frac{1}{2}m\Omega^{2}\left(\bm{r}_{i}-\bm{r}_{j}\right)^{2}+\sum_{i<j}V_{ij}^{NN},
+\end{align}
+Oslo 格式存储的 Hcom 是 \(\frac1{\hbar\Omega}\sum_{i<j}\left(\frac{\bm{p}_{i}\cdot\bm{p}_{j}}{m}+m\Omega^{2}\bm{r}_{i}\cdot\bm{r}_{j}\right)\)，rirj 是 \(\frac1{\hbar\Omega}\sum_{i<j}\frac{1}{2}m\Omega^{2}\left(\bm{r}_{i}-\bm{r}_{j}\right)^{2}\)，而 pipj 则是 \(\frac1{m\hbar\Omega}\sum_{i<j}\bm{p}_i\cdot\bm{p}_j\)。虽然 Oslo 格式是这么存储的，但直接把存储的这几部分加起来作为哈密顿量，在有截断的多体方法中可能是不好的，原因我并未细究。总之目前的代码使用的哈密顿量是
+\begin{align}
+  H=&-\frac{3}{2}\beta\hbar\Omega+\left(1 - \frac{1 - \beta}{A}\right) \sum_{i=1}^{A} \frac{\bm{p}_{i}^{2}}{2m} + \frac{\beta}{A}\sum_{i=1}^A\frac12m\Omega^{2}\bm{r}_{i}^{2}\notag\\
+  &+\frac{\hbar\Omega}{A}\beta\left[\frac1{\hbar\Omega}\sum_{i<j}\left(\frac{\bm{p}_i\cdot\bm{p}_j}{m}+m\Omega^2\bm{r}_i\cdot\bm{r}_j\right)\right]-\frac{\hbar\Omega}{A}\frac1{m\hbar\Omega}\sum_{i<j}\bm{p}_i\cdot\bm{p}_j+\sum_{i<j}V_{ij}^{NN}.
+\end{align}
+也就是说 Oslo 格式的 Hcom 与 pipj 被用到，rirj 是没有被用到的。
+
+Oslo 格式的读取需要配套轨道文件。还有另外一类常用的格式称为 me2j，在读取的时候需要手动加上 \(V_{ij}^{NN}\) 以外的项，这类格式不需要外部额外输入轨道文件，而是需要自己生成。
+
+\subsection{哈密顿量的矩阵元}
+目前所有的讨论全是在一次量子化的框架下完成的，接下来需要进行二次量子化，将哈密顿量写到谐振子基下，然后存到核力文件中供多体计算读取。这里重点讨论需要额外计算的坐标与动量算符在谐振子基下的矩阵元形式。
+
+\subsection{核子质量修正}
+新版 IMSRG 代码加入了对哈密顿量动能项的修正，这是因为上面计算实际上只用了一个核子质量 \(m\)，并未考虑质子与中子的质量不同。实际上使用的核子质量 \(m\) 是
+\begin{equation}
+  m=\frac12(m_p+m_n),
+\end{equation}
+核子动能最严格的写法应该是
+\begin{equation}
+  \sum_{i=1}^A\frac{p_i^2}{2m_i}=\sum_{i=1}^A\left(\frac{p_i^2}{2m}+\frac{p_i^2}{2m}\frac{m-m_i}{m_i}\right),
+\end{equation}
+\ref{eqs:intrinsic-H-betaCM} 算的是等式右边的第一项，只需要对每一个 \(i\) 再用其真实质量 \(m_i=m_p,m_n\) 做修正即可。而质心动能
+\begin{equation}
+  \frac{P^2}{2\sum_{i=1}^Am_i}=\frac{P^2}{2M}+\frac{P^2}{2M}\left(\frac{M}{\sum_{i=1}^Am_i}-1\right),
+\end{equation}
+其中 \(M=Am\)。因此只需把 \ref{eqs:intrinsic-H-betaCM} 中的质心动能整体乘一个系数就能得到修正项。
