@@ -1,0 +1,27 @@
+给定某个算符 \(\hat{O}^\lambda_\mu\) 以及波函数 \(|\Psi_i\rangle\) 与 \(|\Psi_f\rangle\)，两个波函数都是角动量的本征态，计算可观测量可以直接计算 \(\langle \Psi_f|\hat{O}^\lambda_\mu|\Psi_i\rangle\)。波函数绝大多数都是组态空间的，是一系列行列式的叠加，为了计算出非 0 的可观测量，必须保证 \(\mu=M_f-M_i\)，由于在壳模型计算中通常会限制偶 \(A\) 核的 \(M=0\)，奇 \(A\) 核的 \(M=1/2\)，因此需要 \(\mu=0\) 的球张量算符的分量。这可以通过 \ref{eqs:wigner-eckart} 实现。因为在 \cite{2007suhonen} 等教材中，给出的电磁跃迁等算符都是约化矩阵元，要想得到实际被夹在波函数之间的算符，就需要 Wigner-Eckart 定理。
+
+但是直接用 \(m\)-scheme 的波函数夹算符计算可观测量会很慢，计算的量级是整个组态空间的维数。如果更改算符，就需要用波函数重新再计算一次。另外波函数的存储也很占用内存。因此，很多壳模型程序如 KSHELL，BIGSTICK 等选择先用波函数计算密度矩阵并输出，不是直接在程序内部处理算符信息，而是将波函数的信息与算符的信息分离开。密度矩阵的规模是由单粒子基决定的，因此不管是计算还是储存都要更方便。
+
+\subsection{密度矩阵的基本理论}
+
+\subsubsection{约化密度矩阵}
+密度矩阵最一般的定义是
+\begin{equation}
+  \rho=\ket{\Psi}\bra{\Psi},
+\end{equation}
+对于多体问题来说，\(\ket{\Psi}\) 是一系列组态的叠加，令组态空间维数为 \(D\)，因此密度矩阵变成了 \(D\) 维方阵，与直接用波函数处理问题的难度相同。通常说的密度矩阵指的都是一体与两体的约化密度矩阵（RDM），体系的一体与两体算符都可以用两体约化密度矩阵计算。而约化密度矩阵与完整的密度矩阵的关系是对 \(N\) 体系统中很多用不到的自由度求和掉。比如两体约化密度矩阵（2RDM）：
+\begin{equation}
+  \Gamma_{pqrs}=\mel{\Psi}{a_p^\dag a_q^\dag a_s a_r}{\Psi}=\sum_{ij}C_iC_j\mel{D_i}{a_p^\dag a_q^\dag a_s a_r}{D_j}.
+\end{equation}
+
+\subsection{跃迁密度}
+约化这个词在不同语境下的含义不同。在 Wigner-Eckart 定理处，约化指的是移除 \(m\) 量子数依赖；而约化密度矩阵的约化指的是对多体系统中不需要的粒子自由度求和掉。不过在实际多体计算中，密度矩阵就是约化到单体与两体的。
+
+核物理还有好的角动量量子数，因此算符也都是给出的约化矩阵元，因此 \cite{brown} 用 \(m\)-scheme 的波函数计算了跃迁密度，包括单体跃迁密度（OBTD）与两体跃迁密度（TBTD），这些跃迁密度给的都是约化后的双线矩阵元。所以原则上这些密度矩阵实际上经历过两次约化，不过单体与两体的这个称呼，已经包含了一层约化的含义，因此也有将 OBTD 与 TBTD 称为约化的单体与两体密度矩阵的，比如 BIGSTICK 的手册与 \cite{2007suhonen}，此时约化指的就是变为双线矩阵元。不过在 \cite{2007suhonen} 中将 \(\langle \Psi_f|\hat{O}^\lambda_\mu|\Psi_i\rangle=\langle \xi_fJ_fM_f|\hat{O}^\lambda_\mu|\xi_iJ_iM_i\rangle\) 称为单体跃迁密度了。这些称呼有些混乱，不过都是细节，知道接下来推导的 OBTD 与 TBTD 都是约化后的双线矩阵元就够了。
+
+\subsubsection{OBTD}
+$m$-scheme 的单体算符写为二次量子化的形式为
+\begin{equation}
+  \hat{O}^\lambda_\mu=\sum_{\alpha\beta}\langle \alpha|\hat{O}^\lambda_\mu|\beta\rangle a_\alpha^\dag a_\beta,
+\end{equation}
+这里的 \(\alpha\) 与 \(\beta\) 是 \(m\)-scheme 下单粒子态的标号，包含所有量子数。也正因如此才能写出产生湮灭算符，\(j\)-scheme 的单粒子态自然是写不成产生湮灭算符的。
