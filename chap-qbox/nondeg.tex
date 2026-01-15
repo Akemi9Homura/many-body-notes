@@ -1,0 +1,202 @@
+前一章讨论的是应用于简并模型空间的 KK 与 LS 方法。而用到两个主壳层的 HO-MBPT 以及 HF-MBPT 要求在非简并模型空间中求解有效哈密顿量。将 KK 与 LS 推广到非简并模型空间文献中有两种做法，一种是通过多能 $\hat{Q}$-box 得到 generalized KK 或 LS 方法，记为 GKK 与 GLS；另一种推广则称为 extended KK 或 LS 方法，记为 EKK 与 ELS，与简并模型空间中的 KK，LS 相比，每步迭代中更新的是 $H^\text{eff}$ 而不是 $H_1^\text{eff}$。另外，\cite{2014dong} 提到在 HO 基下如果跨壳可能会有质心运动的问题，这需要考虑一下。
+
+简并模型空间的方法不能直接应用于非简并模型空间，首先理论上说不通，另一方面是可能导致 $\hat{Q}$-box 不收敛。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.3\textwidth]{figure/corepol.png}
+  \caption{两体二阶核心极化图。图取自 \cite{2014tsunoda}。}
+  \label{fig:corepol}
+\end{figure}
+以图 \ref{fig:corepol} 为例，EKK 中的能量分母为 $(E-\epsilon_c-\epsilon_b-\epsilon_p+\epsilon_h)$，而 KK 则是 $[(\epsilon_c+\epsilon_d)-\epsilon_c-\epsilon_b-\epsilon_p+\epsilon_h]=\epsilon_d-\epsilon_b-\epsilon_p+\epsilon_h$，如果在 HO-MBPT 中取模型空间为 $sdpf$ 壳，当 $a,d\in 1p0f$，$b,c,p\in 1s0d$ 以及 $h\in 0p$ 时，$\epsilon_d=3\hbar\omega,\epsilon_b=\epsilon_p=2\hbar\omega,\epsilon_h=\hbar\omega$，能量分母为 0，KK 方法无法使用。
+
+\section{EKK}
+EKK 的迭代公式为
+\begin{align}
+  &QH_1P+QHQ\omega_n-\omega_nPHP-\omega_n PH_1Q\omega_{n-1}=0,\label{eqs:ekk-decouple}\\
+  &H_n^\text{eff}=PHP+PH_1Q\omega_n.\label{eqs:nondeg-iter-heff}
+\end{align}
+EKK 的收敛性
+\begin{equation}
+  \rho_P=\frac{\langle\Psi_i|P|\Psi_i\rangle}{\langle\Psi_i|\Psi_i\rangle}>\frac12,\quad i=1,\ldots,d,
+\end{equation}
+
+在 \cite{2011takayanagi2} 中将 EKK 迭代过程分为两种方案：一种是将 $H_{n}^\text{eff}$ 展开为 $H_{n-1}^\text{eff}$ 的级数，称为 EKKS；另一种则是将 $H_{n-1}^\text{eff}$ 对角化，称为 EKKD。
+
+\subsection{EKKD——对角化的 EKK}
+将 \ref{eqs:nondeg-iter-heff} 代入 \ref{eqs:ekk-decouple} 中，得到
+\begin{equation}
+  \omega_nH_{n-1}^\text{eff}-QHQ\omega_n=QH_1P,\label{eqs:nondeg-iter-ekkd}
+\end{equation}
+假设已经得到了 $H_{n-1}^{\mathrm{eff}}$，在 $P$ 空间进行对角化，
+\begin{equation}
+  H_{n-1}^{\mathrm{eff}}|\phi_i^{(n-1)}\rangle=E_i^{(n-1)}|\phi_i^{(n-1)}\rangle,\quad i=1,\ldots,d,\label{eqs:n-1 diagonalization}
+\end{equation}
+得到一组本征值 $E_i^{(n-1)}$ 与本征态 $|\phi_i^{(n-1)}\rangle$，将 $|\phi_i^{(n-1)}\rangle$ 右乘到 \ref{eqs:nondeg-iter-ekkd} 上，可得
+\begin{equation}
+  \omega_n|\phi_i^{(n-1)}\rangle=\frac1{E_i^{(n-1)}-QHQ}QH_1P|\phi_i^{(n-1)}\rangle,\quad i=1,\ldots,d,
+\end{equation}
+这就得到了 $\omega_n$，代入 \ref{eqs:nondeg-iter-heff} 中得到第 $n$ 步的 $H_{n}^{\mathrm{eff}}$，
+\begin{align}
+  H_{n}^{\mathrm{eff}}|\phi_i^{(n-1)}\rangle&=\left(PHP+PH_1Q\frac1{E_i^{(n-1)}-QHQ}QH_1P\right)|\phi_i^{(n-1)}\rangle\notag\\
+  &=H^\text{BH}(E_i^{(n-1)})|\phi_i^{(n-1)}\rangle,
+\end{align}
+\cite{2011takayanagi1} 给出了另一种推导，不是将 $|\phi_i^{(n-1)}\rangle$ 右乘到 \ref{eqs:nondeg-iter-ekkd} 上，而是右乘到 EKKS 的迭代公式 \ref{eqs:nondeg-iter-ekks} 上，等式右边就会变成 $\hat{Q}(E_i^{(n-1)})$ 以 $E$ 为起点的泰勒展开，
+\begin{equation}
+  H_{n}^{\mathrm{eff}}|\phi_i^{(n-1)}\rangle=PH_0P|\phi_i^{(n-1)}\rangle+\sum_{k=0}^\infty\hat{Q}(E)(E_i^{(n-1)}-E)^k=H^\text{BH}(E_i^{(n-1)})|\phi_i^{(n-1)}\rangle,\label{eqs:ekks-taylor}
+\end{equation}
+也就是说如果 EKKD 与 EKKS 迭代起点相同，给出的有效哈密顿量序列就是相同的 \cite{2011takayanagi2}。
+
+由于 $|\phi_i^{(n-1)}\rangle$ 不一定是 $P$ 空间的正交基，需要构造一组正交基 $|\widetilde{\phi}_i^{(n-1)}\rangle$ 满足
+\begin{equation}
+  \langle\widetilde{\phi}_i^{(n-1)}|\phi_j^{(n-1)}\rangle=\delta_{ij},\quad P=\sum_{i=1}^d |\phi_i^{(n-1)}\rangle\langle\widetilde{\phi}_i^{(n-1)}|,\label{eqs:ekkd-norm}
+\end{equation}
+因此第 $n$ 步的有效哈密顿量可构造为
+\begin{equation}
+  H_{n}^{\mathrm{eff}}=\sum_{i=1}^d H^\text{BH}(E_i^{(n-1)})|\phi_i^{(n-1)}\rangle\langle\widetilde{\phi}_i^{(n-1)}|.\label{eqs:n-step-heff}
+\end{equation}
+注意在实际计算中正交基的构建是通过矩阵求逆获得的。将 $H_{n-1}^{\mathrm{eff}}$ 对角化，获得 $d$ 个本征值与本征向量为列组成的矩阵 $\Phi=[\phi^{(n-1)}_1,\ldots,\phi^{(n-1)}_d]$，将矩阵取逆，得到
+\begin{equation}
+  \Phi^{-1}=
+  \begin{bmatrix}
+    \widetilde{\phi}_1^{(n-1)T}\\
+    \vdots\\
+    \widetilde{\phi}_d^{(n-1)T},
+  \end{bmatrix}
+\end{equation}
+根据逆矩阵的定义就可以导出正交归一关系 \ref{eqs:ekkd-norm}。
+
+迭代的起点需要注意。根据上面给出的迭代过程，需要最初选取一个哈密顿量对角化，再用这组本征值与本征向量构建下一步对角化的哈密顿量。\cite{2011takayanagi2} 的初值选取是 $PHP=PH_0P+PH_1P$，这应该是个很合理的选择，直接选取原始哈密顿量的 $P$ 空间块。而且在 EKKD 中没给初始的 $E$，也没法与 EKKS 取相同的初值。在 EKKS 代码中，将迭代的初值选为 $H^\text{eff}_0=PH_0P+\hat{Q}(E)$，在后面有效算符的计算中会发现这么取是合理的，与 KK 方法取 $H_1^\text{eff}(\omega_0)=\hat{Q}(\epsilon_0)$ 也是对应的，不过与 EKKD 的初值选取不同，就得不到与 EKKD 一致的收敛序列了。
+
+对于价空间轨道 $a$ 的 $\hat{S}$-box，
+\begin{equation}
+  \langle a|PHP|a\rangle=\epsilon_a+U_{aa},
+\end{equation}
+对于 $\hat{Q}$-box 的 channel $J^P$ 及其中的两个两体组态 $|ab\rangle,|cd\rangle$，
+\begin{equation}
+  \langle ab|PHP|cd\rangle=(\epsilon_a+\epsilon_b+U_{aa}+U_{bb})\delta_{ac}\delta_{bd}+V_{abcd}^J,
+\end{equation}
+这里的第一项是对角部分，只有 $|ab\rangle=|cd\rangle$ 才会有，由于代码中 $|ab\rangle$ 组态 $ab$ 的排序是确定的，因此 $|ab\rangle=|cd\rangle$ 对应的就是 $a=c,b=d$。这一项有两种理解方式，一种是 $PHP$ 的单体部分作用到两体空间，也就是后面证明的 \ref{eqs:real-1b-to-2b}；另一种则是发现 $PH_1P$ 就是 $\hat{Q}$-box 的一阶图。
+
+EKKD 直接用了 EKK 最原始的迭代式 \ref{eqs:ekk-decouple} 与 \ref{eqs:nondeg-iter-heff} 进行推导，因此 EKKD 的收敛条件就是 
+
+相比 EKKD，EKKS 在推导中 \ref{eqs:ekks-omega} 进行了级数展开。 
+
+\subsection{EKKS——级数求和的 EKK}
+在 \ref{eqs:nondeg-iter-ekkd} 中的 $H_{n-1}^\text{eff}$ 减去一个任意参数 $E$，
+\begin{equation}
+  (E-QHQ)\omega_n=QH_1P-\omega_n(H_{n-1}^\text{eff}-E),\label{eqs:ekks-decouple}
+\end{equation}
+由此可形式地解出 $\omega_n$，等式两侧左乘 $(E-QHQ)^{-1}$ 并进行级数展开，得到
+\begin{equation}
+  \omega_n=\frac{QH_1P}{E-QHQ}\left(1+\frac{H_{n-1}^\text{eff}-E}{E-QHQ}\right)^{-1}=\sum_{k=0}^\infty(-1)^k\frac{1}{(E-QHQ)^{k+1}}QH_1P(H_{n-1}^\text{eff}-E)^k,\label{eqs:ekks-omega}
+\end{equation}
+再代入 \ref{eqs:nondeg-iter-heff} 得到
+\begin{align}
+  H_n^\text{eff}&=PH_0P+\sum_{k=0}^\infty\hat{Q}_k(E)(H_{n-1}^\text{eff}-E)^k\notag\\
+  &=H^\text{BH}(E)+\sum_{k=1}^\infty\hat{Q}_k(E)(H_{n-1}^\text{eff}-E)^k,\label{eqs:nondeg-iter-ekks}
+\end{align}
+其中 $H^\text{BH}(E)=PH_0P+\hat{Q}(E)$。$\hat{Q}(\epsilon)$ 中 $(\epsilon-QHQ)^{-1}$ 直接计算是不可能的，需要进行微扰展开，
+\begin{align}
+  \hat{Q}(\epsilon)={}&P H_1 P + P H_1 Q \frac{1}{\epsilon - Q H_0 Q} Q H_1 P \notag\\
+  &+ P H_1 Q \frac{1}{\epsilon - Q H_0 Q} Q H_1 Q \frac{1}{\epsilon - Q H_0 Q} Q H_1 P + \dots,
+\end{align}
+展开的一、二、三项分别有 1,2,3 个 $H_1$，对应一、二、三阶图。可以证明如果 EKKD 与 EKKS 迭代起点相同，给出的有效哈密顿量序列就是相同的 \cite{2011takayanagi2}。那么应该如何理解 EKKD 没有 $E$ 这个参数，而 EKKS 却有呢？$E$ 可以看作是 $H^\text{BH}(E_i^{(n-1)})$ 泰勒展开的起点，如果泰勒级数能够收敛，其结果与起点的选取无关。需要注意的是 \ref{eqs:nondeg-iter-ekks} 并不是泰勒展开，这只是一个有效哈密顿量满足的自洽迭代公式，泰勒展开出现在 \ref{eqs:ekks-taylor} 中。
+
+在 \cite{2011takayanagi1} 的推导中，没有减去起点能量 $E$，而是直接写出
+\begin{equation}
+  \omega_n=\sum_{k=0}^\infty(-1)^k\frac{1}{(-QHQ)^{k+1}}QH_1P(H_{n-1}^\text{eff})^k,
+\end{equation}
+相当于计算了 $\epsilon=0$ 的 $\hat{Q}(\epsilon)$，因此 
+\begin{align}
+  H_n^\text{eff}&=PH_0P+\sum_{k=0}^\infty\hat{Q}_k(0)(H_{n-1}^\text{eff})^k\notag\\
+  &=H^\text{BH}(0)+\sum_{k=1}^\infty\hat{Q}_k(0)(H_{n-1}^\text{eff})^k,
+\end{align}
+\cite{2011takayanagi1} 指出，这个有效哈密顿量对泰勒展开的起点 $E=0$ 没有强烈的依赖，对此的解释是在 \ref{eqs:n-1 diagonalization} 的求解中 $E_i^{(n-1)}$ 会吸收起点的改变，经过几步迭代之后起点的影响就看不出来了。不过这个解释有些奇怪，EKKS 并不会进行 EKKD 的对角化这一步骤，这是否意味着可以在 EKKS 之后跟上几步 EKKD，以消除对起点的依赖？
+
+这之前的推导都是形式地将 $H$ 分为 $H_0$ 与 $H_1$，并没有用到 $H_0$ 与 $H_1$ 的具体形式，因此可以进行选择。输入的二次量子化形式的哈密顿量为
+\begin{equation}
+  H=\sum_{\alpha\beta}h_{\alpha\beta}a^\dagger_\alpha a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma=H_0+H_1,
+\end{equation}
+在 HF 基下，自然的选取为
+\begin{align}
+  H_0&=\sum_\alpha\epsilon_\alpha a^\dagger_\alpha a_\alpha,\\
+  H_1&=\sum_{\alpha\beta}(h_{\alpha\beta}-\epsilon_\alpha\delta_{\alpha\beta})a^\dagger_\alpha a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma\notag\\
+  &=\sum_{\alpha\beta}g_{\alpha\beta}a^\dagger_\alpha a_\beta+\frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma,
+\end{align}
+EKK 可以看作将 $H_0$ 的价空间部分强行简并为 $E$，再使用 KK 的公式，也就是说 
+\begin{equation}
+  H=H_0'+H_1'
+  =\begin{pmatrix}
+    E&0\\0&QH_0Q
+  \end{pmatrix}
+  +\begin{pmatrix}
+    P\widetilde{H}P&PH_1Q\\QH_1P&QH_1Q
+  \end{pmatrix},
+\end{equation}
+其中 $\widetilde{H}=H-E$，因此从以上划分可以直接将 KK 的简并能量 $\epsilon_0$ 换为 $E$，被迭代的 $H_1^\text{eff}$ 换为 $\widetilde{H}^\text{eff}$ 即可。但需注意首项 $\hat{Q}(E)$ 变为了
+\begin{equation}
+  P\widetilde{H}P+PH_1Q\frac1{E-QHQ}QH_1P=PH_0P+\hat{Q}(E)-E\equiv\widetilde{H}^\text{BH}(E).
+\end{equation}
+
+实际计算中发现 $(V-U)$ 项是比较大的，而 MBPT 所谓的微扰就是体现在
+
+\section{ELS}
+不同的求解方法处理的都是 \ref{eqs:origin-decouple} 这个解耦条件，实际迭代时需要用 $n$ 步与 $n-1$ 步 $\omega$ 的关系进行计算。EKK 写为 \ref{eqs:ekk-decouple}，而 ELS 的写法有些区别，写为 
+\begin{equation}
+  QH_1P+QHQ\omega_n-\omega_{n-1}PHP-\omega_{n-1} PH_1Q\omega_{n}=0,\label{eqs:els-decouple}
+\end{equation}
+把 \ref{eqs:nondeg-iter-heff} 代入，得到 
+\begin{equation}
+  \omega_n=\frac1{-QHQ}QH_1P-\frac1{-QHQ}\omega_{n-1}H_n^\text{eff},
+\end{equation}
+再代入到 \ref{eqs:nondeg-iter-heff} 中，
+\begin{equation}
+  H_n^\text{eff}=\left(1+PH_1Q\frac{1}{-QHQ}\omega_{n-1}\right)^{-1}H^\text{BH}(0).
+\end{equation}
+与 LS 的推导类似，取 $\omega_0=0$，有
+\begin{align}
+  & H_{1}^{\mathrm{eff}}=H^{\mathrm{BH}}(0), \\
+  & H_{2}^{\mathrm{eff}}=\frac{1}{1-\hat{Q}_1(0)}H^{\mathrm{BH}}(0), \\
+  & H_{3}^{\mathrm{eff}}=\frac{1}{1-\hat{Q}_1(0)-\hat{Q}_2(0)H_2^{\mathrm{eff}}}H^{\mathrm{BH}}(0),
+\end{align}
+因此得到
+\begin{equation}
+  H_n^\text{eff}=\left(1-\hat{Q}_1(0)-\sum_{m=2}^{n-1}\hat{Q}_m(0)\prod_{k=n-m+1}^{n-1}H_k^\text{eff}\right)^{-1}H^{\mathrm{BH}}(0).
+\end{equation}
+\cite{2011takayanagi1} 引入的 EKK 与 ELS 方法相比简并模型空间的 KK 与 LS 方法，可以直接把 $\epsilon_0$ 换为 0 或一个任意的起点能量 $E$，把 $H_1^\text{eff}(\omega_n)$ 替换为 $H_n^\text{eff}$，并且在等式两侧同时加上 $PH_0P$，此时就可以把 $PH_0P+\hat{Q}(E)$ 组合为 $H^\text{BH}(E)$。不过注意这里的 EKK 指的是 EKKS，因为 \cite{2012coraggio} 中引入的简并模型空间的 KK 就是级数求和形式的，对应的非简并模型空间的推广就也是级数求和形式的 EKKS。但正如前所述 \cite{2011takayanagi2} 与 \cite{2014dong} 还给出了 EKKD，这也是一种 KK 向非简并模型空间的推广。
+
+$\hat{Q}$-box 都是计算能量为 0 处肯定很不好，需要引入参数 $E$。这里有两种方法，其一是遵循 \cite{2011takayanagi1,2011takayanagi2} 的一贯思路，这两篇文章推导 EKK 从迭代式 \ref{eqs:ekk-decouple} 出发的，推导 ELS 则是从迭代式 \ref{eqs:els-decouple}，也就是从最初就在解耦条件中引入下标 $n$ 与 $(n-1)$。对于 EKKS 能方便地引入 $E$，因为 \ref{eqs:ekk-decouple} 只有$\omega_n$，在 $QHQ$ 上减去再加上 $E$ 就能凑出想要的形式。而 \ref{eqs:els-decouple} 则不能这么推导，只能先推导出一个 $E=0$ 的形式。在此基础上，对 $\widetilde{H}=H-E$ 写出
+\begin{equation}
+  \widetilde{H}_n^\text{eff}=\left(1-\hat{Q}'_1(0)-\sum_{m=2}^{n-1}\hat{Q}'_m(0)\prod_{k=n-m+1}^{n-1}\widetilde{H}_k^\text{eff}\right)^{-1}\widetilde{H}^{\mathrm{BH}}(0),
+\end{equation}
+认为 $E$ 的平移是作用到 $H_0$ 中的，$H_1$ 不变，因此有 $\hat{Q}'_k(0)=\hat{Q}_k(E),\widetilde{H}^{\mathrm{BH}}(0)=H^{\mathrm{BH}}(E)-E$，这样就得出
+\begin{equation}
+  \widetilde{H}_n^\text{eff}=\left(1-\hat{Q}_1(E)-\sum_{m=2}^{n-1}\hat{Q}_m(E)\prod_{k=n-m+1}^{n-1}\widetilde{H}_k^\text{eff}\right)^{-1}\left(H^{\mathrm{BH}}(E)-E\right).
+\end{equation}
+另一种推导方法是先写出自洽方程，也就是等式不含有步数的下标，然后再改写为迭代式的形式。之前 KK 与 LS 的推导都是这么做的。得到的结果为
+\begin{align}
+  \omega&=\frac1{E-QHQ}QH_1P-\frac1{E-QHQ}\omega\widetilde{H}^\text{eff},\\
+  \widetilde{H}^\text{eff}&=\left(1+PH_1Q\frac{1}{E-QHQ}\omega\right)^{-1}\left(H^\text{BH}(E)-E\right).
+\end{align}
+
+此外 \cite{2011takayanagi1} 还指出与 EKKS 不同，起点能量 $E=0$ 对 ELS 很重要
+
+\section{EKK 与 ELS 总结}
+% \subsection{EKK 与 ELS 的比较}
+% 可以证明 EKK 得到的有效哈密顿量的本征态是与 $P$ 空间有最大重叠的态，而 ELS 得到的有效哈密顿量的本征值是完整的
+
+\subsection{EKK 起点能量 $E$ 的选取}
+在 EKK 与 ELS 中，$E$ 的选取要达到两个目的，一是需要满足收敛条件 \ref{eqs:ekks-conv}，二是需要保证 $\hat{Q}$-box 的每个分母都不是 0，也就是 $E$ 要避开 $\hat{Q}$-box 的极点，否则在计算过程中就会发散。
+
+\ce{^43Sc} 以 \ce{^28Si} 为核芯的 EKKS 计算可以说明这些现象。
+将 $\hat{S}$-box 的 $E_1$ 取为 $-7$ MeV，$\nu(1s_{1/2})$ 的 $\hat{S}$-box 的导数随着阶数的增大而增大，这是因为 $k$ 阶导数的分母上是 $(E_1-(\sum\epsilon_p-\sum\epsilon_h))^{k+1}$，如果 $E_1-(\sum\epsilon_p-\sum\epsilon_h)<1$，高阶导数就会很大，而要想使 EKKS 与起点能量无关，就需要求和到所有阶 \cite{2014dong}。因此 $E$ 的选择要避开 $\hat{Q}$-box 分母的极点，判断标准就是所有分母都要大于 1，这样随着求导阶数的升高才能逐渐压低。
+
+不过即使如此也有可能不收敛。将 $E_1$ 改为 $-20$ MeV，$\hat{S}$-box 的导数不发散了，但此时价空间单粒子能仍然发散。将级数求和中相邻的两项相比，发现某些项
+\begin{equation}
+  \left|\frac{\hat{Q}_{k+1}(E_1)}{\hat{Q}_{k}(E_1)}(E_{\mathrm{sp}}-E_1)\right|>1,
+\end{equation}
+这导致了级数随着项数的增加反而变大，最终发散。将 $(V-U)$ 图去掉后同样的 $E_1$ 可以收敛，这说明 Hartree-Fock 基的非微扰单粒子能的改变并不是进行分数填充之后不收敛的原因。同时观察到 $(V-U)$ 图的加入对 $\hat{Q}(\epsilon)$ 产生了明显的改变，应该是 $\hat{Q}(\epsilon)$ 性质的变化导致对于同样的起点能量 EKKS 变得不收敛。但 $(V-U)$ 图并未直接出现在级数收敛的条件 \ref{eqs:ekks-conv} 中，这就引出了一些疑问：$(V-U)$ 图的加入对 $E_p$ 的间接改变大到了什么地步？怎么才能像 \cite{2011takayanagi2} 指出的，在计算之前就能先验地判断 $E_p$ 并将 $E$ 取到 $E_p$ 附近？根据单粒子能的实验值吗？但是在分数填充并对所计算的原子核进行 Hartree-Fock 的情境下，单粒子能实验值真的有意义吗？是针对这个要计算的原子核的吗？
+
+以上问题暂时没有一个让人满意的解答。
+
+\input{chap-qbox/nondeg2.tex}

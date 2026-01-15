@@ -1,0 +1,362 @@
+\newcommand{\mref}{\mathcal{M}_{\text{ref}}}
+
+多组态微扰理论（MCPT）的参考态是 Slater 行列式的叠加，应该属于多参考态方法的一种。关于各种多参考态方法的简介与基本思想在后面有单独讨论，这里先把需要用到的 MCPT 推导一下。MCPT 在核物理中的使用为重要性截断 NCSM (IT-NCSM) \cite{2009roth} 以及 NCSM-PT \cite{2018tichai}。记整个 Hilbert 空间的一组多体基为 $\{\ket{\Phi_\nu}\}$，用大写的 $\ket{\Phi_\nu}$ 而不使用 \cite{2018tichai} 的小写，是为了明显地看出这是多体基而不是单粒子波函数，用小写的 $\ket{\phi_\nu}$ 表示单粒子基更加自然。当基矢为最简单的 Slater 行列式时，这里进一步用 \(\ket{D_\nu}\) 表示，行列式基矢基转换后的基矢则用 \(\ket{\Phi_\nu}\) 表示。可以挑选所研究的 Hilbert 空间的子空间 $\mathcal{M}_\text{ref}$ 进行 MCPT。对于 NCSM-PT，参考空间是 $N_\text{max}$ 截断的组态空间。而对于后续的 Gamow 壳模型的 PT 计算，取 pole 近似的空间作为参考空间也很自然。
+将 $H$ 限制在 $\mathcal{M}_\text{ref}$ 内，对角化能得到一系列的小空间的波函数
+\begin{equation}
+  |\psi_\text{ref}\rangle=\sum_{\mu\in\mathcal{M}_\text{ref}}c_\mu\ket{D_\mu},
+\end{equation}
+波函数的记号统一为用 \(\ket{\psi}\) 表示 \(\mref\) 的本征态，
+% 这些波函数都可以作为参考态，因此不用写出下标 ref，
+而真实的波函数以及微扰修正后的波函数则用 \(\ket{\Psi}\) 表示。
+% 而下标则用 \(k\) 表示 \(\mref\) 本征态的序号，具体到某个 \(k\) 时就变成了 \cite{2009roth,2018tichai} 中 ref 的含义；而 \(\mu,\nu\) 则分别表示 \(\mref\) 内外的 Slater 行列式下标。
+
+\section{基转换视角推导微扰理论}
+\label{sec:basis-trans}
+单参考态微扰理论取某个 Slater 行列式 \(\ket{D_0}\) 为参考态，对能量与波函数的微扰修正来自于与 \(\ket{D_0}\) 正交的组态，也就是除了 \(\ket{D_0}\) 外的全部组态。单参考态微扰理论用于开壳核、激发态会出现一系列简并的行列式，找不到一个好的单参考态。但可以基转换得到一组新的基矢 \(\{\ket{\Phi_i}\}\)，在这组新基下进行微扰，其本质就是 MCPT。基转换关系写为
+\begin{equation}
+  \ket{\Phi_i}=\sum_j\ip{D_j}{\Phi_i}\ket{D_j}=\sum_jU_{ji}\ket{D_j},\label{eqs:newket}
+\end{equation}
+注意到这里是 \(U_{ji}\) 而不是 \(U_{ij}\)，需要回顾一下量子力学的基本讨论，澄清定义。对于一个给定的态 \(\ket{\psi}\)，可分别在基矢 \(\{\ket{k}\}\) 与基矢 \(\{\ket{\alpha}\}\) 下展开为
+\begin{equation}
+  \ket{\psi}=\sum_k\ip{k}{\psi}\ket{k}=\sum_ka_k\ket{k},\quad \ket{\psi}=\sum_\alpha\ip{\alpha}{\psi}\ket{\alpha}=\sum_\alpha a'_\alpha\ket{\alpha},
+\end{equation}
+通常用列矢量表示，也就是 
+\begin{equation}
+  \bm{a}=\begin{pmatrix}
+    a_1\\a_2\\\vdots\\a_n
+  \end{pmatrix},\quad
+  \bm{a}'=\begin{pmatrix}
+    a'_1\\a'_2\\\vdots\\a'_n
+  \end{pmatrix},
+\end{equation}
+基矢 \(\{\ket{\alpha}\}\) 下的表示可转换为
+\begin{align}
+  a'_\alpha=\ip{\alpha}{\psi}=\sum_{k}\ip{\alpha}{k}\ip{k}{\psi}=\sum_kU_{\alpha k}a_k,
+\end{align}
+即
+\begin{equation}
+  \bm{a}'=\bm{U}\bm{a}.\label{eqs:basis-trans}
+\end{equation}
+\(\bm{U}\) 是 \(\{\ket{k}\}\) 基矢向 \(\{\ket{\alpha}\}\) 基矢的转换矩阵，矩阵元为 \(U_{\alpha k}=\ip{\alpha}{k}\)。转换的方向是重要的，因为 \(\{\ket{\alpha}\}\) 基矢向 \(\{\ket{k}\}\) 基矢的反向转换矩阵元 \(\widetilde{U}_{k\alpha}=\ip{k}{\alpha}=U^*_{\alpha k}\)，因此 \(\widetilde{\bm{U}}=\bm{U}^\dagger\)。而反向变换显然可通过 \(\bm{U}^{-1}\) 完成，这也说明基变换矩阵是幺正矩阵。
+
+总结一下，基转换矩阵是通过两套基矢的内积定义的，内积的顺序有要求，一个基转换矩阵承担的永远是右侧基矢下的表示到左侧基矢下的表示的转换。然后回到 \ref{eqs:newket}，该式的本质与 \ref{eqs:basis-trans} 不同，\ref{eqs:basis-trans} 的意思是同一个态 \(\ket{\psi}\) 在两套基矢下的表示的关系，而 \ref{eqs:newket} 则是新基矢在旧基矢下的表示。更明确地说，定义基转换矩阵为 \(U_{ij}=\ip{D_i}{\Phi_j}\)，但在 \ref{eqs:newket} 中 \(U_{ji}\) 并不承担基转换的任务，而是作为叠加系数出现。虽然 \(\bm{U}\) 干的事情本质是基转换，但 \(\bm{U}\) 操作的对象是态 \(\ket{\psi}\) 在某基矢下的表示 \(\bm{a}\)，也就是态矢。为进一步澄清 \ref{eqs:newket} 与 \ref{eqs:basis-trans} 的关系，在 \ref{eqs:newket} 上左乘 \(\bra{\Phi_j}\)，
+\begin{equation}
+  \ip{\Phi_j}{\Phi_i}=\sum_kU_{ki}\ip{\Phi_j}{D_k}=\sum_k\widetilde{U}_{jk}\ip{D_k}{\Phi_i}=\delta_{ji},
+\end{equation}
+记 \(\{\ket{D_i}\}\) 基矢下 \(\ket{\Phi_i}\) 的态矢为 \(\bm{a}\)，在 \(\{\ket{\Phi_i}\}\) 基矢下态矢为 \(\bm{a}'\)，且 \(a'_j=\ip{\Phi_j}{\Phi_i}=\delta_{ji}\)，而 \(a_j=\ip{D_j}{\Phi_i}\)。因此 \ref{eqs:newket} 实际被改写为了
+\begin{equation}
+  a'_j=\sum_k\widetilde{U}_{jk}a_k,
+\end{equation}
+这就是 \ref{eqs:basis-trans}，用 \(\widetilde{U}\) 实现逆向转换。这也说明 \(\bm{U}\) 定义的合理性。
+
+在接下来的讨论中，将标准正交基拓展为双正交基矢，这会在后续 \cite{2003rolik} 给出的微扰公式中用到。\(\{\ket{\Phi_i}\}\) 对应的左矢用 \(\{\bra*{\widetilde{\Phi}_i}\}\) 表示，双正交基矢需要满足关系
+\begin{equation}
+  \ip*{\widetilde{\Phi_i}}{\Phi_j}=\delta_{ij}.
+\end{equation}
+基转换关系写为
+\begin{equation}
+  \bra*{\widetilde{\Phi}_i}=\sum_{j}\widetilde{U}_{ij}\bra{D_j},\label{eqs:newbra}
+\end{equation} 
+其中 \(\widetilde{U}_{ij}=\ip*{\widetilde{\Phi}_i}{D_j}\)，可计算
+\begin{align}
+  \braket*{\widetilde{\Phi}_i}{\Phi_j}&=\sum_{kl}\widetilde{U}_{ik}U_{lj}\delta_{kl}\notag\\
+  &=\sum_k\widetilde{U}_{ik}U_{kj}=(\widetilde{U}U)_{ij}=\delta_{ij},
+\end{align}
+因此 \(\widetilde{U}=U^{-1}\)。值得指出的是，Gamow 框架使用的只转置的左矢就是一种双正交基矢。
+
+类似地可以写出逆变换
+\begin{align}
+  \ket{D_i}&=\sum_j\widetilde{U}_{ji}\ket{\Phi_j},\\
+  \bra{D_i}&=\sum_jU_{ij}\ket{\Phi_j},
+\end{align}
+同样可以计算
+\begin{align}
+  \ip{D_i}{D_j}&=\sum_{kl}U_{ik}\widetilde{U}_{lj}\delta_{kl}\notag\\
+  &=\sum_kU_{ik}\widetilde{U}_{kj}=(U\widetilde{U})_{ij}=\delta_{ij}.
+\end{align}
+
+如果基转换能够解除基矢的简并，选某个新基矢 \(\ket{\Phi_k}\) 作为新的参考态，使用单参考态微扰理论的公式就没有问题。不过为了使用方便，最终的微扰公式还是写回行列式基矢。以下的讨论是形式的推导，不依赖于非微扰哈密顿量的具体划分方式，因此可以将这部分推导放在 \ref{sec:mcpt-h0} 节之前。
+
+将能量与波函数按照微扰的阶数逐阶写为
+\begin{align}
+  E_k(\lambda)&=E_k^{(0)}+\lambda E_k^{(1)}+\lambda^2 E_k^{(2)}+\ldots,\\
+  |\Psi_k(\lambda)\rangle&=|\Psi_k^{(0)}\rangle+\lambda|\Psi_k^{(1)}\rangle+\lambda^2|\Psi_k^{(2)}\rangle+\ldots,
+\end{align}
+其中 \(\ket*{\Psi_k^{(0)}}=\ket{\Phi_k}\)。同样有 intermediate normalization，
+\begin{equation}
+  \langle\Psi_k^{(0)}|\Psi_k^{(p)}\rangle=0,\quad p\ge1,
+\end{equation}
+代入薛定谔方程中
+\begin{align}
+  H_0|\Psi_k^{(0)}\rangle+\sum_{p=1}^\infty\lambda^p\left(H_0|\Psi_k^{(p)}\rangle+V|\Psi_k^{(p-1)}\rangle\right)=E_k^{(0)}|\Psi_k^{(0)}\rangle+\sum_{p=1}^\infty\lambda^p\sum_{j=0}^pE_k^{(j)}|\Psi_k^{(p-j)}\rangle,
+\end{align}
+左乘 $\langle\Psi_k^{(0)}|$ 与 $\langle\widetilde{\Phi}_i|,\;i\ne k$，得到 \(p\ge1\) 时，
+\begin{align}
+  E_k^{(p)}&=\langle\Psi_k^{(0)}|V|\Psi_k^{(p-1)}\rangle,\label{eqs:mcpt-energy1}\\
+  C^{\prime(p)}_{ik}&=\langle\widetilde{\Phi}_i|\Psi_k^{(p)}\rangle=\frac1{E_k^{(0)}-E_i^{(0)}}\left[\langle\widetilde{\Phi}_i|V|\Psi_k^{(p-1)}\rangle-\sum_{j=1}^pE_k^{(j)}\langle\widetilde{\Phi}_i|\Psi_k^{(p-j)}\rangle\right],\quad i\ne k.\label{eqs:mcpt-wf1}
+\end{align}
+这里系数 \(C_{ik}^{\prime(p)}\) 是 \(\ket*{\Psi_k^{(p)}}\) 在新基矢 \(\{\ket{\Phi_i}\}\) 下的叠加系数，即
+\begin{equation}
+  |\Psi_k^{(p)}\rangle=\sum_{i}C_{ik}^{\prime(p)}|\Phi_i\rangle,
+\end{equation}
+当 \(p=0\) 时 \(C_{ik}^{\prime(0)}=\delta_{ik}\)，而当 \(i=k\) 时 \(C_{kk}^{\prime(p)}=\delta_{p0}\)，这两个叠加系数的特殊值本质上是 \(p=0\) 时只有参考态 \(\ket{\psi_k}\)，\(p>0\) 时完全不包含 \(\ket{\psi_k}\)，也就是 intermediate normalization。代入得到
+\begin{align}
+  E_k^{(p)}&=\sum_m\langle\widetilde{\Phi}_k|V|\Phi_m\rangle C_{mk}^{\prime(p-1)},\label{eqs:mcpt-energy2}\\
+  C_{ik}^{\prime(p)}&=\frac1{E_k^{(0)}-E_i^{(0)}}\left[\sum_{m}\langle\widetilde{\Phi}_i|V|\Phi_{m}\rangle C^{\prime(p-1)}_{mk}-\sum_{j=1}^pE_k^{(j)}C^{\prime(p-j)}_{ik}\right],\quad i\ne k.\label{eqs:mcpt-wf2}
+\end{align}
+
+同样 \(\ket*{\Psi_k^{(p)}}\) 还可以在行列式基矢下展开为
+\begin{equation}
+  \ket*{\Psi_k^{(p)}}=\sum_iC_{ik}^{(p)}\ket{D_i},
+\end{equation}
+也可从 \ref{eqs:mcpt-energy1} 与 \ref{eqs:mcpt-wf1} 出发直接得到
+\begin{align}
+  E_k^{(p)}&=\sum_m\langle\widetilde{\Phi}_k|V|D_m\rangle C_{mk}^{(p-1)},\label{eqs:mcpt-energy3}\\
+  C_{ik}^{\prime(p)}&=\frac1{E_k^{(0)}-E_i^{(0)}}\left[\sum_{m}\langle\widetilde{\Phi}_i|V|D_{m}\rangle C^{(p-1)}_{mk}-\sum_{j=1}^pE_k^{(j)}C^{(p-j)}_{ik}\right],\quad i\ne k,\label{eqs:mcpt-wf3}
+\end{align}
+虽然 \ref{eqs:mcpt-wf3} 得到的仍然是基矢 \(\{\ket{\Phi_i}\}\) 下的表示，但可以通过 \ref{eqs:basis-trans} 直接得到行列式基矢下波函数的表示，
+\begin{equation}
+  C_{ik}^{(p)}=\sum_jU_{ij}C_{jk}^{\prime(p-1)},
+\end{equation}
+如果把上式直接代入 \ref{eqs:mcpt-wf3} 中以全统一为行列式基矢会很复杂，多了很多求和，不如先按照 \ref{eqs:mcpt-wf3} 算出来后再转换，每一步只需要存行列式基矢下的叠加系数即可。
+
+接下来可以算一下能量与波函数微扰的低阶项。能量的零阶微扰为
+\begin{equation}
+  E_k^{(0)}=\langle\widetilde{\Phi}_k|H_0|\Phi_k\rangle=E_\text{ref}^{(0)},
+\end{equation}
+一阶微扰为
+\begin{equation}
+  E_k^{(1)}=\langle\widetilde{\Phi}_k|V|\Phi_k\rangle=\langle\widetilde{\Phi}_k|H|\Phi_k\rangle-E_k^{(0)},
+\end{equation}
+一阶波函数修正
+\begin{equation}
+  C_{ik}^{\prime(1)}=\frac{\langle\widetilde{\Phi}_i|V|\Phi_k\rangle}{E_k^{(0)}-E_i^{(0)}},\quad i\ne k
+\end{equation}
+能量的二阶微扰为
+\begin{equation}
+  E_k^{(2)}=\sum_{i\ne k}\frac{\langle\widetilde{\Phi}_k|V|\Phi_i\rangle\langle\widetilde{\Phi_i}|V|\Phi_k\rangle}{E_k^{(0)}-E_i^{(0)}},
+\end{equation}
+三阶微扰为 \cite{2009shavitt}，
+\begin{equation}
+  E_k^{(3)}=\sum_{i,j\ne k}\frac{\langle\widetilde{\Phi}_k|V|\Phi_i\rangle\langle\widetilde{\Phi}_i|W|\Phi_j\rangle\langle\widetilde{\Phi}_j|V|\Phi_k\rangle}{(E^{(0)}_k-E^{(0)}_i)(E^{(0)}_k-E^{(0)}_j)},
+\end{equation}
+其中
+\begin{equation}
+  W_{ij}=V_{ij}-E_k^{(1)}\delta_{ij},
+\end{equation}
+用这个公式循环多重 $\mathcal{M}_\text{ref}$ 之外的空间比较耗时，有一个规律，算到 $p$ 阶就要对 $\mathcal{M}_\text{ref}$ 之外的空间循环 $p-1$ 次，而递推公式则需要保留每一阶的波函数，但循环的每一步只需进行一次，用空间换了时间。
+
+\section{非微扰哈密顿量}
+\label{sec:mcpt-h0}
+非微扰哈密顿量 $H_0$ 的选取对微扰的收敛性非常重要，这称为哈密顿量的划分（partition）。\cite{2009roth,2018tichai} 选取的非微扰哈密顿量均为
+\begin{equation}
+  H_0=\sum_{k}\epsilon_k|\psi_k\rangle\langle\psi_k|+\sum_{\nu\notin\mathcal{M}_\text{ref}}\epsilon_\nu|\Phi_\nu\rangle\langle\Phi_\nu|,\label{eqs:mcpt-h0}
+\end{equation}
+但该式只能说明 $H_0$ 被取为了分块对角的形式，两个对角块分别作用在 $\mathcal{M}_\text{ref}$ 内外，没有内外空间的相互作用。这种定义方式是为了保证
+\begin{equation}
+  H_0|\psi_k\rangle=\epsilon_k|\psi_k\rangle,\label{eqs:mcpt-h0-Schrodinger}
+\end{equation}
+满足此式才能类似单参考态微扰理论，将 $\ket{\psi_k}$ 作为参考态进行后续推导。然而，这两个对角块各自的 $\epsilon$ 在 \ref{eqs:mcpt-h0} 中并没有给出，具体的划分方式是有任意性的。另外，\cite{2009roth,2018tichai} 中第一项并没有 \(k\) 求和，这将在下面详细解释。
+
+在此统一一下公式中关于能量的记号，使用 $E_k^{(p)}$ 表示参考态 $\ket{\psi_k}$ 的各阶微扰能量，这是想要的最终结果；而 \ref{eqs:mcpt-h0} 中出现的 $\epsilon$ 是非微扰能量，在下面讨论的 MP 划分中就是单粒子能量 \(e\) 之和。这种记号与 \cite{2018tichai} 不同，主要目的是为了将非微扰能量 \(\epsilon\) 与目标态的各阶微扰能量 \(E\) 区分开。
+
+\subsection{Epstein-Nesbet 划分}
+\label{sec:en-partition}
+一种自然的划分是
+\begin{equation}
+  \epsilon_\nu=\ev{H}{\Phi_\nu},
+\end{equation}
+也就是 $H$ 夹在基矢之间的矩阵元。在 MCPT 中 $\mref$ 内外 \(\epsilon\) 的取法有所不同，$\mref$ 外这就是 $H$ 的对角元，$QVQ$ 的对角元就是 0。而 $\mref$ 内 
+\begin{equation}
+  \epsilon_k=\ev{H}{\psi_k},
+\end{equation}
+也就是 $PHP$ 对角化的本征值。\(P\) 是 \(\mref\) 的投影算符，\(P=\sum_k\ket{\psi_k}\bra{\psi_k}\)，而 \(Q=1-P\) 为 \(\mref\) 外空间的投影算符。
+
+关于 \ref{eqs:mcpt-h0} 第一项中的 \(k\) 求和，没有像第二项那样写 \(k\in\mref\) 是因为第二项表达的是求和的 \(\ket{\Phi_\nu}\) 是在 \(\mref\) 外的基矢，而 \(k\) 不是基矢的指标，而是本征态的指标，写 \(k\in\mref\) 不太合适。虽然在 \cite{2009roth,2018tichai} 中没有写 $k$ 求和，只显式地写出了一个参考态。但实际上这个求和不仅应该写，还不能仅对几个想求的参考态进行求和，而是需要对 $PHP$ 个数等于 \(\mref\) 维数的所有本征态进行求和。只有这样构造的 \(H_0\) 维数才与 \(H\) 一致，否则 \(\mref\) 空间就只有一个基矢了。\cite{2009roth,2018tichai} 不写求和的原因是只计算到能量二阶微扰修正不需要 \(\mref\) 内其他本征态，具体将在后面说明。
+
+尽管 \(k\) 求和是必要的，但因为 \(\ket{\psi_k}\) 是 \(H\) 限制在 \(\mref\) 内的本征态，满足
+\begin{equation}
+  PHP\ket{\psi_k}=\epsilon_k\ket{\psi_k},
+\end{equation} 
+因此 \ref{eqs:mcpt-h0} 的第一项就会变为
+\begin{equation}
+  \sum_k\epsilon_k\ket{\psi_k}\bra{\psi_k}=PHP,
+\end{equation}
+因此在实际计算用到夹在 \(\mref\) 内组态之间的 \(H_0\) 时，可以直接取 \(PHP\)，这部分可以直接用输入的哈密顿量算，并不需要通过显式求和去构建 \(H_0\) 的第一个对角块，在 EN 划分中这个块就等于 \(H\) 的这个对角块，因此 \(PVP=0\)。
+由此可以得到该划分的零阶能量与一阶能量，
+\begin{align}
+  E_k^{(0)}&=\ev{H_0}{\psi_k}=\epsilon_k,\\
+  E_k^{(1)}&=\ev{V}{\psi_k}=0.
+\end{align}
+
+EN 划分的自然之处在于没有在 \(H_0\) 中引入任何额外的东西，就直接把 \(PHP\) 整体与 \(QHQ\) 的对角元原封不动放在了 \(H_0\) 中。另外，这种划分是可以直接单参考态处理开壳体系的，并不会导致简并。但问题在于 EN 划分不是广度一致（大小一致）的，且不会改善收敛性，因此其实不太实用。
+
+\subsubsection{大小延展性与大小一致性}
+在此介绍一下大小延展性（size extensivity）与大小一致性（size consistency）这两个术语。能量是广延量，因此多体体系的能量平均到每个粒子上应趋近于常数，这称为大小延展性，可表示为
+\begin{equation}
+  \lim_{N\to\infty}\frac{E(N)}{N}=\text{const}.
+\end{equation}
+然而用以上公式作为判据去研究一个方法的大小延展性比较复杂，因此又引入了大小一致性的概念以更方便地判断。一个多体方法在计算两个相距足够远，相互作用可忽略不计的例子组成的复合体系得到的总能量，等于单独计算两个粒子能量之和，就说这个方法满足大小一致性。这两种说法基本可以混用。这是检验理论是否正确的判据之一。
+
+
+\subsection{Møller–Plesset 划分}
+\label{sec:mp-partition}
+还有一种简单的划分方法是类似单参考态微扰理论的做法引入单粒子能 \(e\) 来构造 \(H_0\)，多体态的非微扰能量 \(\epsilon\) 就是占据的单粒子轨道能量之和。这种划分不仅简单而且是大小一致的，但 MP 划分的单参考形式只能用于闭壳。这里先回顾单参考态的 MP 划分。不管是 HO-MBPT \cite{2010roth,2012langhammer} 还是 HF-MBPT \cite{2016tichai}，\(H_0\) 都取为
+\begin{equation}
+  H_0=\sum_\alpha e_\alpha a_\alpha^\dagger a_\alpha,
+\end{equation}
+\(e_\alpha\) 就是单粒子基 \(\alpha\) 的单粒子能量。同理如果使用 Berggren 基，也就是用 Berggren 基的单粒子能。\(e_\alpha\) 随着基矢的构造产生，而具体的构造方式则可以通过求解谐振子的哈密顿量、HF 方程等方式获得。需要注意的是，\(e_\alpha\) 与二次量子化的单体矩阵元 \(h_{\alpha\alpha}\) 不是一个东西，单粒子能其实只是一个辅助计算的量，并不会直接出现在 \(H\) 中。将 \(e\) 放在二次量子化的 \(H_0\) 中本质是选取体系真实单粒子能的一组良好近似，以求获得更好的收敛性，微扰哈密顿量 \(V\) 则可以与壳模型的剩余相互作用类比。
+
+在 MCPT 中，\(QH_0Q\) 部分的对角元自然取为
+\begin{equation}
+  \epsilon_\nu=\sum_p e_p,\quad p\text{ occupied in }\ket{\Phi_\nu},
+\end{equation}
+\(PH_0P\) 部分则可以取为
+\begin{equation}
+  \epsilon_k=\sum_p e_p\rho_{pp},
+\end{equation}
+\(\rho\) 是参考态 \(\ket{\psi_k}\) 的密度矩阵。\(QH_0Q\) 部分自然也可以这么写，不过 Slater 行列式基矢的密度矩阵是平凡的。
+
+在 \cite{2018tichai} 中单粒子能被定义为了
+\begin{equation}
+  \epsilon_p=\ev{H^{[1]}}{p}+\mel{pr}{H^{[2]}}{ps}\rho_{rs},
+\end{equation}
+这里的 \(H^{[1]},H^{[2]}\) 代表二次量子化哈密顿量的单体项 \(h\) 与两体项 \(V\)，不要与微扰哈密顿量 \(V\) 混淆。在第 \ref{chap:hf} 章中推导出的 HF 单粒子能有类似的形式，因此 \cite{2018tichai} 的这种取法应该是类比了 HF 单粒子能，相当于对开壳的参考态做了类似 HF 的操作。
+
+尽管 EN 划分不满足大小一致性，但还是进行了讨论，主要是为了澄清为什么 \cite{2009roth,2018tichai} 均采取 MP 划分，但 \cite{2009roth} 中 \(E_k^{(1)}=0\)，\cite{2018tichai} 却是 \(E_k^{(1)}\ne0\)。这是因为 \cite{2018tichai} 是标准的 MP 划分，而 \cite{2009roth} 采用的则是 EN 划分与 MP 划分的混合，在 \(\mref\) 之内将 \(\epsilon_k\) 取为 \(\expval{H}{\psi_k}\)，而 \(\mref\) 外的 \(\epsilon_\nu\) 则定义为 \(\epsilon_k+\Delta\epsilon_\nu\)，\(\Delta\epsilon_\nu\) 为 \(\ket{\Phi_\nu}\) 相对于 \(\mref\) 的激发能。 
+
+\section{MCPT 公式}
+\label{sec:mcpt-formula}
+下面进行 MCPT 的公式推导。首先指出 \cite{2009roth,2018tichai} 没有考虑完整的问题。如果对 \(\ket{\psi_k}\) 的微扰修正全部来自于 \(\mref\) 之外的 Slater 行列式，那最终得到的波函数的 \(\mref\) 部分的波函数还是 \(\ket{\psi_k}\)，只是差一个相位。但这显然不是真实的波函数。\cite{2009roth,2018tichai} 的做法本质是选定 \(\{\ket{\psi_k}\}\) 中的某个态作为参考态 \(\ket{\psi_\text{ref}}\)，取 \(H_0\) 为
+\begin{equation}
+  H_0=\epsilon_\text{ref}|\psi_\text{ref}\rangle\langle\psi_\text{ref}|+\sum_{\nu\notin\mathcal{M}_\text{ref}}\epsilon_\nu|\Phi_\nu\rangle\langle\Phi_\nu|,
+\end{equation}
+虽然 \(H_0\) 应该取为 \ref{eqs:mcpt-h0} 才完备，但 \cite{2009roth,2018tichai} 实际处理的都是上式，这个 \(H_0\) 的 \(\mref\) 空间只包含了参考态，人为地舍弃了其他本征态。这么做的正确性是因为只算到了二阶微扰能量，只插入了一个组态求和。如果中间插入的是与 \(\ket{\psi_\text{ref}}\) 正交的 \(\ket{\psi_l}\)，二阶微扰能量与一阶微扰波函数的分子会出现
+\begin{align}
+  \mel{\psi_l}{V}{\psi_\text{ref}}&=\mel{\psi_l}{H-H_0}{\psi_\text{ref}}\notag\\
+  &=\mel{\psi_l}{PHP}{\psi_\text{ref}}-\mel{\psi_l}{H_0}{\psi_\text{ref}}\notag\\
+  &=E_\text{ref}\ip{\psi_l}{\psi_\text{ref}}-\epsilon_\text{ref}\ip{\psi_l}{\psi_\text{ref}}=0,\quad l\ne\text{ref},
+\end{align}
+其中 \(E_\text{ref}\) 是 \(PHP\) 的本征值，在 EN 划分下 \(\epsilon_\text{ref}=E_\text{ref}\)。但不管哪种划分，两个 \(\mref\) 的本征态都是正交的。正因如此，\(\mref\) 的其他本征态不会贡献到二阶微扰能量与一阶微扰波函数。
+
+将计算进一步推向高阶的时候就必须纳入 \(\mref\) 其他本征态的贡献了。在 \ref{sec:basis-trans} 节中从基转换视角下重新推导了微扰理论。因此 MCPT 就变成了一个基转换的问题（所以看上去 \cite{thesis-tichai} 说 MCPT 还是单参考态方法没问题，进行基转换之后确实就与单参考态微扰没有明显区别）。按照 \ref{eqs:mcpt-h0} 的取法，把 \(PHP\) 完全对角化，以本征态作为 \(\mref\) 的新基矢自然可以。然而 \(\mref\) 的维数可能很大，\(PHP\) 的完全对角化可能是难以做到的。即使可以像 NCSM-PT 那样人为地将 \(\mref\) 取为 \(N_\text{max}=0\) 的小空间，但这么小的 \(\mref\) 需要更高阶的微扰计算才能更好地逼近真实解；在 Gamow 计算中，对 pole 近似的空间进行 \(N_\text{max}\) 截断也不太物理，可能得不到与 pole 近似本征态 overlap 最大的目标态。因此 \(\mref\) 不能太随心所欲地截断，能充分考虑静态关联的，或其物理本质应该被选为 \(\mref\) 的空间很可能不小，通过完全对角化得到 \(\mref\) 的一组新基矢难以做到。
+
+这就需要另一种方法获得 \(\mref\) 空间的新基矢。采取 \cite{2003rolik} 的做法，将参考态 \(\ket{\psi_k}\) 展开为
+\begin{equation}
+  \ket{\psi_k}=d_0\ket{D_0}+\sum_{i\ne0}d_i\ket{D_i},
+\end{equation}
+\(\ket{D_0}\) 的选取有一定任意性，因为后面 \(d_0\) 会出现在分母上，只要 \(d_0\ne0\) 即可，并不要求它一定接近 1。在 \cite{2003rolik} 中取 \(\ket{D_0}=\ket{\text{HF}}\)，然而在核物理中因为自旋轨道耦合的存在，开壳核的 HF 态并不是一个良定义的行列式。自然可选择 \(\ket{D_0}\) 是基矢中 \(|d_0|\) 最大的一个；不过这么做当计算几个参考态时 \(\ket{D_0}\) 可能不是同一个行列式，不如统一取能量最低的那个行列式简单。\(i\) 求和包含了 \(\mref\) 内外除 \(\ket{D_0}\) 的所有基矢。目标是构造包含 \(\ket{\psi_k}\) 在内的一组新基矢。
+
+由于 \(d_0\ne0\)，因此 \(\ket{\psi_k}\) 与 \(\{\ket{D_i},i\ne0\}\) 构成一组线性无关的矢量，对这些矢量进行 Gram-Schmidt 正交化，自然也能得到一组包含 \(\ket{\psi_k}\) 的新基矢。但问题是 Gram-Schmidt 正交化并没有直接的表达式，必须要逐个递推计算。在 \(\mref\) 空间维数较大时，不管是预先存储还是计算时动态生成都很困难。因此采取 \cite{2003rolik} 的做法。参考态的投影算符为 \(P_k=\op*{\psi_k}{\widetilde{\psi}_k}\)，为了直接用于 Gamow 情况，将左矢写为 Berggren 基对应的双正交形式，也就是 
+\begin{equation}
+  \bra{\widetilde{u}}=(\ket{u})^T.
+\end{equation}
+目标是构建 \(\dim{(\mref)}\) 个新基矢，其中有一个是 \(\ket{\psi_k}\)。自然地可以尝试将 \(P_k\) 的补算符 \(Q_k=1-P_k\) 作用到 \(\{\ket{D_i},i\ne0\}\) 上，得到一些投影行列式 \(\{\ket*{\hat{D}_i},i\ne0\}\)，这些投影行列式自然与 \(\ket{\psi_k}\) 正交。如此构建出的一组矢量为 \(\{\ket{\psi_k},\ket*{\hat{D}_i},i\ne0\}\)，但这组矢量却不是相互之间都正交的，可以计算 overlap 矩阵
+\begin{equation}
+  \mathcal{S}=
+  \begin{pmatrix}
+    \ip*{\widetilde{\psi}_k}{\psi_k}&\ip*{\widetilde{\psi}_k}{\hat{D}_j}\\
+    \ip*{\hat{D}_i}{\psi_k}&\ip*{\hat{D}_i}{\hat{D}_j}
+  \end{pmatrix}
+  =\begin{pmatrix}
+      \bm{1}&\bm{0}\\\bm{0}&\bm{S}
+    \end{pmatrix},
+\end{equation}
+其中
+\begin{equation}
+  S_{ij}=\ip*{D_i}{D_j}-\langle D_i|\psi_k\rangle\langle\widetilde{\psi}_k|D_j\rangle=\delta_{ij}-d_id_j,
+\end{equation}
+因此 
+\begin{equation}
+  \bm{S}=\bm{I}-\bm{d}\bm{d}^T,
+\end{equation}
+\(\bm{d}\) 是态矢 \(\ket{\psi_k}\) 移去 \(d_0\)，即 \(\bm{d}=(d_1,d_2,\ldots,)^T\)，维数为 \(\dim(\mref)-1\)。使用 Sherman-Morrison 公式
+\begin{equation}
+  (\bm{A}+\bm{u}\bm{v}^T)^{-1}=\bm{A}^{-1}-\frac{\bm{A}^{-1}\bm{u}\bm{v}^T\bm{A}^{-1}}{1+\bm{v}^T\bm{A}^{-1}\bm{u}},
+\end{equation}
+可以很简单地得到 \(\bm{S}\) 的逆
+\begin{equation}
+  \bm{S}^{-1}=\bm{I}+\frac{\bm{d}\bm{d}^T}{1-\bm{d}^T\bm{d}},
+\end{equation}
+因此 
+\begin{equation}
+  (S^{-1})_{ij}=\delta_{ij}+\frac{d_id_j}{1-\sum_{m\ne0}d_m^2}=\delta_{ij}+\frac{d_id_j}{d_0^2}.
+\end{equation}
+
+由此可定义一组双正交基矢，右矢直接取为
+\begin{align}
+  \ket{\Phi_j}=\ket*{\hat{D}_j}&=\ket{D_j}-d_j\ket{\psi_k}\notag\\
+  &=\sum_i(\delta_{ij}-d_id_j)\ket{D_i},\quad j\ne0,
+\end{align}
+当 \(j=0\) 时 \(\ket{\Phi_0}=\ket{\psi_k}\)。因此可定义矩阵 \(U_{ij}=\ip*{D_i}{\Phi_j}\)，两组基矢通过 \(\bm{U}\) 的转换为
+\begin{equation}
+  \ket{\Phi_j}=\sum_iU_{ij}\ket{D_i},
+\end{equation}
+且
+\begin{equation}
+  \bm{U}=\begin{pmatrix}
+    d_0&-d_0\bm{d}^T\\\bm{d}&\bm{I}-\bm{d}\bm{d}^T
+  \end{pmatrix}.
+\end{equation}
+而与 \(\ket{\Phi_j}\) 配套的左矢写为
+\begin{equation}
+  \bra*{\widetilde{\Phi}_i'}=\sum_j(U^{-1})_{ij}\bra{D_j},
+\end{equation}
+满足正交关系
+\begin{equation}
+  \ip*{\widetilde{\Phi}_i'}{\Phi_j}=\delta_{ij},
+\end{equation}
+使用一个结论，对于分块矩阵
+\begin{equation}
+  \bm{M}=\begin{pmatrix}
+    \bm{A}&\bm{B}\\\bm{C}&\bm{D}
+  \end{pmatrix},
+\end{equation}
+其逆矩阵是
+\begin{equation}
+  \bm{M}^{-1} = \begin{pmatrix}
+  \bm{A}^{-1} + \bm{A}^{-1}\bm{B}(\bm{D} - \bm{C}\bm{A}^{-1}\bm{B})^{-1}\bm{C}\bm{A}^{-1} & 
+  -\bm{A}^{-1}\bm{B}(\bm{D} - \bm{C}\bm{A}^{-1}\bm{B})^{-1} \\
+  -(\bm{D} - \bm{C}\bm{A}^{-1}\bm{B})^{-1}\bm{C}\bm{A}^{-1} & 
+  (\bm{D} - \bm{C}\bm{A}^{-1}\bm{B})^{-1}
+  \end{pmatrix}
+\end{equation}
+或者更紧凑的写法
+\begin{equation}
+  \bm{M}^{-1} = \begin{pmatrix}
+  \bm{A}^{-1} + \bm{A}^{-1}\bm{B}\bm{S}^{-1}\bm{C}\bm{A}^{-1} & -\bm{A}^{-1}\bm{B}\bm{S}^{-1} \\
+  -\bm{S}^{-1}\bm{C}\bm{A}^{-1} & \bm{S}^{-1}
+  \end{pmatrix}
+\end{equation}
+其中 $\bm{S} = \bm{D} - \bm{C}\bm{A}^{-1}\bm{B}$ 称为 Schur 补。
+可计算 \(\bm{U}\) 的 Schur 补为
+\begin{equation}
+  \bm{I}-\bm{d}\bm{d}^T-\bm{d}d_0^{-1}(-d_0)\bm{d}^T=\bm{I},
+\end{equation}
+形式非常简单，因此 \(\bm{U}\) 的逆矩阵为
+\begin{equation}
+  \bm{U}^{-1}=
+  \begin{pmatrix}
+    d_0&\bm{d}^T\\-d_0^{-1}\bm{d}&\bm{I}
+  \end{pmatrix}.
+\end{equation}
+
+
+另一种解法则是写出
+\begin{equation}
+  \bra*{\widetilde{\Phi}_i'}=\sum_{j\ne0}(S^{-1})_{ij}\bra*{\hat{D}_j},\quad i\ne0,
+\end{equation}
+这样就能保证
+\begin{equation}
+  \ip*{\widetilde{\Phi}_i'}{\Phi_j}=\sum_{l\ne0}(S^{-1})_{il}\ip*{\hat{D}_l}{\hat{D}_j}=\sum_{l\ne0}(S^{-1})_{il}S_{lj}=\delta_{ij}.
+\end{equation}
+因此 
+\begin{align}
+  \bra*{\widetilde{\Phi}_i'}&=\sum_{j\ne0}(S^{-1})_{ij}\sum_m(\delta_{jm}-d_jd_m)\bra*{D_m}\notag\\
+  &=\sum_{j,m\ne0}(S^{-1})_{ij}S_{jm}\bra*{D_m}-\sum_{j\ne0}(S^{-1})_{ij}d_jd_0\bra*{D_0}\notag\\
+  &=\sum_{m\ne0}\delta_{im}\bra*{D_m}-\sum_{j\ne0}(\delta_{ij}+\frac{d_id_j}{d_0^2})d_jd_0\bra*{D_0}\notag\\
+  &=\bra*{D_i}-d_id_0\bra*{D_0}-\frac{d_i}{d_0}\sum_{j\ne0}d_j^2\bra*{D_0}\notag\\
+  &=\bra*{D_i}-d_id_0\bra*{D_0}-\frac{d_i}{d_0}(1-d_0^2)\bra*{D_0}\notag\\
+  &=\bra*{D_i}-\frac{d_i}{d_0}\bra*{D_0},\quad i\ne0.
+\end{align}
+同时考虑到 \(i=0\) 时 \(\bra*{\widetilde{\Phi}_i'}=\bra*{\widetilde{\psi}_k}\)，也可得到 \((U^{-1})_{ij}=\ip*{\widetilde{\Phi}_i'}{D_j}\)，形式与直接求逆一致。

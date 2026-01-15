@@ -1,0 +1,185 @@
+\section{EKK 的收敛性}
+\subsection{EKKS 的收敛条件}
+EKKS 的收敛要求 \ref{eqs:ekks-omega} 的级数展开收敛，取矩阵的范数，有 
+\begin{equation}
+  \lVert\omega_n\rVert\le\sum_{k=0}^{\infty}\lVert QH_1P\rVert\cdot\left\lVert\frac{1}{E-QHQ}\right\rVert^{k+1}\cdot\lVert H_{n-1}^\text{eff}-E \rVert^k,
+\end{equation}
+为使 $\lVert\omega_n\rVert$ 有限，取 $n\to\infty$，需满足
+\begin{equation}
+  \left\lVert\frac{1}{E-QHQ}\right\rVert\cdot\lVert H_{n-1}^\text{eff}-E\rVert<1,
+\end{equation}
+应用一个数学定理，矩阵的范数大于等于它本征值绝对值中最大的，
+\begin{equation}
+  \lVert A\rVert\ge\max|\lambda_i|,
+\end{equation}
+因此得出 EKKS 的收敛条件 
+\begin{equation}
+  \left|\frac{E_p-E}{\varepsilon_q-E}\right|<1,\quad \text{for any } p=1,\ldots,d,\quad q=d+1,\ldots,D,\label{eqs:ekks-conv}
+\end{equation}
+其中 $E_p$ 为 $H^\text{eff}$ 的本征值，$\varepsilon_q$ 为 $QHQ$ 的本征值，但 $QHQ$ 的本征值不容易知道，因此这个判据在实际计算中无法使用。而且严格来说这个收敛条件既不充分也不必要 \cite{2011takayanagi2}。\cite{2011takayanagi2} 指出 $E$ 应该取在 $P$ 空间能谱的中间。
+% 对于实际求解来说，$E$ 的参数有两个，$\hat{S}$-box 的 $E_1$ 可以根据对角的单粒子能确定，这就是有效哈密顿量的本征值；而 $\hat{Q}$-box 的 $E_2$ 应该用 KSHELL 计算两价核子体系的能谱确定。在壳模型计算中两价核子体系有 2p、2n、1p1n 三种，对每个原子核来说 KSHELL 中的矩阵应该只是 MBPT 得出的有效哈密顿量的块对角部分。最合理的方式应该是 2p、2n、1p1n 这三个原子核全算一下，所有算出来的能谱都是有效哈密顿量的本征值。
+
+这个收敛条件看上去很像数学物理方法中关于泰勒展开收敛半径的结论：$f(z)$ 在 $a$ 处展开，$b$ 为距离 $a$ 最近的奇点，则 $f(z)$ 可以在圆 $|z-a|<|b-a|$ 内展开为泰勒级数，或者说在圆内泰勒级数收敛。正如之前的讨论，EKKS 中泰勒展开实际是对 $H^\text{BH}(E^{(n-1)}_i)$ 进行的，因此这里的 $z$ 就对应 $E^{(n-1)}_i$，也就是 $E_p$，$b$ 对应 $\varepsilon_q$，也就是 $\hat{Q}$ 可能的奇点，而 $a$ 就是展开点 $E$。
+
+\section{$\hat{Q}$-box 的计算}
+代码中以拉格朗日插值法求 $\hat{Q}$-box 的导数，相当于以插值法画出图像并求交点。作为示意，展示金师兄笔记中的示意图 \ref{fig:qbox}。实际算出来的 $\hat{Q}$-box 的极点为单粒子能的加减，而输入中给出的 shift1b 与 shift2b 两个量则是控制迭代的开始位置。如果初始位置取的离极点太近，就有可能出现发散的问题。为了增加收敛性，将 shift1b 与 shift2b 减小是可能的办法。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figure/qbox.png}
+  \caption{$\hat{Q}(\epsilon)$ 找交点，因为实际方程为矩阵，交点对应的是要求的模型空间哈密顿量。}
+  \label{fig:qbox}
+\end{figure}
+
+此外，真实的 $\hat{Q}$-box 在每个区间都是减函数，但是在有截断的计算中有可能算出来上升的部分，这时再插值也有可能插值出来发散的部分。为了解决这个问题，尝试用严格求导的方式来计算导数。
+
+\subsection{精确求导}
+二阶图有一个形如 $1/(x+a)$ 的能量分母，其 $n$ 阶导数的形式比较简单，是
+\begin{equation}
+  \left(\frac1{x+a}\right)^{(n)}=(-1)^n n!\frac1{(x+a)^{n+1}},
+\end{equation}
+而三阶图的能量分母为 $1/(x+a)(x+b)$，虽然可以拆成
+\begin{equation}
+  \frac{1}{(x+a)(x+b)}=\frac1{b-a}\left(\frac1{x+a}-\frac1{x+b}\right),
+\end{equation}
+但对于某些图如 diag-1bp-4，能量分母为 $(\epsilon+\epsilon_h-\epsilon_{p_1}-\epsilon_{p_2})(\epsilon+\epsilon_h-\epsilon_{p_3}-\epsilon_{p_4})$，在循环中 $p_3,p_4$ 如果与 $p_1,p_2$ 取成了相同的态，就会导致这一项求和的系数 $1/(b-a)$ 非常大，数值上出现问题。因此在代码中使用的导数公式为
+\begin{align}
+  \left[\frac{1}{(x+a)(x+b)}\right]^{(n)}&=(-1)^nn!\sum_{k=1}^{n+1}\frac1{(x+a)^k(x+b)^{n+2-k}}.
+\end{align}
+实际上也完全可以把 $n!$ 直接从二阶图与三阶图的导数公式中去掉，然后在之后的代码中也不再除掉 $n!$。
+
+\subsection{Padé 近似}
+\cite{2012coraggio} 中提到了用 Padé 近似估计级数收敛后的值，这里的级数指的是 $\hat{Q}$-box 展开到三阶图的这个 $1/(E-QHQ)$ 级数，并不是 EKK 的级数。也就是说可以用展开到三阶的级数去估计 $\hat{Q}$-box 的高阶项，公式为
+\begin{equation}
+  [2|1] = V_{Qbox}^0 + V_{Qbox}^1+ V_{Qbox}^2 \bigl( 1 - (V_{Qbox}^2)^{-1} \, V_{Qbox}^3 \bigr)^{-1}.
+\end{equation} 
+回顾一下 Padé 近似的目的，有一个级数
+\begin{equation}
+  F(x)=\sum_{n=0}^\infty F_nx^n,
+\end{equation}
+由于计算能力的限制，只能计算几个 $F(x)$ 的低阶系数，如果把泰勒级数截断到这么低阶的项，就可能与 $F(x)$ 差别很大。但又想把这个展开应用到更大 $x$ 的区域，此时 Padé 近似就有可能起到用处。将 $H$ 写为 $H=H_0+xH_1$，此时 
+\begin{equation}
+  \hat{Q}(\epsilon,x)=xPH_1P+x^2PH_1Q\frac1{\epsilon-QH_0Q-xQH_1Q}QH_1P,
+\end{equation} 
+将分式展开为
+\begin{equation}
+  \frac1{\epsilon-QH_0Q-xQH_1Q}=\sum_{n=0}^\infty\frac{(xQH_1Q)^n}{(\epsilon-QH_0Q)^{n+1}},
+\end{equation}
+因此可定义 
+\begin{equation}
+  F_2=PH_1Q\frac1{\epsilon-QH_0Q}QH_1P,\quad F_3=PH_1Q\frac1{\epsilon-QH_0Q}QH_1Q\frac1{\epsilon-QH_0Q}QH_1P,
+\end{equation}
+注意到 $F_2$ 是二阶图，$F_3$ 是三阶图，带回得到
+\begin{equation}
+  \hat{Q}(\epsilon,x)=F_1x+F_2x^2+F_3x^3,
+\end{equation}
+其中 $F_1\equiv PH_1P$，也就是一阶图。
+对这个展开式应用 Padé 近似，并取 $x=1$ 即可。
+
+但这样还不够，不管是 EKK 还是 ELS 都需要 $\hat{Q}$-box 的高阶导数，在原代码中通过数值差分求导数，自然可以得到这个 Padé 近似之后的 $\hat{Q}$-box 的高阶导数。但是改为严格求导之后就不能这么做了，只能对 Padé 近似式求导。虽然从数学上直接对 Padé 近似式求导不知道有什么意义，但至少在数值上与直接差分肯定是一样的。因此还是需要推导这个 Padé 近似式的导数。
+
+为了方便标记，分别用 $q_1,q_2,q_3$ 表示 $\hat{Q}$-box 的一二三阶图，需要求导的项就是
+\begin{equation}
+  f=q_2/(1-q_3/q_2)=q_2^2/(q_2-q_3),
+\end{equation}
+为了求 $f$ 的高阶导数，改写为
+\begin{equation}
+  (q_2-q_3)f=q_2^2,
+\end{equation}
+用莱布尼茨公式对两侧求 $n$ 阶导数，首先看右侧，
+\begin{equation}
+  (q_2^2)^{(1)}=2q_2q_2^{(1)},
+\end{equation}
+因此 
+\begin{equation}
+  (q_2^2)^{(n)}=2(q_2q_2^{(1)})^{(n-1)}=2\sum_{k=0}^{n-1}C_{n-1}^kq_2^{(n-k-1)}q_2^{(k+1)},\quad n\ge1,
+\end{equation}
+而左侧为
+\begin{equation}
+  \sum_{k=0}^{n-1}C_n^k[q_2^{(n-k)}-q_3^{(n-k)}]f^{(k)}+(q_2-q_3)f^{(n)},
+\end{equation}
+因此
+\begin{equation}
+  f^{(n)}=\frac1{q_2-q_3}\sum_{k=0}^{n-1}\left\{2C_{n-1}^kq_2^{(n-k-1)}q_2^{(k+1)}-C_n^k[q_2^{(n-k)}-q_3^{(n-k)}]f^{(k)}\right\},
+\end{equation}
+再除以 $n!$ 换为 $f_n$，
+\begin{equation}
+  f_n=\frac1{q_2-q_3}\sum_{k=0}^{n-1}\left\{2\frac{k+1}{n}q_{2,n-k-1}q_{2,k+1}-[q_{2,n-k}-q_{3,n-k}]f_k\right\}.
+\end{equation}
+
+需要澄清的是，在 MBPT 中除了 $\hat{Q}$-box 展开的级数，使用 EKK 方法时还有一个泰勒级数，同样将这个级数截断到了有限阶。理论上说这也可以用 Padé 近似去更好地处理，但是对 \ce{^38K} 用 EKK 与 ELS 的实际计算发现，在 $E$ 选取相同时结果也几乎相同，而 ELS 并不涉及级数的问题，是个严格的迭代过程，看上去 EKK 的级数展开是收敛的，应该不存在截断到有限项与原函数差别较大的问题。结果与实验值差别较大应该有其他原因。
+
+\subsection{$\hat{Z}$-vertex}
+为了解决 $\hat{Q}$-box 的极点发散问题，引入了 $\hat{Z}$-vertex，
+\begin{equation}
+  \hat{Z}(\epsilon)=\frac{1}{1-\hat{Q}_1(\epsilon)}[\hat{Q}(\epsilon)-\hat{Q}_1(\epsilon)P(\epsilon-H_0)P].\label{eqs:z-vertex}
+\end{equation}
+将 \ref{eqs:n-step-heff} 在 $P$ 空间对角化，对应的 \ref{eqs:n-1 diagonalization} 改写为
+\begin{equation}
+  [PH_0P+R^{(n-1)}]|\phi_i^{(n)}\rangle=E_i^{(n)}|\phi_i^{(n)}\rangle,\quad i=1,2,\ldots,d,
+\end{equation}
+其中
+\begin{equation}
+  R^{(n-1)}=\sum_{j=1}^d\hat{Q}(E_j^{(n-1)})|\phi_j^{(n-1)}\rangle\langle\widetilde{\phi}_j^{(n-1)}|,
+\end{equation}
+$PH_0P$ 这一项与被求和的 $j$ 无关，且本身就在 $P$ 空间，根据 \ref{eqs:ekkd-norm}，$P$ 空间的正交基不是归一化到单位算符，而是投影算符，考虑到 $P^2=P$，因此 $PH_0P$ 这一项会单列出来。
+
+当迭代收敛时，也就是 $n-1$ 上标与 $n$ 上标相等，得到自洽条件为
+\begin{equation}
+  (E_i-H_0)|\phi_i\rangle=\hat{Q}(E_i)|\phi_i\rangle,
+\end{equation}
+也可以写为
+\begin{equation}
+  (E_i(\epsilon)-H_0)|\phi_i\rangle=\hat{Q}(\epsilon)|\phi_i\rangle,\quad \epsilon=E_i(\epsilon).\label{eqs:z-vertex-con1}
+\end{equation}
+
+定义了 $\hat{Z}$-vertex 之后，在 $\epsilon=E_i(\epsilon)$ 时，有
+\begin{equation}
+  \hat{Z}(\epsilon)|\phi_i\rangle=\hat{Q}(\epsilon)|\phi_i\rangle,\label{eqs:z-vertex-con2}
+\end{equation}
+也就是说迭代收敛之后，$\hat{Q}$-box 与 $\hat{Z}$-vertex 作用于收敛的本征态上的结果是一样的。因此 \ref{eqs:n-step-heff} 可用 $\hat{Z}$-vertex 定义为
+\begin{equation}
+  H_{n}^{\mathrm{eff}}=\sum_{i=1}^d [PH_0P+\hat{Z}(E_i^{(n-1)})]|\phi_i^{(n-1)}\rangle\langle\widetilde{\phi}_i^{(n-1)}|,
+\end{equation}
+虽然每一步的迭代中用 $\hat{Q}$-box 与 $\hat{Z}$-vertex 构建的 $H_{n}^{\mathrm{eff}}$ 是不一样的，但收敛之后是一样的。这样就在保证结果相同的前提下避免了 $\hat{Q}$-box 的极点问题。
+
+为了加快计算，同样可用泰勒展开的方式计算迭代每一步的 $\hat{Z}$-vertex。这就需要计算 $\hat{Z}$-vertex 的各阶导数，用莱布尼茨公式，
+\begin{equation}
+  (u\cdot v)^{(n)}=\sum_{k=0}^nC_n^ku^{(n-k)}v^{(k)},
+\end{equation}
+将 $\hat{Z}$-vertex 拆分为两个函数的乘积，
+\begin{equation}
+  f(\epsilon)=\frac{1}{1-\hat{Q}_1(\epsilon)},\quad g(\epsilon)=\hat{Q}(\epsilon)-\hat{Q}_1(\epsilon)P(\epsilon-H_0)P,
+\end{equation}
+$f(\epsilon)$ 的高阶导数用 Mathematica 算了一下也没看出规律来，所以我们这样计算：对
+\begin{equation}
+  f(\epsilon)=1+f(\epsilon)\hat{Q}_1(\epsilon),
+\end{equation}
+两侧求 $k$ 阶导数，有
+\begin{equation}
+  f^{(k)}(\epsilon)=\frac{1}{1-\hat{Q}^{(1)}(\epsilon)}\sum_{i=1}^k C_k^if^{(k-i)}(\epsilon)\hat{Q}^{(i+1)}(\epsilon),
+\end{equation}
+注意 $\hat{Q}^{(k)}(\epsilon)=k!\hat{Q}_k(\epsilon)$ 表示导数本身，因为代码中计算的是 $\hat{Q}$-box 的各阶导数，而没有把 $k!$ 除掉。这样就可以从最低阶开始逐阶递推得到高阶导数。代入 $k=1,2$ 验证，有 
+\begin{equation}
+  f^{(1)}(\epsilon)=\frac{\hat{Q}^{(2)}(\epsilon)}{[1-\hat{Q}^{(1)}(\epsilon)]^2},\quad f^{(2)}(\epsilon)=\frac{2[\hat{Q}^{(2)}(\epsilon)]^2}{[1-\hat{Q}^{(1)}(\epsilon)]^3}+\frac{\hat{Q}^{(3)}(\epsilon)}{[1-\hat{Q}^{(1)}(\epsilon)]^2},
+\end{equation}
+而 $g(\epsilon)$ 的 $k$ 阶导数为
+\begin{equation}
+  g^{(k)}(\epsilon)=-\hat{Q}^{(k+1)}(\epsilon)P(\epsilon-H_0)P-(k-1)\hat{Q}^{(k)}(\epsilon),
+\end{equation}
+代入 $k=0,1$ 也是完全成立的。因此 $\hat{Z}$-vertex 的 $n$ 阶导数为 
+\begin{equation}
+  \hat{Z}^{(n)}(\epsilon)=\sum_{k=0}^nC_n^kf^{(n-k)}(\epsilon)g^{(k)}(\epsilon),
+\end{equation}
+代入 $k=1$ 验证，
+\begin{equation}
+  \hat{Z}^{(1)}(\epsilon)=\frac{2\hat{Q}_2(\epsilon)}{[1-\hat{Q}_1(\epsilon)]^2}[\hat{Q}(\epsilon)-\hat{Q}_1(\epsilon)P(\epsilon-H_0)P]-\frac{2\hat{Q}_2(\epsilon)}{1-\hat{Q}_1(\epsilon)}P(\epsilon-H_0)P,
+\end{equation}
+与 \cite{2014dong} 给出的公式一致。也可以写为
+\begin{equation}
+  \hat{Z}^{(1)}(\epsilon)=\frac{2\hat{Q}_2(\epsilon)}{1-\hat{Q}_1(\epsilon)}[\hat{Z}(\epsilon)-P(\epsilon-H_0)P],
+\end{equation}
+由 \ref{eqs:z-vertex-con1} 与 \ref{eqs:z-vertex-con2}，可知收敛时
+\begin{equation}
+  \hat{Z}^{(1)}(\epsilon)|\phi_i\rangle=0,\quad \epsilon=E_i(\epsilon).\label{eqs:z-vertex-1deriv}
+\end{equation}
+对于 $\hat{S}$-box，是对每个对角元进行迭代，因此本征波函数就是一个数，也就是 $\hat{Z}^{(1)}(\epsilon)=0$，由 \ref{eqs:z-vertex} 与 \ref{eqs:z-vertex-1deriv}，得到 $\hat{Z}(\epsilon)=\hat{Q}(\epsilon)$，从计算结果中也可以看出，在迭代的最后一步，这个关系确实成立，但没收敛时两者有区别。

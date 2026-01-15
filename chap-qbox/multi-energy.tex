@@ -1,0 +1,353 @@
+将简并模型空间的 KK 与 LS 向非简并模型空间推广，除了前面介绍的 EKK 与 ELS 之外，还有 \cite{1994suzuki,1995kuo} 引入的 GLS 与 GKK，将只用一个能量 $\epsilon$ 计算的 $\hat{Q}(\epsilon)$ 推广为多能 $\hat{Q}$-box，一系列综述文章都指出这种方法过于复杂，只在 \cite{2005coraggio} 中得到了使用。虽然不涉及起点能量的选择，但 $\hat{Q}$-box 还是有可能发散，因为在循环过程中还是会循环出多能 $\hat{Q}$-box 的各个能量都相同的情况，此时就退化为这个能量 $\hat{Q}$-box 的高阶导数，如果有一项的分母小于 1，还是会发散。
+
+\section{GLS}
+非简并模型空间的非微扰哈密顿量取为
+\begin{equation}
+  PH_0P=\sum_{\alpha=1}^d\epsilon_\alpha P_\alpha,
+\end{equation}
+其中
+\begin{equation}
+  P=\sum_{\alpha=1}^dP_\alpha,\quad P_\alpha P_\beta=P_\alpha\delta_{\alpha\beta},
+\end{equation}
+因此 $PP_\alpha=P_\alpha$，将解耦条件 \ref{eqs:origin-decouple} 写为
+\begin{equation}
+  QH_1P+QHQ\omega-\omega(\sum_\alpha\epsilon_\alpha P_\alpha)-\omega H_1^\text{eff}=0,
+\end{equation}
+在等式两侧同时右乘 $P_\alpha$，得到 
+\begin{equation}
+  QH_1P_\alpha+QHQ\omega P_\alpha-\epsilon_\alpha\omega P_\alpha-\omega H_1^\text{eff}P_\alpha=0,
+\end{equation}
+可解出 
+\begin{equation}
+  \omega P_\alpha=\frac1{\epsilon_\alpha-QHQ}QH_1P_\alpha-\frac1{\epsilon_\alpha-QHQ}\omega H_1^\text{eff}P_\alpha,\label{eqs:gls-omegaPa}
+\end{equation}
+而 $\sum_\alpha\omega P_\alpha=\omega P=Q\omega P^2=\omega$，因此上式两侧对 $\alpha$ 求和，得到相似变换算符
+\begin{equation}
+  \omega=\sum_\alpha\frac1{\epsilon_\alpha-QHQ}QH_1P_\alpha-\sum_\alpha\frac1{\epsilon_\alpha-QHQ}\omega H_1^\text{eff}P_\alpha,\label{eqs:gls-omega}
+\end{equation}
+在 \ref{eqs:origin-heff} 两侧同时右乘 $P_\alpha$，并将 \ref{eqs:gls-omegaPa} 代入，得到 
+\begin{equation}
+  H_1^\text{eff}P_\alpha=PH_1P_\alpha+PH_1Q\frac1{\epsilon_\alpha-QHQ}QH_1P_\alpha-PH_1Q\frac1{\epsilon_\alpha-QHQ}\omega H_1^\text{eff}P_\alpha,
+\end{equation}
+解出
+\begin{equation}
+  H_1^\text{eff}P_\alpha=\left(1+PH_1Q\frac1{\epsilon_\alpha-QHQ}\omega\right)^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha,
+\end{equation}
+其中
+\begin{equation}
+  \hat{Q}(\epsilon_\alpha)=PH_1P+PH_1Q\frac1{\epsilon_\alpha-QHQ}QH_1P,
+\end{equation}
+还注意到
+\begin{equation}
+  H_1^\text{eff}=P\mathcal{H}P=H_1^\text{eff}P=\sum_\alpha H_1^\text{eff}P_\alpha,
+\end{equation}
+因此 
+\begin{equation}
+  H_1^\text{eff}=\sum_\alpha\left(1+PH_1Q\frac1{\epsilon_\alpha-QHQ}\omega\right)^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha.\label{eqs:gls-heff-iter}
+\end{equation}
+类似 LS，用 $\omega_n$ 标记有效哈密顿量的迭代步数，将上式改写为
+\begin{equation}
+  H_1^\text{eff}(\omega_n)=\sum_\alpha\left(1+PH_1Q\frac1{\epsilon_\alpha-QHQ}\omega_{n-1}\right)^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha,
+\end{equation}
+以及
+\begin{equation}
+  \omega_n=\sum_\alpha\left[\frac1{\epsilon_\alpha-QHQ}QH_1P_\alpha-\frac1{\epsilon_\alpha-QHQ}\omega_{n-1} H_1^\text{eff}(\omega_n)P_\alpha\right],
+\end{equation}
+迭代的初值取为 $\omega_0=0$，得到迭代序列 \cite{1995kuo}
+\begin{align}
+  H_1^\text{eff}(\omega_1)&=\sum_\alpha\hat{Q}(\epsilon_\alpha)P_\alpha,\\
+  \omega_1&=\sum_\alpha\frac1{\epsilon_\alpha-QHQ}QH_1P_\alpha,\\
+  H_1^\text{eff}(\omega_2)&=\sum_\alpha\left[1-\sum_\beta\hat{Q}_1(\epsilon_\alpha\epsilon_\beta)P_\beta\right]^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha,\\
+  \omega_2&=\sum_\alpha\left[\frac1{\epsilon_\alpha-QHQ}QH_1P_\alpha-\sum_\beta\frac1{\epsilon_\alpha-QHQ}\frac1{\epsilon_\beta-QHQ}QH_1P_\beta H_1^\text{eff}(\omega_2)P_\alpha\right],\\
+  H_1^\text{eff}(\omega_3)&=\sum_\alpha\left[1-\sum_\beta\hat{Q}_1(\epsilon_\alpha\epsilon_\beta)P_\beta-\sum_{\beta\gamma}\hat{Q}_2(\epsilon_\alpha\epsilon_\beta\epsilon_\gamma)P_\beta H^\text{eff}_1(\omega_2)P_\gamma\right]^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha,
+\end{align}
+其中
+\begin{equation}
+  \hat{Q}_m(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=(-1)^mPH_1Q\frac1{\epsilon_1-QHQ}\frac1{\epsilon_2-QHQ}\ldots\frac1{\epsilon_{m+1}-QHQ}QH_1P,\quad m\ge1,\label{eqs:multi-energy-qbox}
+\end{equation}
+这就是多能 $\hat{Q}$-box。不过需要注意的是迭代中为了结果更好看其实动了一点手脚，这在 SCGLS 的推导中能更明显地看出，以 $H_1^\text{eff}(\omega_3)$ 为例，为了防止求和下标重复，将 $\omega_2$ 写为
+\begin{equation}
+  \omega_2=\sum_\beta\left[\frac1{\epsilon_\beta-QHQ}QH_1P_\alpha-\sum_\gamma\frac1{\epsilon_\beta-QHQ}\frac1{\epsilon_\gamma-QHQ}QH_1P_\gamma H_1^\text{eff}(\omega_2)P_\beta\right],
+\end{equation}
+得到
+\begin{align}
+  H_1^\text{eff}(\omega_3)={}&\sum_\alpha\Bigg[1+\sum_\beta PH_1Q\frac1{\epsilon_\alpha-QHQ}\frac1{\epsilon_\beta-QHQ}QH_1P_\beta \notag\\
+  &-\sum_{\beta\gamma}PH_1Q\frac1{\epsilon_\alpha-QHQ}\frac1{\epsilon_\beta-QHQ}\frac1{\epsilon_\gamma-QHQ}QH_1P_\gamma H_1^\text{eff}(\omega_2)P_\beta \Bigg]^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha,
+\end{align}
+上式的最后是 $P_\gamma H_1^\text{eff}(\omega_2)P_\beta$，与文献中公式两个投影算符的顺序不太一样，为了得到文献中的结果，应该把 $\hat{Q}$-box 中的 $\epsilon_\beta$ 与 $\epsilon_\gamma$ 调换一下，对最终结果没有影响。
+
+经过计算得到 $H_1^\text{eff}(\omega_n)$ 为 
+\begin{align}
+  H_1^\text{eff}(\omega_n)={}&\sum_\alpha\Bigg[1-\sum_\beta\hat{Q}_1(\epsilon_\alpha\epsilon_\beta)P_\beta-\sum_{\beta\gamma}\hat{Q}_2(\epsilon_\alpha\epsilon_\beta\epsilon_\gamma)P_\beta H_1^\text{eff}(\omega_{n-1})P_\gamma\notag\\
+  &-\ldots -\sum_{\beta\gamma\ldots\lambda\mu}\hat{Q}_{n-1}(\epsilon_\alpha\epsilon_\beta\epsilon_\gamma\ldots\epsilon_\lambda\epsilon_\mu)P_\beta H_1^\text{eff}(\omega_2)P_\gamma H_1^\text{eff}(\omega_3)\ldots P_\lambda H_1^\text{eff}(\omega_{n-1})P_\mu\Bigg]^{-1}\notag\\
+  &\times\hat{Q}(\epsilon_\alpha)P_\alpha\\
+  ={}&\sum_\alpha\Bigg[1-\sum_\beta\hat{Q}_1(\epsilon_\alpha\epsilon_\beta)P_\beta-\sum_{m=2}^{n-1}\sum_{\beta_1\beta_2\ldots\beta_m}\hat{Q}_m(\epsilon_\alpha\epsilon_{\beta_1}\epsilon_{\beta_2}\ldots\epsilon_{\beta_m})\notag\\
+  &\times P_{\beta_1}\prod_{k=n-m+1}^{n-1}H_1^\text{eff}(\omega_k)P_{\beta_{k-n+m+1}}\Bigg]^{-1}\hat{Q}(\epsilon_\alpha)P_\alpha.
+\end{align}
+这里比较困难的就是确定 $P_{\beta_{k-n+m+1}}$ 这一项 $\beta$ 的下标，注意到 $\gamma=\beta_2$，$m=2$ 时 $k=n-1$，而 $m=n-1$ 时投影算符的下标就是 $\beta_k$，因此假设连乘积中 $\beta$ 下标是 $k+am+b$，可写出方程组
+\begin{equation}
+  \begin{cases}
+    2a+b+n-1=2\\
+    a(n-1)+b=0
+  \end{cases}
+\end{equation}
+这样就可以解出 $P_{\beta_{k-n+m+1}}$ 这一项的形式。
+
+以上公式的下标改成与 \cite{1984suzuki-nondeg} 相统一的形式，
+\begin{align}
+  H_1^\text{eff}(\omega_n)={}&\sum_{\alpha_1=1}^d\Bigg[1-\sum_{\alpha_2=1}^d\hat{Q}_1(\epsilon_{\alpha_1}\epsilon_{\alpha_2})P_{\alpha_2}-\sum_{m=2}^{n-1}\sum_{\alpha[2,m+1]=1}^d\hat{Q}_m(\epsilon_{\alpha_1}\epsilon_{\alpha_2}\ldots\epsilon_{\alpha_{m+1}})\notag\\
+  &\times P_{\alpha_2}\prod_{k=n-m+1}^{n-1}H_1^\text{eff}(\omega_k)P_{\alpha_{k-n+m+2}}\Bigg]^{-1}\hat{Q}(\epsilon_{\alpha_1})P_{\alpha_1}.\label{eqs:gls-Heff}
+\end{align}
+
+由于多能 $\hat{Q}$-box 的宗量相互交换顺序结果是不变的，因此可以只计算并且存储 $\alpha_1\le\alpha_2\le\ldots\le\alpha_{m+1}$ 的多能 $\hat{Q}$-box，其个数是从 $d$ 条价空间轨道中有放回地抽取 $(m+1)$ 条轨道的组合数，也就是 $C_{d+m}^{m+1}$ 个，代码中有个参数 $ND$，也就是导数最高阶数求到 $(ND-1)$ 阶，也就是 $n$ 最大只能取到 $ND$，$m$ 最大只能取到 $(ND-1)$。至少对实空间来说，需要保存的多能 $\hat{Q}$-box 个数是不算多的，能够处理。
+
+\subsection{组态空间中的 GLS}
+% 在实际的运算中以上公式都是要写到组态表象下的。对哈密顿量的单体部分来说比较简单，实空间 MBPT 模型空间哈密顿量的单体部分是对角的，每个对角元就是这个单粒子轨道的单粒子能，各个 $\epsilon_i$ 就是这条轨道的 Hartree-Fock 能量。将 \ref{eqs:gls-Heff} 写到单体组态表象下，左侧的有效哈密顿量是对角矩阵，因此每一个对角元就变成一个代数方程。这里需要说明一下，方程本身是算符的方程，与表象无关，实际求解时是选取组态表象，将它写为组态表象下的矩阵方程进行的计算，做的操作相当于在 \ref{eqs:gls-Heff} 左右两侧用单体组态空间的基 $|a\rangle$ 进行 overlap，只会改变 $\hat{Q}$-box 两侧进出的粒子，不会改变中间的计算过程，因此多能 $\hat{Q}$-box 对能量的求和仍然是取遍整个模型空间的。
+
+% 两体部分的非微扰哈密顿量则是由单粒子的 Hartree-Fock 能量组合而成，因为两体哈密顿量是按照 channel 分块对角的，同一个组态 $|ab\rangle$ 可以存在于角动量不同的 channel 内，因此模型空间有部分简并，多能 $\hat{Q}$-box 对能量的求和必须考虑这一点。
+
+在实际计算之前，考虑一下组态空间中这个复杂的 GLS 方程能简化成什么样是有益的。因为这一堆投影算符的形式很简单，很多 $\alpha_1$ 至 $\alpha_{m+1}$ 的组合对应的投影算符乘起来是 0。如果能考虑这点的话，可以简化多能 $\hat{Q}$-box 以及这一堆价空间轨道求和的计算。
+
+对于实空间的单体部分，$\hat{Q}$-box 与有效哈密顿量都是对角矩阵，而投影算符 $(P_\alpha)_{ij}=\delta_{\alpha i}\delta_{\alpha j}$。考虑一个对角矩阵 $D$ 乘投影算符 $P_\alpha$，有 
+\begin{equation}
+  (DP_\alpha)_{ij}=D_{ik}(P_\alpha)_{kj}=D_{\alpha\alpha}\delta_{\alpha i}\delta_{\alpha j},
+\end{equation}
+这里用了爱因斯坦求和，把哑指标 $k$ 求和了，但 $\alpha$ 不是哑指标。也就是说 $DP_\alpha$ 是一个只有对角的 $(\alpha,\alpha)$ 非 0 的矩阵。
+因此 \ref{eqs:gls-Heff} 写为矩阵元形式为
+\begin{align}
+  H_1^\text{eff}(\omega_n)_{ii}&=\sum_{\alpha_1=1}^d\Bigg[1-\hat{Q}_1(\epsilon_{\alpha_1}\epsilon_i)_{ii}-\sum_{m=2}^{n-1}\hat{Q}_m(\epsilon_{\alpha_1}\epsilon_i\ldots\epsilon_i)_{ii}\prod_{k=n-m+1}^{n-1}H_1^\text{eff}(\omega_k)_{ii}\Bigg]^{-1}\hat{Q}(\epsilon_{\alpha_1})_{\alpha_1\alpha_1}\delta_{\alpha_1 i}\notag\\
+  &=\Bigg[1-\hat{Q}_1(\epsilon_i\epsilon_i)_{ii}-\sum_{m=2}^{n-1}\hat{Q}_m(\epsilon_i\epsilon_i\ldots\epsilon_i)_{ii}\prod_{k=n-m+1}^{n-1}H_1^\text{eff}(\omega_k)_{ii}\Bigg]^{-1}\hat{Q}(\epsilon_i)_{ii},
+\end{align}
+也就是说单体的 GLS 等价于用这条轨道的非微扰能量作为简并能量进行 LS 计算，用不到多能 $\hat{Q}$-box。
+
+而两体部分则是分 channel 的块对角矩阵。此时考虑 $D$ 为一块对角矩阵，指标 $i$ 表示第 $i$ 个对角块，也就是第 $i$ 个 channel。而 $P_\alpha$ 就需要考虑 $\alpha$ 这个两体组态是不是在 $i$ channel 内。此时不去管每个块内的每个矩阵元是什么，而是从块的角度考虑，取 $DP_\alpha$ 的第 $i$ 个对角块，有
+\begin{equation}
+  (DP_\alpha)_i=
+  \begin{cases}
+    D_iP_\alpha,\quad &\alpha\in i\text{th\;channel},\\
+    0,\quad &\alpha\notin i\text{th\;channel},
+  \end{cases}
+\end{equation}
+因此取 \ref{eqs:gls-Heff} 的 $i$th channel 对角块，有 
+\begin{align}
+  H_1^\text{eff}(\omega_n)_i={}&\sum_{\alpha_1=1}^d\Bigg\{1-\sum_{\alpha_2=1}^d[\hat{Q}_1(\epsilon_{\alpha_1}\epsilon_{\alpha_2})P_{\alpha_2}]_i-\sum_{m=2}^{n-1}\sum_{\alpha[2,m+1]=1}^d\Big[\hat{Q}_m(\epsilon_{\alpha_1}\epsilon_{\alpha_2}\ldots\epsilon_{\alpha_{m+1}}) P_{\alpha_2}\Big]_i\notag\\
+  &\times\prod_{k=n-m+1}^{n-1}\Big[H_1^\text{eff}(\omega_k)P_{\alpha_{k-n+m+2}}\Big]_i\Bigg\}^{-1}[\hat{Q}(\epsilon_{\alpha_1})P_{\alpha_1}]_i,
+\end{align}
+虽然仍然是矩阵方程，但发现在 $i$th channel 的计算中，所有对 $\alpha$ 轨道的求和都要求 $\alpha\in i$th channel 才非 0。因此多能 $\hat{Q}$-box 只需要循环到这个 channel 的维数即可，大大减小了计算量。
+
+\section{GKK}
+KK 的推导过程与 LS 有所区别，出发点都是从解耦条件得出的相似变换算符，但 LS 及 GLS 将 $\omega$ 代入 \ref{eqs:origin-heff}，反解出有效哈密顿量，也就是将有效哈密顿量用 $\omega$ 表示，随后取定初值再逐步进行迭代，迭代的每一步都需要同时更新有效哈密顿量与 $\omega$。但 KK，EKK 以及 GKK 则是直接对 $\omega$ 进行级数展开或迭代，将 $\omega$ 用有效哈密顿量表示，这之后再代入 \ref{eqs:origin-heff}，就能写出只含有有效哈密顿量的迭代公式，直接迭代有效哈密顿量本身，迭代的过程并不用处理 $\omega$。
+
+GKK 的推导与 EKK 也有区别，因为 EKK 的本质是通过引入参数 $E$，迭代 $\widetilde{H}^\text{eff}=H^\text{eff}-E$ 这个有效哈密顿量整体，之后其实与 KK 是类似的，虽然之前给出的 EKK 推导与 KK 不一样，但取 $E=\epsilon_0$ KK 也能沿用 EKK 的级数展开的推导方法，而 GKK 与 KK 的相似点在于迭代的还是只有微扰部分 $H_1$，只是迭代公式的由单能 $\hat{Q}$-box 换为了多能 $\hat{Q}$-box，可以沿用 KK 的推导方法。总的来说，EKK、GKK 这两种方法都与 KK 有共通之处。
+
+为了方便推导将 \ref{eqs:gls-omega} 改写为
+\begin{equation}
+  \omega=\sum_{\alpha=1}^d\frac1{e(\alpha)}QH_1P_\alpha-\sum_{\alpha=1}^d\frac1{e(\alpha)}\omega V^\text{eff}P_\alpha,\label{eqs:gkk-omega1}
+\end{equation}
+这里令
+\begin{equation}
+  e(\alpha)=\epsilon_\alpha-QHQ,\quad\alpha=1,\ldots,d,
+\end{equation}
+并将 $H_1^\text{eff}$ 记为 $V^\text{eff}$，因为在 GKK 中迭代的也是 $H_1^\text{eff}$ 这个微扰部分，不能用下标表示迭代步数；而 $H_1^\text{eff}(\omega)$ 这种在 LS 中用过的记号也不合适，因为迭代过程中没涉及 $\omega$，仅仅是对 $H_1^\text{eff}$ 的操作。综合以上考虑，用 $V^\text{eff}$ 这个符号，相当于 \cite{1984suzuki-nondeg} 中的 $R$。
+
+模仿 KK 的推导，将 \ref{eqs:gkk-omega1} 反复代入自身，算到无穷项，消掉等式右侧的 $V^\text{eff}$，有 
+\begin{equation}
+  \omega=\sum_{\alpha=1}^d\frac1{e(\alpha)}QH_1P_\alpha+\sum_{m=1}^\infty\sum_{\alpha[1,m+1]=1}^d(-1)^m\frac1{e(\alpha[1,m+1])}QH_1P_{\alpha_1}V^\text{eff}P_{\alpha_2}\ldots V^\text{eff}P_{\alpha_{m+1}},
+\end{equation}
+其中用到了新定义的记号
+\begin{equation}
+  \sum_{\alpha[1,n]=a}^b=\sum_{\alpha_1=a}^b\sum_{\alpha_2=a}^b\ldots\sum_{\alpha_n=a}^b,
+\end{equation}
+以及 
+\begin{equation}
+  e(\alpha[1,n])=e(\alpha_1)e(\alpha_2)\ldots e(\alpha_n).
+\end{equation}
+因此可直接得出 $V^\text{eff}$ 满足的方程 
+\begin{align}
+  V^\text{eff}&=PH_1P+PH_1Q\omega\notag\\
+  &=\sum_{\alpha=1}^d\hat{Q}(\epsilon_\alpha)P_\alpha+\sum_{m=1}^\infty\sum_{\alpha[1,m+1]=1}^d\hat{Q}_m(\epsilon_{\alpha_1}\epsilon_{\alpha_2}\ldots\epsilon_{\alpha_{m+1}})P_{\alpha_1}V^\text{eff}P_{\alpha_2}\ldots V^\text{eff}P_{\alpha_{m+1}},
+\end{align}
+写为迭代形式为
+\begin{equation}
+  V^\text{eff}_n=\sum_{\alpha=1}^d\hat{Q}(\epsilon_\alpha)P_\alpha+\sum_{m=1}^\infty\sum_{\alpha[1,m+1]=1}^d\hat{Q}_m(\epsilon_{\alpha_1}\epsilon_{\alpha_2}\ldots\epsilon_{\alpha_{m+1}})P_{\alpha_1}V^\text{eff}_{n-1}P_{\alpha_2}\ldots V^\text{eff}_{n-1}P_{\alpha_{m+1}},\label{eqs:gkk-iter}
+\end{equation}
+迭代初值取为 \cite{1995kuo}
+\begin{equation}
+  V_1^\text{eff}=\sum_{\alpha=1}^d\hat{Q}(\epsilon_\alpha)P_\alpha+\sum_{\alpha\beta}\hat{Q}_1(\epsilon_{\alpha}\epsilon_{\beta})P_{\alpha}\hat{Q}(\epsilon_\beta)P_{\beta}+\sum_{\alpha\beta\gamma}\hat{Q}_2(\epsilon_{\alpha}\epsilon_{\beta}\epsilon_\gamma)P_{\alpha}\hat{Q}(\epsilon_\beta)P_{\beta}\hat{Q}(\epsilon_\gamma)P_\gamma+\ldots.
+\end{equation}
+
+\section{多能 $\hat{Q}$-box 的计算}
+多能 $\hat{Q}_m(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})$ 可以用之前定义的 $\hat{Q}(\epsilon)$ 表示。$\hat{Q}_m$ 中的能量分母为
+\begin{equation*}
+  \frac1{\epsilon_1-QHQ}\frac1{\epsilon_2-QHQ}\ldots\frac1{\epsilon_{m+1}-QHQ},
+\end{equation*} 
+可以写出这样的等式 \cite{1994suzuki}
+\begin{equation}
+  \frac1{\epsilon_1-QHQ}\frac1{\epsilon_2-QHQ}\ldots\frac1{\epsilon_{m+1}-QHQ}=\sum_{k=1}^{m+1}(-1)^m\frac{C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})}{\epsilon_k-QHQ},\label{eqs:multi-energy-eqs}
+\end{equation}
+其中
+\begin{equation}
+  C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=\left[(\epsilon_k-\epsilon_1)(\epsilon_k-\epsilon_2)\ldots(\epsilon_k-\epsilon_{k-1})(\epsilon_k-\epsilon_{k+1})\ldots(\epsilon_k-\epsilon_{m+1})\right]^{-1},\label{eqs:multi-energy-ck}
+\end{equation}
+这个公式的推导用到的是部分分式分解的方法，其实就是将分式拆开再待定系数。考虑 
+\begin{equation}
+  \frac1{x-\epsilon_1}\frac1{x-\epsilon_2}\ldots\frac1{x-\epsilon_{m+1}}=\sum_{k=1}^{m+1}\frac{C_k}{x-\epsilon_k},
+\end{equation}
+对每个 $k$，两侧同乘 $(x-\epsilon_k)$ 再令 $x=\epsilon_k$，就可以得到 \ref{eqs:multi-energy-ck}。为了得到 \ref{eqs:multi-energy-eqs} 的形式，左右同乘 $(-1)^{m+1}$ 即可。
+
+由此多能 $\hat{Q}$-box 可以写为
+\begin{align}
+    \hat{Q}_m(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})&=(-1)^mPH_1Q\sum_{k=1}^{m+1}(-1)^m\frac{C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})}{\epsilon_k-QHQ}QH_1P\notag\\
+    &=\sum_{k=1}^{m+1}C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})PH_1Q\frac1{\epsilon_k-QHQ}QH_1P\notag\\
+    &=\sum_{k=1}^{m+1}C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})\hat{Q}(\epsilon_k),\label{eqs:multi-energy-from-single}
+\end{align}
+最后一个等号用到了
+\begin{equation}
+  \sum_{k=1}^{m+1}C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=0,
+\end{equation}
+这样才能把零阶 $\hat{Q}$-box 中的 $PH_1P$ 项去掉。
+因此用单能 $\hat{Q}$-box 就能求出多能 $\hat{Q}$-box。
+
+不过 \ref{eqs:gkk-iter} 对 $\alpha$ 的循环都是从 1 到 $d$ 的，这说明多能 $\hat{Q}$-box 的宗量是可以取相同能量的。但以上推导过程都假设了 $\epsilon_1$ 到 $\epsilon_{m+1}$ 互不相同，否则 $C_k$ 无法定义。考虑能量存在重复的情况，将 \ref{eqs:multi-energy-qbox} 改写为
+\begin{equation}
+  \hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=(-1)^mPH_1Q\frac1{(\varepsilon_1-QHQ)^{l_1}}\frac1{(\varepsilon_2-QHQ)^{l_2}}\ldots\frac1{(\varepsilon_{n}-QHQ)^{l_n}}QH_1P,
+\end{equation}
+其中 $l_1+l_2+\ldots l_n=m+1$，用 $\epsilon$ 表示可以相等的能量，$\varepsilon$ 表示互不相同的能量，$\varepsilon_1$ 到 $\varepsilon_n$ 互不相同，$l_k$ 表示能量 $\varepsilon_k$ 出现的次数，$l_i\geq 1,n\leq m+1$。为了与后文出现的单能 $\hat{Q}$-box 的导数区分，将多能 $\hat{Q}$-box 的记号写为 $\hat{Q}_m^n$，下标 $m$ 表示一共有 $m+1$ 个 $\epsilon$，上标 $n$ 表示这 $m+1$ 个能量里有 $n$ 个互不相同的 $\varepsilon$。注意在这套记号下，$\hat{Q}_m^n$ 不一定都相等，有很多种 $n$ 个$\varepsilon$ 的排列组合。
+
+尽管如此，任意更换多能 $\hat{Q}$-box 中两个能量宗量的顺序，是相等的，比如 $\hat{Q}_2(\epsilon_1\epsilon_2\epsilon_2)=\hat{Q}_2(\epsilon_2\epsilon_1\epsilon_2)$，这一点 \cite{1984suzuki-nondeg} 也指出了。因此在实际计算 $\hat{Q}_m(\epsilon_{\alpha_1}\epsilon_{\alpha_2}\ldots\epsilon_{\alpha_{m+1}})$ 时，只需计算模型空间循环中那些 $\alpha_1\le\alpha_2\le\ldots\le\alpha_{m+1}$ 的组合即可。
+
+接下来就是去实际计算有相同能量的多能 $\hat{Q}$-box，考虑 
+\begin{equation}
+  f(x)=\frac1{(x-\varepsilon_1)^{l_1}}\frac1{(x-\varepsilon_2)^{l_2}}\ldots\frac1{(x-\varepsilon_n)^{l_n}}
+\end{equation}
+的部分分式分解，总可以拆分为
+\begin{align}
+  \frac1{(x-\varepsilon_1)^{l_1}}\frac1{(x-\varepsilon_2)^{l_2}}\ldots\frac1{(x-\varepsilon_n)^{l_n}}=\sum_{i=1}^{n}\sum_{j=1}^{l_i}\frac{a_{ij}}{(x-\varepsilon_i)^j},\label{eqs:multi-energy-decomposition}
+\end{align}
+待定系数法自然可以求 $a_{ij}$，也可以用留数求出 $a_{ij}$ 的解析表达式。先回忆一下留数的定义：在孤立奇点 $z_0$ 附近将 $f(z)$ 展开为洛朗级数，
+\begin{equation}
+  f(z)=\sum_{k=-\infty}^\infty a_k(z-z_0)^k,
+\end{equation}
+$a_{-1}$ 这个系数有特殊的地位，是 $z_0$ 这个极点处的留数，记为 $\text{Res}f(z_0)$，求 $m$ 阶极点留数的公式为
+\begin{equation}
+  \text{Res}f(z_0)=\frac1{(m-1)!}\frac{\mathrm{d}^{m-1}}{\mathrm{d}z^{m-1}}(z-z_0)^mf(z)\bigg|_{z=z_0},
+\end{equation}
+而 $m$ 阶极点也有一个性质，就是洛朗级数的负幂次展开是有限项的，最小到 $a_{-m}$。以上结果可以用来对有理函数的部分分式进行分解，$\varepsilon_i$ 是 $f(x)$ 的 $l_i$ 阶极点，因此 $a_{i1}=\text{Res}f(\varepsilon_i)$；对于 $j>1$ 的那些系数，可以在 \ref{eqs:multi-energy-decomposition} 两侧同乘 $(x-\varepsilon_i)^{j-1}$，把 $a_{ij}$ 项变为 $(x-\varepsilon_i)^{-1}$，就可以得到 $a_{ij}=\text{Res}[(x-\varepsilon_i)^{j-1}f(x)]|_{x=\varepsilon_i}$，$\varepsilon_i$ 是 $(x-\varepsilon_i)^{j-1}f(x)$ 的 $(l_i-j+1)$ 阶极点。因此 
+\begin{equation}
+  a_{ij}=\frac1{(l_i-j)!}\frac{\mathrm{d}^{l_i-j}}{\mathrm{d}x^{l_i-j}}(x-\varepsilon_i)^{l_i}f(x)\bigg|_{x=\varepsilon_i},\quad j=1,2,\ldots,l_i.
+\end{equation}
+虽然得到了这样一个解析表达式，但是求高阶导数仍很复杂。有两个想法：一是带入足够数量的 $x$，得到 $a_{ij}$ 满足的方程组，并直接解出来；二是用这样的多个函数乘积的高阶导数的公式，将 $a_{ij}$ 算出来，虽然计算量比较大，但毕竟代码中限定了求导的阶数，计算代价应该是可以接受的。
+
+计算多个函数乘积高阶导数的公式为
+\begin{equation}
+  (f_1f_2\ldots f_k)^{(n)}=\sum_{r_1+r_2+\ldots+r_k=n}\frac{n!}{r_1!r_2!\ldots r_n!}f^{(r_1)}_1f_2^{(r_2)}\ldots f_k^{(r_k)},\quad r_i\ge0.
+\end{equation}
+求出所有系数之后，将 \ref{eqs:multi-energy-decomposition} 改写为
+\begin{equation}
+  \frac1{(x-\varepsilon_1)^{l_1}}\frac1{(x-\varepsilon_2)^{l_2}}\ldots\frac1{(x-\varepsilon_n)^{l_n}}=\sum_{k=1}^{n}\sum_{j=1}^{l_k}\frac{C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)}{(x-\varepsilon_k)^j},
+\end{equation}
+其中 
+\begin{equation}
+  C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)=\frac1{(l_k-j)!}\frac{\mathrm{d}^{l_k-j}}{\mathrm{d}x^{l_k-j}}\left[\frac1{(x-\varepsilon_1)^{l_1}}\ldots\frac1{(x-\varepsilon_{k-1})^{l_{k-1}}}\frac1{(x-\varepsilon_{k+1})^{l_{k+1}}}\ldots\frac1{(x-\varepsilon_n)^{l_n}}\right]\bigg|_{x=\varepsilon_k}.
+\end{equation}
+
+取 $x=QHQ$，有 
+\begin{equation}
+  (-1)^{m+1}\frac1{(\varepsilon_1-QHQ)^{l_1}}\frac1{(\varepsilon_2-QHQ)^{l_2}}\ldots\frac1{(\varepsilon_n-QHQ)^{l_n}}=\sum_{k=1}^{n}\sum_{j=1}^{l_k}(-1)^j\frac{C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)}{(\varepsilon_k-QHQ)^j},
+\end{equation}
+因此 
+\begin{align}
+  \hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})&=(-1)^mPH_1Q\frac1{(\varepsilon_1-QHQ)^{l_1}}\frac1{(\varepsilon_2-QHQ)^{l_2}}\ldots\frac1{(\varepsilon_{n}-QHQ)^{l_n}}QH_1P\notag\\
+  &=-PH_1Q\sum_{k=1}^{n}\sum_{j=1}^{l_k}(-1)^j\frac{C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)}{(\varepsilon_k-QHQ)^j}QH_1P\notag\\
+  &=\sum_{k=1}^{n}\sum_{j=1}^{l_k}C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)(-1)^{j-1}PH_1Q\frac1{(\varepsilon_k-QHQ)^j}QH_1P\notag\\
+  &=\sum_{k=1}^{n}\sum_{j=1}^{l_k}C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}_{j-1}(\varepsilon_k),\quad n\ge2,
+\end{align}
+要求 $n\ge2$ 是因为 $C_{kj}'$ 在 $n=1$ 时无法定义，$n=1$ 时为 $\hat{Q}_m(\varepsilon_1)$。综上，
+\begin{equation}
+  \hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=
+  \begin{cases}
+    \sum_{k=1}^{n}\sum_{j=1}^{l_k}C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}_{j-1}(\varepsilon_k),\quad &n\ge2,\\
+    \hat{Q}_m(\varepsilon_1),\quad &n=1.
+  \end{cases}
+\end{equation}
+
+还有另一种推导方式，利用 \ref{eqs:multi-energy-from-single} 总可以写出能量互不相同的多能 $\hat{Q}$-box 
+\begin{align}
+    \hat{Q}_{n-1}^n(\varepsilon_1\varepsilon_2\ldots\varepsilon_n)&=(-1)^{n-1}PH_1Q\frac1{\varepsilon_1-QHQ}\frac1{\varepsilon_2-QHQ}\ldots\frac1{\varepsilon_n-QHQ}QH_1P\notag\\
+    &=\sum_{k=1}^nC_k(\varepsilon_1\varepsilon_2\ldots\varepsilon_n)\hat{Q}(\varepsilon_k),\quad n\geq 2,
+\end{align}
+因此
+\begin{align}
+    \hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})&=(-1)^m(-1)^{n-1}\frac{(-1)^{l_1+l_2+\ldots+l_n-n}}{(l_1-1)!(l_2-1)!\ldots(l_n-1)!}\frac{\partial^{l_1+l_2+\ldots+l_n-n}}{\partial\varepsilon_1^{l_1-1}\partial\varepsilon_2^{l_2-1}\ldots\partial\varepsilon_n^{l_n-1}}\hat{Q}_{n-1}^n(\varepsilon_1\varepsilon_2\ldots\varepsilon_n)\notag\\
+    &=\frac1{(l_1-1)!(l_2-1)!\ldots(l_n-1)!}\frac{\partial^{l_1+l_2+\ldots+l_n-n}}{\partial\varepsilon_1^{l_1-1}\partial\varepsilon_2^{l_2-1}\ldots\partial\varepsilon_n^{l_n-1}}\hat{Q}_{n-1}^n(\varepsilon_1\varepsilon_2\ldots\varepsilon_n),\quad n\geq 2,
+\end{align}
+下面计算这个导数，看 $\hat{Q}_{n-1}^n(\varepsilon_1\varepsilon_2\ldots\varepsilon_n)$ 中的第 $k$ 项 $C_k(\varepsilon_1\varepsilon_2\ldots\varepsilon_n)\hat{Q}(\varepsilon_k)$，
+\begin{align}
+    &\frac{\partial^{l_1+\ldots+l_n-n}}{\partial\varepsilon_1^{l_1-1}\ldots\partial\varepsilon_k^{l_k-1}\ldots\partial\varepsilon_n^{l_n-1}}\left[\frac1{(\varepsilon_k-\varepsilon_1)\ldots(\varepsilon_k-\varepsilon_{k-1})(\varepsilon_k-\varepsilon_{k+1})\ldots(\varepsilon_k-\varepsilon_n)}\hat{Q}(\varepsilon_k)\right]\notag\\
+    ={}&\frac{\partial^{l_k-1}}{\partial\varepsilon_k^{l_k-1}}\left[\frac{(l_1-1)!\ldots(l_{k-1}-1)!(l_{k+1}-1)!\ldots(l_n-1)!}{(\varepsilon_k-\varepsilon_1)^{l_1}\ldots(\varepsilon_k-\varepsilon_{k-1})^{l_{k-1}}(\varepsilon_k-\varepsilon_{k+1})^{l_{k+1}}\ldots(\varepsilon_k-\varepsilon_n)^{l_n}}\hat{Q}(\varepsilon_k)\right],
+\end{align}
+因此
+\begin{align}
+    \hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})&=\frac1{\prod_{i=1}^n(l_i-1)!}\sum_{k=1}^n\frac{\prod_{i=1}^n(l_i-1)!}{(l_k-1)!}\frac{\partial^{l_k-1}}{\partial\varepsilon_k^{l_k-1}}\left[C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}(\varepsilon_k)\right]\notag\\
+    &=\sum_{k=1}^n\frac{1}{(l_k-1)!}\frac{\partial^{l_k-1}}{\partial\varepsilon_k^{l_k-1}}\left[C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}(\varepsilon_k)\right],
+\end{align}
+其中 $C'_k$ 是 \ref{eqs:multi-energy-ck} 的推广，
+\begin{equation}
+  C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)=\left[(\epsilon_k-\varepsilon_1)^{l_1}\ldots(\varepsilon_k-\varepsilon_{k-1})^{l_{k-1}}(\varepsilon_k-\varepsilon_{k+1})^{l_{k+1}}\ldots(\epsilon_k-\epsilon_n)^{l_n}\right]^{-1},
+\end{equation}
+当 $l$ 全为 1 时退化为 $C_k(\epsilon_1\epsilon_2\ldots\epsilon_n)$。而 $n=1$ 时 $C_1(\varepsilon_1l_1)$ 没有定义，因此要单列出来，
+\begin{equation}
+    \hat{Q}_m^1(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=(-1)^mPH_1Q\frac1{(\varepsilon_1-QHQ)^{m+1}}QH_1P=\hat{Q}_m(\varepsilon_1),
+\end{equation}
+综上所述，多能 $\hat{Q}$-box 可以用单能 $\hat{Q}$-box 表示为
+\begin{equation}
+\hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=
+\begin{cases}
+    \sum_{k=1}^n\frac{1}{(l_k-1)!}\frac{\partial^{l_k-1}}{\partial\varepsilon_k^{l_k-1}}\left[C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}(\varepsilon_k)\right],\quad &n\geq 2,\\
+    \hat{Q}_m(\varepsilon_1),\quad &n=1.
+\end{cases}
+\end{equation}
+
+可以证明这两个公式相等，实际上就是用莱布尼茨公式把这两个函数乘积的导数算出来的过程，\cite{2014suzuki-multi} 的证明过程与这里的第二种推导是一样的。
+\begin{align}
+  \hat{Q}_m^n(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})&=\sum_{k=1}^n\frac{1}{(l_k-1)!}\frac{\partial^{l_k-1}}{\partial\varepsilon_k^{l_k-1}}\left[C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}(\varepsilon_k)\right]\notag\\
+  &=\sum_{k=1}^n\frac1{(l_k-1)!}\sum_{j=0}^{l_k-1}\frac{(l_k-1)!}{j!(l_k-j-1)!}\left[\frac{\partial^{l_k-j-1}}{\partial\varepsilon_k^{l_k-j-1}}C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\right]\hat{Q}^{(j)}(\varepsilon_k)\notag\\
+  &=\sum_{k=1}^n\sum_{j=0}^{l_k-1}\frac1{(l_k-j-1)!}\left[\frac{\partial^{l_k-j-1}}{\partial\varepsilon_k^{l_k-j-1}}C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\right]\hat{Q}_j(\varepsilon_k)\notag\\
+  &=\sum_{k=1}^n\sum_{j=1}^{l_k}\frac1{(l_k-j)!}\left[\frac{\partial^{l_k-j}}{\partial\varepsilon_k^{l_k-j}}C'_k(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\right]\hat{Q}_{j-1}(\varepsilon_k)\notag\\
+  &=\sum_{k=1}^n\sum_{j=1}^{l_k}C'_{kj}(\varepsilon_1l_1;\varepsilon_2l_2;\ldots\varepsilon_nl_n)\hat{Q}_{j-1}(\varepsilon_k),\quad n\ge2.
+\end{align}
+
+验证一下以上公式，当 $\epsilon_k=\varepsilon_k$ 时，$n=m+1$，$l$ 全为 1，有
+\begin{equation}
+    \hat{Q}_m^{m+1}(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})=\sum_{k=1}^{m+1}C_k(\epsilon_1\epsilon_2\ldots\epsilon_{m+1})\hat{Q}(\epsilon_k),
+\end{equation}
+回到 \ref{eqs:multi-energy-from-single}。取 $\epsilon_1=\varepsilon_1,\epsilon_2=\epsilon_3=\varepsilon_2$，有 $m=n=2,l_1=1,l_2=2$，
+\begin{align}
+    \hat{Q}_2^2(\epsilon_1\epsilon_2\epsilon_2)&=\frac1{(\varepsilon_1-\varepsilon_2)^2}\hat{Q}(\varepsilon_1)+\frac{\partial}{\partial\varepsilon_2}\left[\frac1{\varepsilon_2-\varepsilon_1}\hat{Q}(\varepsilon_2)\right]\notag\\
+    &=PH_1Q\left[\frac1{(\varepsilon_1-\varepsilon_2)^2(\varepsilon_1-QHQ)}-\frac1{(\varepsilon_1-\varepsilon_2)^2(\varepsilon_2-QHQ)}+\frac1{(\varepsilon_1-\varepsilon_2)(\varepsilon_2-QHQ)^2}\right]QH_1P\notag\\
+    &=PH_1Q\frac1{(\varepsilon_1-QHQ)}\frac1{(\varepsilon_2-QHQ)^2}QH_1P,
+\end{align}
+取 $\epsilon_1=\varepsilon_1,\epsilon_2=\epsilon_3=\varepsilon_2,\epsilon_4=\epsilon_5=\epsilon_6=\varepsilon_3$，有 $m=5,n=3,l_1=1,l_2=2,l_3=3$，用 Python 计算出
+\begin{equation}
+    \hat{Q}_5^3(\epsilon_1\ldots\epsilon_6)=-PH_1Q\frac1{\varepsilon_1-QHQ}\frac1{(\varepsilon_2-QHQ)^2}\frac1{(\varepsilon_3-QHQ)^3}QH_1P.
+\end{equation}
+
+\cite{2014suzuki-multi} 给出的公式为
+\begin{equation}
+  \hat{Q}_m(\bm{\varepsilon}^{(d)},\bm{n}^{(d)})=\sum_{l=1}^d\sum_{k=0}^{n_l-1}C_{lk}(\bm{\varepsilon}^{(d)},\bm{n}^{(d)})\hat{Q}_k(\varepsilon_l),
+\end{equation}
+其中
+\begin{equation}
+  \bm{\varepsilon}^{(d)}=(\varepsilon_1,\varepsilon_2,\ldots,\varepsilon_d),\quad \bm{n}^{(d)}=(n_1,n_2,\ldots,n_d),\quad n_1+n_2+\ldots+n_d=m+1,
+\end{equation}
+系数 $C_{lk}$ 为
+\begin{equation}
+  C_{lk}(\bm{\varepsilon}^{(d)},\bm{n}^{(d)})=\frac1{(n_l-k-1)!}\left(\frac{\partial}{\partial\varepsilon_l}\right)^{n_l-k-1}\left(\prod_{i=1,i\ne l}^d\frac1{(\varepsilon_l-\varepsilon_i)^{n_i}}\right).
+\end{equation}
+这里要注意 \cite{2014suzuki-multi} 假设模型空间的 $d$ 个非微扰能量全都是非简并的，都用 $\varepsilon$ 来标记，从 
+\begin{equation}
+  \hat{Q}_m(\bm{\varepsilon}^{(d)},\bm{n}^{(d)})=(-1)^mPHQ\frac1{e(\varepsilon_1)^{n_1}e(\varepsilon_2)^{n_2}\ldots e(\varepsilon_d)^{n_d}}QHP
+\end{equation}
+出发来推导公式，其中 $e(E_0)=E_0-QHQ$。这里有两点需要注意，其一，某些 $n$ 完全可以等于 0，但 $n=0$ 时求和上标成 $-1$ 了；其二，模型空间的非微扰能量也可以部分简并。因此不将 $d$ 理解为模型空间维数，而是理解为多能 $\hat{Q}$-box 中出现了 $d$ 个互不相同的能量，此时推导过程可以直接沿用。
+
+问题在于 Gamow-MBPT 的 channel 维数实在太大了，两体 channel 有 1000 维，循环这 1000 个非微扰能量无法完成。历史上 ELS 这个方法只在 $0p$ 壳用过，可能只有小模型空间才能完成这个计算。

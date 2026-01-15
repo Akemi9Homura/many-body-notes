@@ -1,0 +1,28 @@
+
+\section{复对称矩阵}
+\label{sec:complex-symmetric-mat}
+
+在 Berggren 基矢下，Gamow 壳模型的哈密顿量是复对称矩阵。在具体讨论 Gamow 壳模型的求解之前，先讨论复对称矩阵的性质。复对称矩阵 \(\bm{A}\) 满足 \(\bm{A}=\bm{A}^T\)，并非厄米矩阵，因此并不一定能对角化，本征值也不一定是实数而是复数。
+
+对于厄米矩阵 \(bm{H}\)，本征方程
+\begin{equation}
+    \bm{H}\bm{v}=\lambda\bm{v},
+\end{equation}
+\(\lambda\) 为实数。两侧取厄米共轭得到
+\begin{equation}
+    \bm{v}^\dagger\bm{H}=\lambda\bm{v}^\dagger,
+\end{equation}
+同时右乘 \(\bm{v}\)，
+\begin{equation}
+    \bm{v}^\dagger\bm{H}\bm{v}=\lambda\bm{v}^\dagger\bm{v},
+\end{equation}
+可以看出应该将本征矢量 \(\bm{v}\) 的归一化关系取为 \(\bm{v}^\dagger\bm{v}=1\)。以上讨论并非来自于线性代数的推导，但得出的结论与熟知的公式都是自洽的。对于复对称矩阵 \(\bm{A}\)，重复以上流程，只是把取厄米共轭改为转置，归一化关系应为 \(\bm{v}^T\bm{v}=1\)。
+
+对于 Dirac 记号，右矢仍为 \(\ket{\alpha}\)，但左矢应记为 \(\bra{\tilde{\alpha}}=(\bra{\alpha})^*\)，因为 Dirac 的 bra 符号默认是厄米共轭的。因此 Berggren 基矢的正交归一关系为
+\begin{equation}
+    \braket{\tilde{\alpha}}{\beta}=\delta_{\alpha\beta}.
+\end{equation}
+可观测量算符 \(\hat{O}\) 的矩阵元为
+\begin{equation}
+    O_{\alpha\beta}=\mel{\tilde{\alpha}}{\hat{O}}{\beta}.
+\end{equation}

@@ -1,0 +1,31 @@
+组态相互作用方法是求解量子多体问题的概念上最简单的方法之一，其基本思想就是在 $A$ 体 Hilbert 空间中对角化以 Slater 行列式为基矢的哈密顿量。所有组态组成的基矢是多体基，要想写出 Slater 行列式，还需要知道行列式中每个粒子的单粒子波函数，这也可以认为是一组基矢，称为单粒子基，不要与多体基混淆。对角化得出的波函数是所有基矢的叠加，这样就包含了多体关联。
+
+组态相互作用的基础是求出组态相互作用矩阵元，给定二次量子化形式的哈密顿量
+\begin{equation}
+  H=\sum_{\alpha\beta}h_{\alpha\beta}a_\alpha^\dagger a_\beta + \frac14\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma,
+\end{equation}
+与一个 Slater 行列式（一个 Slater 行列式就是一个组态）
+\begin{equation}
+  |D_i\rangle=a_{\alpha_1}^\dagger\ldots a_{\alpha_n}^\dagger|0\rangle,
+\end{equation}
+注意轨道编号固定为从左到右从小到大。组态相互作用矩阵元就是把 $H$ 夹在两个组态之间，经过 Wick 收缩后得到的结果。因为 $H$ 只包含到两体，因此左右的 Slater 行列式最多只能相差两个轨道，相差更多轨道就一定为 0。接下来分类讨论相差 0,1,2 个轨道时组态相互作用矩阵元的公式。
+
+相差 0 个轨道时，$|D_f\rangle=|D_i\rangle=a_{\alpha_1}^\dagger\ldots a_{\alpha_n}^\dagger|0\rangle$，
+\begin{equation}
+    \langle D_f|H|D_i\rangle=\sum_{k=1}^n h_{\alpha_k\alpha_k}+\sum_{k<l}^nV_{\alpha_k\alpha_l\alpha_k\alpha_l},\label{eqs:ci-0}
+\end{equation}
+
+相差 1 个轨道时，$|D_i\rangle = a_{\alpha_1}^\dagger\ldots a_{\alpha_a}^\dagger\ldots a_{\alpha_n}^\dagger|0\rangle, |D_f\rangle = a_{\alpha_1}^\dagger\ldots a_{\alpha_b}^\dagger\ldots a_{\alpha_n}^\dagger|0\rangle$，
+\begin{equation}
+    \langle D_f|H|D_i\rangle=(-1)^{\mathrm{permute}(\alpha_a,\alpha_b)}\left(h_{\alpha_b\alpha_a}+\sum_{k\ne a,b}V_{\alpha_b\alpha_k\alpha_a\alpha_k}\right),\label{eqs:ci-1}
+\end{equation}
+产生算符的含义也应该澄清一下，防止误解。可以认为整个空间所有轨道都是按照固定顺序排的，$a_{\alpha_a}^\dagger$ 是 $\alpha_a$ 这条轨道有填充，与之相差 1 个轨道的 $|D_f\rangle$ 则是 $\alpha_b$ 填了，$\alpha_a$ 空着。一定要从轨道的角度理解。粒子是全同的，$\alpha_a,\alpha_b$ 不是粒子的编号。
+
+相差 2 个轨道时，$|D_i\rangle = a_{\alpha_1}^\dagger\ldots a_{\alpha_a}^\dagger\ldots a_{\alpha_b}^\dagger\ldots a_{\alpha_n}^\dagger|0\rangle, |D_f\rangle = a_{\alpha_1}^\dagger\ldots a_{\alpha_c}^\dagger\ldots a_{\alpha_d}^\dagger\ldots a_{\alpha_n}^\dagger|0\rangle$，
+\begin{equation}
+    \langle D_f|H|D_i\rangle=(-1)^{\mathrm{permute}(\alpha_c,\alpha_d)+\mathrm{permute}(\alpha_a,\alpha_b)}V_{\alpha_c\alpha_d\alpha_a\alpha_b},\label{eqs:ci-2}
+\end{equation}
+$\mathrm{permute}(\alpha_a,\alpha_b)$ 表示从 $\alpha_a$ 交换到 $\alpha_b$ 所在位置的次数。
+
+
+

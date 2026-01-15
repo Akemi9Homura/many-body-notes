@@ -1,0 +1,35 @@
+\section{历史回顾}
+之前讨论的是“比较标准”的多体微扰理论，接下来讨论 MBPT 推导壳模型价空间有效相互作用，也就是 $\hat{Q}$-box。
+首先回顾一下壳模型有效相互作用理论的发展历史，依据 \cite{2019stroberg} 的综述。
+
+在壳模型出现之后，就有了根据实验谱参数化的剩余相互作用，但这种做法隐藏了有效的价空间相互作用与底层的核子-核子相互作用的联系。随着上世纪 60 年代现实 $NN$ 相互作用取得了很大进展，提供了高质量的散射相移的描述，Kuo 与 Brown 使用核物质中用到过的 Brueckner $G$ 矩阵来处理强短程关联，在 $G$ 中包含二阶图以解释核心极化效应。通过这种方式得到了 $sd$ 壳与 $pf$ 壳的相互作用。然而随后证明了 $G$ 矩阵缺乏收敛性，用更复杂的处理方式（如 RPA，非微扰顶点修正）则会破坏与实验的一致性，之后被证明是闯入态导致的发散。另外，在图计算中用更大的模型空间进行中间态求和也会降低与实验的一致性。
+
+因为有效相互作用理论存在着这些问题，在这之后壳模型理论更多致力于经验相互作用的构建与改进，不过 Kuo 等人则是继续研究 $\hat{Q}$-box 折叠图求和方法。同时，不同于有效相互作用的另一条路径则是从裸相互作用出发，把所有核子都认为活跃粒子，比如 QMC 以及 NCSM。
+
+转机伴随着 EFT 核力及重整化群（RG）出现。可以简单理解为 SRG 实现了核力高低动量部分的解耦，而 $G$ 矩阵在低动量与高动量之间有明显的耦合，使其变得非微扰。因此在历史上用 $G$ 矩阵建立有效相互作用的努力失败了。SRG 将核力软化，能够提高多体方法的收敛性，SRG 之后的相互作用适合微扰展开。
+
+\section{核芯能量}
+壳模型有效相互作用对角化出的能量一定是相对于核芯的，这是因为有效相互作用只有价空间轨道，没有 hole 轨道，相当于组态空间的 Slater 行列式基矢只有价空间部分，没有填满的核芯部分。但多体方法必须考虑核心极化，处理的行列式也会有核芯部分，这样所有的能量都是总能量而不是相对能量。因此多体方法必须进行一些特殊处理以保证有效相互作用可以直接用于壳模型计算。对 VS-IMSRG，核芯能量的分离比较简单，因为进行了 normal order，核芯能量已经被算进了 normal order 的零体项中，直接从有效相互作用中减去即可。但 MBPT 在组态空间中进行计算，核芯能量的分离没有这么简单，需要借助分离定理，证明比较麻烦，这里直接说明结论 \cite{1974kuo,1977ellis}。
+
+\cite{1974kuo} 首先对图进行了一下分类。价空间的外腿称为 active line，价空间外的粒子线以及空穴线称为 passive line，为了清晰地显示passive 的粒子是在价空间之外，在粒子线上加一些横着的小短线。Linked 图的定义为，每一个相互作用顶点必须直接或间接地连在至少一条外线上，因此图 \ref{fig:linked_diag} 的 (iii) 是 unlinked 的，在 \cite{1977ellis} 中这类图被称为混合的 core-valence 图，也就是图的一部分全部来自于闭壳图。分离定理说明的就是 unlinked 图互相抵消，只需要计算全部的 linked 图，同时能量分母的 $E$ 也是相对于核芯的能量。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figure/linked_connected.png}
+  \caption{linked 图与 connected 图的定义。图取自 \cite{1974kuo}。}
+  \label{fig:linked_diag}
+\end{figure}
+
+关于 $E$ 如何消去核芯能量，$1/(E-QH_0Q)$ 直接理解为 $E$ 与 $QH_0Q$ 都减去核芯能量是不正确的，实际上要更复杂。$QH_0Q$ 自然是中间态的非微扰能量，也就是核芯的非微扰能量加中间态的粒子减中间态的空穴，
+\begin{equation}
+  QH_0Q = \epsilon_c+\sum_p\epsilon_p-\sum_h\epsilon_h,
+\end{equation}
+但是 \cite{1977ellis}
+\begin{equation}
+  E = E_c + E_v = \epsilon_c + \Delta_c + \epsilon_v + \Delta_v,
+\end{equation}
+其中 $\epsilon_c$ 与 $\epsilon_v$ 分别代表核芯与价空间的非微扰能量，$\epsilon_c$ 与 $QH_0Q$ 中的非微扰能量消去，$\Delta$ 则为微扰修正。分离定理保证了 unlinked 图相互抵消，这样能量分母均与 $\Delta_c$ 无关，这就使得 $E$ 只剩下了 $E_v$。这样求出的有效相互作用及其对角化的结果都是 $E_v$，将核芯能量分离了出去。
+
+$E_v$ 的两部分在 $\hat{Q}$-box 的公式中也各有对应。在简并模型空间中 $\epsilon_v$ 就是简并非微扰能量能量，比如模型空间为 $sd$ 壳的 $\hat{Q}$-box，$\epsilon_v = 2\epsilon_{sd}$；而如果在非简并模型空间，取 $E$ 为某个起点能量进行泰勒展开， $\epsilon_v$ 就是 $E$，展开后的 $H^\text{eff} - E$ 相当于 $E_v - \epsilon_v = \Delta_v$，也就是 $\hat{Q}$-box 迭代求的微扰修正。
+
+在图 \ref{fig:linked_diag} 中注意到 (ii)(iv) 看上去也像是 unlinked 的，但实际上并不是。这里需要引入 connected 图的定义。\underline{在 linked 图中}，所有连着相互作用线的外线，应该直接或间接地互相连接，这样的图称为 connected 图，反之则为 disconnected。(ii) 为 connected 是因为右边的外线没有连接相互作用线，定义只需要连接相互作用线的外线全部连起来就行了。当然不管是 connected 还是 disconnected，都属于 linked 图，都需要计算。

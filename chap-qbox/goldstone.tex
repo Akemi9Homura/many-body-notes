@@ -1,0 +1,71 @@
+计算 Goldstone 图是 $\hat{Q}$-box 计算最重要的部分。$\hat{Q}$-box 最开始是一系列价空间外组态的求和，理论上说对组态进行循环计算就能得到结果，并不需要引入 Goldstone 图。但由于组态的数量过多，引入 Goldstone 图的目的是把对组态的求和转为对单粒子轨道的求和，实际做的事情是把包含组态之间的矩阵元的公式用图及其计算规则，转换为了用 Fock 空间矩阵元表达的形式。在此基础上，由于 $m$-scheme 的轨道仍然很多，在 $j$-scheme 下进行单粒子轨道求和才是可行的，这就需要一系列的角动量耦合，把 $m$-scheme 的 Goldstone 图在耦合表象下写出。
+
+Goldstone 图的归一化问题写一下。
+
+接下来的推导遵循 \cite{jin-goldstone} 的定义。需要指出的是，之前定义过单粒子态的量子数标记为 $|\zeta_aj_am_a\rangle$ 或 $|k_am_a\rangle$，然而在涉及 Goldstone 图的计算中，写太多下标很复杂，因此在波函数中用 $a$ 表示 $(\zeta_a,j_a)$，分别用 $\alpha,\beta,\gamma,\delta,...$ 表示 $m_a,m_b,m_c,m_d,...$；而在 CG 系数，$3j$ 符号，相因子等数学结构中，用 $a$ 表示 $j_a$ 这个数。
+
+\section{基本定义}
+耦合表象的相互作用矩阵元为
+\begin{equation}
+  V_{abcd}^J=\sum_{\alpha\beta\gamma\delta}C_{a\alpha b\beta}^{JM}C_{c\gamma d\delta}^{JM}\langle a\alpha b\beta|\hat{V}|c\gamma d\delta\rangle,\label{eqs:goldstone-V}
+\end{equation}
+定义两种交叉耦合矩阵元，角动量耦合的方向与 $V_{abcd}^J$ 不同，
+\begin{align}
+  R_{abcd}^J&=\sum_{\alpha\beta\gamma\delta}(-1)^{b-\beta}C_{b-\beta a\alpha}^{JM}(-1)^{d-\delta}C_{d-\delta c\gamma}^{JM}\langle a\alpha d\delta|\hat{V}|b\beta c\gamma\rangle,\label{eqs:goldstone-R}\\
+  T_{abcd}^J&=\sum_{\alpha\beta\gamma\delta}(-1)^{b-\beta}C_{a\alpha b-\beta}^{JM}(-1)^{d-\delta}C_{c\gamma d-\delta}^{JM}\langle a\alpha d\delta|\hat{V}|c\gamma b\beta\rangle.\label{eqs:goldstone-T}
+\end{align}
+
+\section{改变耦合方向}
+为了更好地使用新定义的三种耦合矩阵元及其分解规则，对于复杂的图需要将耦合方向改变，才能将图用这些分解规则拆开。改变耦合方向本质是 $V,R,T$ 三类矩阵元之间的关系，推导如下。
+
+\textbullet $V-R$ 关系
+
+首先写出 $V$ 的定义 \ref{eqs:goldstone-V}，需要在右侧插入两个 CG 系数的幺正性 \ref{app:cg-unitary-sumJM}，但由于在对 $\alpha\beta\gamma\delta$ 求和之后还必须剩下一组对 $\alpha\beta\gamma\delta$ 的求和，才能最终凑出 $R$ 矩阵元，因此需要先把 \ref{eqs:goldstone-V} 改写为两次对 $\alpha\beta\gamma\delta$ 求和的形式，
+\begin{equation}
+  V_{abcd}^J=\sum_{\alpha'\beta'\gamma'\delta'}\sum_{\alpha\beta\gamma\delta}C_{a\alpha b\beta}^{JM}C_{c\gamma d\delta}^{JM}\langle a\alpha' b\beta'|\hat{V}|c\gamma' d\delta'\rangle\delta_{\alpha\alpha'}\delta_{\beta\beta'}\delta_{\gamma\gamma'}\delta_{\delta\delta'},
+\end{equation}
+因此可以把右侧的 $\delta$ 换为 CG 系数的幺正关系 \ref{app:cg-unitary-sumJM}， 
+\begin{equation}
+  \sum_{J'M'}C_{b\beta c-\gamma}^{J'M'}C_{b\beta'c-\gamma'}^{J'M'}=\delta_{\beta\beta'}\delta_{\gamma\gamma'},\quad \sum_{J''M''}C_{a-\alpha d\delta}^{J''M''}C_{a-\alpha' d\delta'}^{J''M''}=\delta_{\alpha\alpha'}\delta_{\delta\delta'},
+\end{equation}
+因此右侧的 CG 系数部分变为 
+\begin{align}
+  &\sum_{\alpha'\beta'\gamma'\delta'}\sum_{\alpha\beta\gamma\delta}\sum_{J'M'J''M''}C_{a\alpha b\beta}^{JM}C_{c\gamma d\delta}^{JM}C_{b\beta c-\gamma}^{J'M'}C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha d\delta}^{J''M''}C_{a-\alpha' d\delta'}^{J''M''}\notag\\
+  ={}&\sum_{\alpha'\beta'\gamma'\delta'}\sum_{J'M'J''M''}C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha' d\delta'}^{J''M''}\left(\sum_{\alpha\beta\gamma\delta}C_{a\alpha b\beta}^{JM}C_{c\gamma d\delta}^{JM}C_{b\beta c-\gamma}^{J'M'}C_{a-\alpha d\delta}^{J''M''}\right),
+\end{align}
+括号里的四个 CG 系数转换为 $6j$ 符号，留下的两个 CG 系数以及四个对 $m$ 量子数的求和与 $m$-scheme 矩阵元组合成 $R$，所以需要按照上式的方式分配。然而这里还存在一个问题，括号里的 CG 系数 $C_{a\alpha b\beta}^{JM}$ 与 $C_{c\gamma d\delta}^{JM}$ 需要用 \ref{app:cg-changej1j2j3} 对三个角动量进行翻转，才能凑成正确的 \ref{app:cg-to-6j} 的形式。然而翻转会产生相位 $(-1)^{a-\alpha}$ 与 $(-1)^{c-\gamma}$，这两个相位的 $\alpha,\gamma$ 量子数被求和了，这非常危险，这些相位在 \ref{app:cg-to-6j} 中是不该出现的。因此我们在最一开始就把 $V_{abcd}^J$ 中出现的这两个 CG 系数翻转为需要的顺序，
+\begin{equation}
+    V_{abcd}^J=\sum_{\alpha'\beta'\gamma'\delta'}\sum_{\alpha\beta\gamma\delta}(-1)^{a+J-b}(-1)^{a-\alpha'}\frac{\hat{J}}{\hat{b}}C_{a-\alpha JM}^{b\beta}(-1)^{c-\gamma'}\frac{\hat{J}}{\hat{d}}C_{JM c-\gamma}^{d\delta}
+    \langle a\alpha' b\beta'|\hat{V}|c\gamma' d\delta'\rangle\delta_{\alpha\alpha'}\delta_{\beta\beta'}\delta_{\gamma\gamma'}\delta_{\delta\delta'},
+\end{equation}
+在把 $\delta$ 换为 CG 系数的幺正性之前，将 $\alpha,\gamma$ 替换为 $\alpha',\gamma'$ 是安全的。这样就能安全地使用 \ref{app:cg-to-6j}，技巧是分析两种耦合顺序，需要最后剩下 $\delta_{J'J''}$ 才能消去其中一个 $J$ 求和，因此一种耦合顺序是 $a$ 与 $J$ 耦合为 $b$，$b$ 与 $c$ 再耦合为 $J'$；另一种耦合顺序是 $J$ 与 $c$ 耦合为 $d$，$a$ 与 $d$ 再耦合为 $J''$。因此得到
+\begin{align}
+  &\sum_{J'M'J''M''}C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha' d\delta'}^{J''M''}\sum_{\alpha\beta\gamma\delta}C_{a-\alpha JM}^{b\beta}C_{JM c-\gamma}^{d\delta}C_{b\beta c-\gamma}^{J'M'}C_{a-\alpha d\delta}^{J''M''}\notag\\
+  ={}&\sum_{J'M'J''M''}C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha' d\delta'}^{J''M''}\sum_{\alpha\beta\gamma\delta}C_{a-\alpha JM}^{b\beta}C_{b\beta c-\gamma}^{J'M'}C_{JM c-\gamma}^{d\delta}C_{a-\alpha d\delta}^{J''M''}\notag\\
+  ={}&\frac1{\hat{J}^2}\sum_{J'J''M'M''}C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha' d\delta'}^{J''M''}\sum_{\alpha\beta\gamma\delta M}C_{a-\alpha JM}^{b\beta}C_{b\beta c-\gamma}^{J'M'}C_{JM c-\gamma}^{d\delta}C_{a-\alpha d\delta}^{J''M''}\notag\\
+  ={}&\frac1{\hat{J}^2}\sum_{J'J''M'M''}C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha' d\delta'}^{J''M''}\delta_{J'J''}\delta_{M'M''}(-1)^{a+c+J+J'}\hat{b}\hat{d}
+  \begin{Bmatrix}
+    a&b&J\\c&d&J'
+  \end{Bmatrix}\notag\\
+  ={}&\frac1{\hat{J}^2}\sum_{J'}\hat{J'}^2C_{b\beta' c-\gamma'}^{J'M'}C_{a-\alpha' d\delta'}^{J'M'}(-1)^{a+c+J+J'}\hat{b}\hat{d}
+  \begin{Bmatrix}
+    a&b&J\\c&d&J'
+  \end{Bmatrix},
+\end{align}
+代入 $V_{abcd}^J$ 中，得到 
+\begin{align}
+  V_{abcd}^J&=\sum_{J'}
+  \begin{Bmatrix}
+    a&b&J\\c&d&J'
+  \end{Bmatrix}
+  \hat{J'}^2\sum_{\alpha'\beta'\gamma'\delta'}(-1)^{a-\alpha'}C_{a-\alpha' d\delta'}^{J'M'}(-1)^{c-\gamma'}C_{c-\gamma'b\beta'}^{J'M'}\langle a\alpha' b\beta'|\hat{V}|c\gamma' d\delta'\rangle\notag\\
+  &=-\sum_{J'}
+  \begin{Bmatrix}
+    a&b&J\\c&d&J'
+  \end{Bmatrix}\hat{J'}^2
+  \sum_{\alpha'\beta'\gamma'\delta'}(-1)^{a-\alpha'}C_{a-\alpha' d\delta'}^{J'M'}(-1)^{c-\gamma'}C_{c-\gamma'b\beta'}^{J'M'}\langle d\delta'c\gamma'|\hat{V}|a\alpha'b\beta'\rangle\notag\\
+  &=-\sum_{J'}
+  \begin{Bmatrix}
+    a&b&J\\c&d&J'
+  \end{Bmatrix}\hat{J'}^2R_{dabc}^{J'}.
+\end{align}
