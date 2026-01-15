@@ -77,11 +77,11 @@ $f_{\alpha\beta}$ 是单体算符夹在单粒子波函数之间的矩阵元。�
 \end{equation}
 二次量子化的哈密顿量为
 \begin{equation}
-  \hat{H}=\sum_{\alpha\beta}h_{\alpha\beta}a_\alpha^\dagger a_\beta + \frac12\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma,
+  \hat{H}=\sum_{\alpha\beta}h_{\alpha\beta}a_\alpha^\dagger a_\beta + \frac12\sum_{\alpha\beta\gamma\delta}V_{\alpha\beta\gamma\delta}a^\dagger_\alpha a^\dagger_\beta a_\delta a_\gamma,\label{eqs:h-fock-noas}
 \end{equation}
 其中 
 \begin{equation}
-  h_{\alpha\beta}=(\phi_\alpha,(\hat{T}+\hat{V})\phi_\beta),\quad V_{\alpha\beta\gamma\delta}=(\phi_\alpha(1)\phi_\beta(2),\hat{V}(1,2)\phi_\delta(2)\phi_\gamma(1)),
+  h_{\alpha\beta}=(\phi_\alpha,(\hat{T}+\hat{V})\phi_\beta),\quad V_{\alpha\beta\gamma\delta}=(\phi_\alpha(1)\phi_\beta(2),\hat{V}(1,2)\phi_\delta(2)\phi_\gamma(1)),\label{eqs:second-quantum-v}
 \end{equation}
 这里的 $\phi_\alpha(1)\phi_\beta(2)$ 是两粒子的直积态，没有反对称化。直积态定义为
 \begin{equation}
@@ -108,7 +108,7 @@ $f_{\alpha\beta}$ 是单体算符夹在单粒子波函数之间的矩阵元。�
 \begin{equation}
   V^\text{AS}_{\alpha\beta\gamma\delta}=-V^\text{AS}_{\beta\alpha\gamma\delta}=-V^\text{AS}_{\alpha\beta\delta\gamma}=V^\text{AS}_{\beta\alpha\delta\gamma}.
 \end{equation}
-只有反对称化之后，初态与末态这两个两体态才能各自对换本身的指标；在此之前，\(|ab)\) 与 \(|ba)\) 是两个不同的态，把 \(|ab)\) 换为 \(|ba)\) 必须匹配初态的 \(|cd)\) 换为 \(|dc)\)。
+只有反对称化之后，初态与末态这两个两体态才能各自对换本身的指标；在此之前，\(|\alpha\beta)\) 与 \(|\beta\alpha)\) 是两个不同的态，把 \(|\alpha\beta)\) 换为 \(|\beta\alpha)\) 必须匹配初态的 \(|\gamma\delta)\) 换为 \(|\delta\gamma)\)。
 
 由此二次量子化的哈密顿量变为
 \begin{equation}
@@ -116,7 +116,16 @@ $f_{\alpha\beta}$ 是单体算符夹在单粒子波函数之间的矩阵元。�
 \end{equation}
 将反对称矩阵元代入，并把 $\delta$ 与 $\gamma$ 指标对换，湮灭算符的反对易关系会多一个负号，将 1/4 的系数消为 1/2。在之后的推导中，将反对称矩阵元的上标 AS 忽略，默认所用的矩阵元全是反对称的。
 
-不过这里需要额外提一句，之后会计算的 $\hat{V}$ 的矩阵元，以及计算 Goldstone 图耦合的文章 \cite{jin-goldstone} 中定义的单体算符 $U$ 与两体算符 $V$ 的 $j$-scheme 矩阵元都只是 \ref{eqs:h-fock} 中产生湮灭算符的系数，这可以称为 Fock 空间的矩阵元，但更正确的理解是这些矩阵元是多体 Hilbert 空间的 building block，多体 Hilbert 空间的矩阵元是用这些 Fock 空间的矩阵元拼起来的。壳模型对角化需要处理不同粒子数的组态空间，因此任何有效相互作用理论输出的都不应该是 Hilbert 空间组态之间的矩阵元，而必须是 Fock 空间的矩阵元，这样才能让壳模型拼成任意粒子数 Hilbert 空间的组态相互作用矩阵元。然而，因为 $\hat{Q}$-box 是在组态空间中进行的方法，所以实际求解时还是会把单体与两体的 Fock 空间矩阵元混在一起一块相似变换，在代码中体现为需要将 $\hat{S}$-box 与 $\hat{Q}$-box 加起来一块进行变换，变换后需要额外将 Fock 空间矩阵元再提取出来。之所以要把 $\hat{S}$-box 与 $\hat{Q}$-box 手动加起来，是因为在计算 $\hat{S}$-box 与 $\hat{Q}$-box 时用 Fock 空间矩阵元，以 Goldstone 图计算 $\hat{S}$-box 与 $\hat{Q}$-box，而没有用到 \ref{eqs:ci-0}、\ref{eqs:ci-1}、\ref{eqs:ci-2} 这些用 Fock 空间矩阵元拼 Hilbert 空间矩阵元的组态相互作用公式。这部分操作在 \ref{sec:qbox-1b-to-2b} 中有详细描述。这里只需要记住，之后讨论的所有算符的变换都是对于 Fock 空间矩阵元而言的，这部分其实没有包含多体的信息，多体的信息被包含在产生湮灭算符里；只有在 $\hat{Q}$-box 进行相似变换时才会对总的、多体的 $H$ 进行处理。
+在以上的所有对单粒子轨道的求和中，都是全求和，不施加任何限制。在施加了限制之后，这些系数是可以消除掉的。先看不进行反对称化时的 \(1/2\) 系数，可以理解为从直积态 \(|\alpha\beta)\) 散射到 \(|\gamma\delta)\)（这里把初态放在了左边，但其实不重要，这个散射自己理解一下即可）。在散射之前的两个粒子 \(\alpha\) 与 \(\beta\) 如果不加限制会求和两次，\(\alpha<\beta\) 与 \(\alpha>\beta\) 都会被算进去，但是每次散射中，因为是全同粒子，所以区分不出来是散射到 \(\gamma\delta\) 还是 \(\delta\gamma\)，这两个直积态并不是一个态，在矩阵元 \(V_{\alpha\beta\gamma\delta}\) 的定义 \ref{eqs:second-quantum-v} 中也可以看出来，在坐标空间进行的积分确实区分开两个末态。这两个末态分别对应所谓的直接项 \(V_{\alpha\beta\gamma\delta}\) 与交换项 \(-V_{\alpha\beta\delta\gamma}\)。因此，只有初态能通过 \(1/2\) 的因子把全求和的重复计算变为只计算 \(\alpha<\beta\)。但是末态是无论如何不能只求和 \(\gamma<\delta\) 的，因为那样就漏掉了交换项。也就是说 \ref{eqs:h-fock-noas} 的系数含义是
+\begin{equation}
+  \frac12\sum_{\alpha\beta\gamma\delta} = \sum_{\alpha<\beta}\sum_{\gamma\delta}.
+\end{equation}
+而反对称化后的 \(1/4\) 就好理解了，初末态都可以通过 \(1/2\) 因子把全求和变为只求和 \(\alpha<\beta\) 与 \(\gamma<\delta\)，因此
+\begin{equation}
+  \frac14\sum_{\alpha\beta\gamma\delta} = \sum_{\alpha<\beta}\sum_{\gamma<\delta}.
+\end{equation}
+
+这里需要额外提一句，之后会计算的 $\hat{V}$ 的矩阵元，以及计算 Goldstone 图耦合的文章 \cite{jin-goldstone} 中定义的单体算符 $U$ 与两体算符 $V$ 的 $j$-scheme 矩阵元都只是 \ref{eqs:h-fock} 中产生湮灭算符的系数，这可以称为 Fock 空间的矩阵元，但更正确的理解是这些矩阵元是多体 Hilbert 空间的 building block，多体 Hilbert 空间的矩阵元是用这些 Fock 空间的矩阵元拼起来的。壳模型对角化需要处理不同粒子数的组态空间，因此任何有效相互作用理论输出的都不应该是 Hilbert 空间组态之间的矩阵元，而必须是 Fock 空间的矩阵元，这样才能让壳模型拼成任意粒子数 Hilbert 空间的组态相互作用矩阵元。然而，因为 $\hat{Q}$-box 是在组态空间中进行的方法，所以实际求解时还是会把单体与两体的 Fock 空间矩阵元混在一起一块相似变换，在代码中体现为需要将 $\hat{S}$-box 与 $\hat{Q}$-box 加起来一块进行变换，变换后需要额外将 Fock 空间矩阵元再提取出来。之所以要把 $\hat{S}$-box 与 $\hat{Q}$-box 手动加起来，是因为在计算 $\hat{S}$-box 与 $\hat{Q}$-box 时用 Fock 空间矩阵元，以 Goldstone 图计算 $\hat{S}$-box 与 $\hat{Q}$-box，而没有用到 \ref{eqs:ci-0}、\ref{eqs:ci-1}、\ref{eqs:ci-2} 这些用 Fock 空间矩阵元拼 Hilbert 空间矩阵元的组态相互作用公式。这部分操作在 \ref{sec:qbox-1b-to-2b} 中有详细描述。这里只需要记住，之后讨论的所有算符的变换都是对于 Fock 空间矩阵元而言的，这部分其实没有包含多体的信息，多体的信息被包含在产生湮灭算符里；只有在 $\hat{Q}$-box 进行相似变换时才会对总的、多体的 $H$ 进行处理。
 
 \section{角动量耦合}
 前面提到的直积态是一般的讨论，而在原子核的实际计算中，角动量及其耦合是非常重要的概念。描述单粒子态的量子数包括 $n,l,j,m,t_z$，单粒子态最详细的写法为 $|nljt_zm\rangle$，但在研究角动量耦合时，$n,l,t_z$ 这些量子数并不重要，用 $\xi$ 代表这些量子数，可以把单粒子态写为 $|\xi_ij_im_i\rangle$。还有一种写法是用 $k$ 代表 $\xi$ 与 $j$，将单粒子态写为 $|km\rangle$，$k$ 相当于代码中 $j$-scheme 单粒子轨道的唯一编号，这种写法更加简洁，不过需要注意在角动量耦合时 $k_\alpha$ 对应的角动量就是 $j_\alpha$。在后续推导中使用的基本就是这种记法。

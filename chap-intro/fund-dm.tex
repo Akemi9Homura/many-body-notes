@@ -14,9 +14,44 @@
   \Gamma_{pqrs}=\mel{\Psi}{a_p^\dag a_q^\dag a_s a_r}{\Psi}=\sum_{ij}C_iC_j\mel{D_i}{a_p^\dag a_q^\dag a_s a_r}{D_j}.
 \end{equation}
 
-另外，当左右两侧的态不同时，也可以定义跃迁密度矩阵。虽然核物理中确实是这么算的，但是不知道在什么教材或文章中有明确的定义与公式。因此在这里采用量子化学文章 \cite{2017blunt} 的记号，他们的定义与密度矩阵的基本定义非常自洽。跃迁的初态与末态分别记为 \(\ket{\Psi_i}\) 与 \(\ket{\Psi_f}\)，最标准，与 \cite{brown,2007suhonen} 相一致的记号就是把末态 \(\ket{\Psi_f}\) 放在左侧，初态 \(\ket{\Psi_i}\) 放在右侧。
+另外，当左右两侧的态不同时，也可以定义跃迁密度矩阵。跃迁的初态与末态分别记为 \(\ket{\Psi_i}\) 与 \(\ket{\Psi_f}\)，最标准，与 \cite{brown,2007suhonen} 相一致的记号就是把末态 \(\ket{\Psi_f}\) 放在左侧，初态 \(\ket{\Psi_i}\) 放在右侧。因此可以计算跃迁矩阵元
+\begin{equation}
+  O_{fi}=\langle \Psi_f|\hat{O}|\Psi_i\rangle,
+\end{equation}
+可以用密度矩阵计算 \(O_{fi}\)，利用迹的性质可写为
+\begin{equation}
+  O_{fi}=\langle \Psi_f|\hat{O}|\Psi_i\rangle = \Trace(|\Psi_i\rangle\langle\Psi_f|\hat{O})=\Trace(\rho\hat{O}),
+\end{equation}
+因此跃迁密度矩阵定义为
+\begin{equation}
+  \rho = |\Psi_i\rangle\langle\Psi_f|,
+\end{equation}
+这个顺序反而成了初态在左侧末态在右侧，所以在 \cite{2017blunt} 中将密度矩阵的上标与初末态计算矩阵元的顺序反过来写，即为
+\begin{equation}
+  \rho^{if} = |\Psi_i\rangle\langle\Psi_f|.
+\end{equation}
+以单体算符为例，令
+\begin{equation}
+  \hat{O}=\sum_{pq}O_{pq}a_p^\dag a_q,
+\end{equation}
+因此 
+\begin{equation}
+  O_{fi}=\mel{\Psi_f}{\hat{O}}{\Psi_i}=\sum_{pq}O_{pq}\mel{\Psi_f}{a_p^\dag a_q}{\Psi_i}=\sum_{pq}O_{pq}\gamma^{if}_{qp},
+\end{equation}
+这里定义单体的跃迁密度矩阵（TDM）为
+\begin{equation}
+  \gamma^{if}_{pq}=\mel{\Psi_f}{a_q^\dag a_p}{\Psi_i},
+\end{equation}
+因此得到 
+\begin{equation}
+  O_{fi}=\Trace(\gamma^{if}\hat{O}),
+\end{equation}
+这就证明了单体算符对应的可观测量只需要单体密度矩阵即可，之前定义的 \(\rho\) 是完整的密度矩阵。
+定义单体密度矩阵的时候必须把下标的顺序换一下，才能正确与迹的定义对应起来，否则就会出现 \(\gamma_{pq}O_{pq}\) 的结果。在处理的哈密顿量是实对称矩阵时这样也是正确的，单体密度矩阵定义的顺序与产生湮灭算符保持一致是 \cite{2017blunt} 中的记号。而在 \cite{book-zeng2} 中是反过来的定义。
 
-\subsection{跃迁密度}
+同样的思路用两体算符的计算推导两体密度矩阵。
+
+\subsection{约化跃迁密度}
 约化这个词在不同语境下的含义不同。在 Wigner-Eckart 定理处，约化指的是移除 \(m\) 量子数依赖；而约化密度矩阵的约化指的是对多体系统中不需要的粒子自由度求和掉。不过在实际多体计算中，密度矩阵就是约化到单体与两体的。
 
 核物理还有好的角动量量子数，因此算符也都是给出的约化矩阵元，因此 \cite{brown} 用 \(m\)-scheme 的波函数计算了跃迁密度，包括单体跃迁密度（OBTD）与两体跃迁密度（TBTD），这些跃迁密度给的都是约化后的双线矩阵元。所以原则上这些密度矩阵实际上经历过两次约化，不过单体与两体的这个称呼，已经包含了一层约化的含义，因此也有将 OBTD 与 TBTD 称为约化的单体与两体密度矩阵的，比如 BIGSTICK 的手册与 \cite{2007suhonen}，此时约化指的就是变为双线矩阵元。不过在 \cite{2007suhonen} 中将 \(\langle \Psi_f|\hat{O}^\lambda_\mu|\Psi_i\rangle=\langle \xi_fJ_fM_f|\hat{O}^\lambda_\mu|\xi_iJ_iM_i\rangle\) 称为单体跃迁密度了。这些称呼有些混乱，不过都是细节，知道接下来推导的 OBTD 与 TBTD 都是约化后的双线矩阵元就够了。
