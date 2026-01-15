@@ -14,14 +14,72 @@
   \Gamma_{pqrs}=\mel{\Psi}{a_p^\dag a_q^\dag a_s a_r}{\Psi}=\sum_{ij}C_iC_j\mel{D_i}{a_p^\dag a_q^\dag a_s a_r}{D_j}.
 \end{equation}
 
+另外，当左右两侧的态不同时，也可以定义跃迁密度矩阵。虽然核物理中确实是这么算的，但是不知道在什么教材或文章中有明确的定义与公式。因此在这里采用量子化学文章 \cite{2017blunt} 的记号，他们的定义与密度矩阵的基本定义非常自洽。跃迁的初态与末态分别记为 \(\ket{\Psi_i}\) 与 \(\ket{\Psi_f}\)，最标准，与 \cite{brown,2007suhonen} 相一致的记号就是把末态 \(\ket{\Psi_f}\) 放在左侧，初态 \(\ket{\Psi_i}\) 放在右侧。
+
 \subsection{跃迁密度}
 约化这个词在不同语境下的含义不同。在 Wigner-Eckart 定理处，约化指的是移除 \(m\) 量子数依赖；而约化密度矩阵的约化指的是对多体系统中不需要的粒子自由度求和掉。不过在实际多体计算中，密度矩阵就是约化到单体与两体的。
 
 核物理还有好的角动量量子数，因此算符也都是给出的约化矩阵元，因此 \cite{brown} 用 \(m\)-scheme 的波函数计算了跃迁密度，包括单体跃迁密度（OBTD）与两体跃迁密度（TBTD），这些跃迁密度给的都是约化后的双线矩阵元。所以原则上这些密度矩阵实际上经历过两次约化，不过单体与两体的这个称呼，已经包含了一层约化的含义，因此也有将 OBTD 与 TBTD 称为约化的单体与两体密度矩阵的，比如 BIGSTICK 的手册与 \cite{2007suhonen}，此时约化指的就是变为双线矩阵元。不过在 \cite{2007suhonen} 中将 \(\langle \Psi_f|\hat{O}^\lambda_\mu|\Psi_i\rangle=\langle \xi_fJ_fM_f|\hat{O}^\lambda_\mu|\xi_iJ_iM_i\rangle\) 称为单体跃迁密度了。这些称呼有些混乱，不过都是细节，知道接下来推导的 OBTD 与 TBTD 都是约化后的双线矩阵元就够了。
 
 \subsubsection{OBTD}
-$m$-scheme 的单体算符写为二次量子化的形式为
+单体算符在 \(m\)-scheme 下写为二次量子化的形式为
 \begin{equation}
   \hat{O}^\lambda_\mu=\sum_{\alpha\beta}\langle \alpha|\hat{O}^\lambda_\mu|\beta\rangle a_\alpha^\dag a_\beta,
 \end{equation}
 这里的 \(\alpha\) 与 \(\beta\) 是 \(m\)-scheme 下单粒子态的标号，包含所有量子数。也正因如此才能写出产生湮灭算符，\(j\)-scheme 的单粒子态自然是写不成产生湮灭算符的。
+
+使用 Wigner-Eckart 定理 \ref{eqs:w-e-3j}，将算符矩阵元约化
+\begin{equation}
+  \langle \alpha|\hat{O}^\lambda_\mu|\beta\rangle =  (-1)^{j_\alpha - m_\alpha} \mqty(j_\alpha&\lambda&j_\beta\\-m_\alpha&\mu&m_\beta) \langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle,
+\end{equation}
+下面处理产生湮灭算符，这是两个算符的乘积，需要使用球张量算符的张量积公式 \cite{2007suhonen}，用秩为 \(L_1\) 与 \(L_2\) 的球张量算符 \(\hat{T}^{L_1}\) 与 \(\hat{T}^{L_2}\) 构造秩为 \(L\) 的球张量算符，
+\begin{equation}
+  \hat{T}^L_M=\sum_{M_1M_2}C_{L_1M_1L_2M_2}^{LM}\hat{T}^{L_1}_{M_1}\hat{T}^{L_2}_{M_2}\equiv[\hat{T}^{L_1}\otimes \hat{T}^{L_2}]^L_M,\label{eqs:tensor-op-prod}
+\end{equation}
+另外，秩为 \(L\) 的张量算符 \(\hat{T}^L_M\)，其厄米共轭 \((\hat{T}^L_M)^\dag\) 并不是秩为 \(L\) 的张量算符。存在关系 \cite{2007suhonen}
+\begin{equation}
+  (\hat{T}^L_M)^\dag = (-1)^{M}\hat{T}^L_{-M},
+\end{equation}
+因此 
+\begin{equation}
+  \tilde{\hat{T}}^L_M \equiv (-1)^{p+M}(\hat{T}^L_{-M})^\dag
+\end{equation}
+是球张量算符。根据 \cite{brown} 的说法，\(p\) 可任意选择，当秩 \(L\) 为整数时取 \(p=0\)，为半整数时取 \(p=L\)，以保证相位为实数。对于产生湮灭算符，\(a^\dag=a^\dag_{km}\) 是秩为 \(j\) 的球张量算符，为半整数，因此需要将湮灭算符也变为球张量算符，
+\begin{equation}
+  \tilde{a}_{km} =(-1)^{j+m}(a^\dag_{k,-m})^\dag=(-1)^{j+m} a_{k,-m},
+\end{equation}
+由此可得
+\begin{equation}
+  a_{km}=(-1)^{j-m}\tilde{a}_{k,-m}.
+\end{equation}
+
+将湮灭算符换为球张量算符，另外为了与 \ref{eqs:tensor-op-prod} 的形式一致，用 \ref{app:3j-to-cg} 将 \(3j\) 系数符号换为 CG 系数，得到
+\begin{align}
+  \hat{O}^\lambda_\mu &=\sum_{\alpha\beta}(-1)^{j_\alpha - m_\alpha}(-1)^{j_\alpha+j_\beta+\lambda}\mqty(j_\alpha&j_\beta&\lambda\\-m_\alpha&m_\beta&\mu)\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle a^\dag_\alpha a_\beta\notag\\
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}(-1)^{j_\alpha-m_\alpha+\lambda-\mu+1}\hat{\lambda}^{-1}C_{j_\alpha -m_\alpha j_\beta m_\beta}^{\lambda -\mu}a^\dag_\alpha a_\beta\notag\\
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}(-1)^{j_\beta + m_\beta+1}\hat{\lambda}^{-1}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu}\hat{\lambda}^{-1}a^\dag_{k_\alpha m_\alpha} (-1)^{j_\beta - m_\beta}\tilde{a}_{k_\beta -m_\beta}\notag\\
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \hat{\lambda}^{-1}\sum_{m_\alpha m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu} a^\dag_{k_\alpha m_\alpha}\tilde{a}_{k_\beta -m_\beta}\notag\\
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \hat{\lambda}^{-1}[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu.
+\end{align}
+由此计算初态 \(\ket{\Psi_i}\) 与末态 \(\ket{\Psi_f}\) 之间的约化跃迁矩阵元
+\begin{equation}
+  \langle \Psi_f||\hat{O}^\lambda||\Psi_i\rangle = \sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \hat{\lambda}^{-1}\langle \Psi_f||[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda||\Psi_i\rangle.
+\end{equation}
+根据 \cite{brown} 定义 OBTD 为 
+\begin{equation}
+  \text{OBTD}(fik_\alpha k_\beta\lambda) \equiv \hat{\lambda}^{-1}\langle \Psi_f||[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda||\Psi_i\rangle,
+\end{equation}
+因此约化跃迁矩阵元的计算就简化为了
+\begin{equation}
+  \langle \Psi_f||\hat{O}^\lambda||\Psi_i\rangle = \sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\;\text{OBTD}(fik_\alpha k_\beta\lambda).
+\end{equation}
+这就是完全的 \(j\)-scheme 下的表达式了，算符的全部物理信息都由其约化矩阵元给出，而波函数的信息全部被分离在 OBTD 中。后续讨论算符的章节会将核物理计算常用的各种算符的约化矩阵元全部给出。
+
+不过多体计算得到的波函数通常是 \(m\)-scheme 的，因此还需要通过 \(m\)-scheme 的波函数计算出 OBTD。虽然定义里包含了 \(\hat{\lambda}^{-1}\)，但为了算符的通用性显然不包含这个因子才更好，使用 \ref{eqs:wigner-eckart} 得到
+\begin{equation}
+  \langle \Psi_f||[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda||\Psi_i\rangle = \frac{\langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle}{(-1)^{J_f - M_f} \mqty(J_f&\lambda&J_i\\-M_f&\mu&M_i)},
+\end{equation}
+这里 \cite{brown} 应该是写错了，分母的 \(3j\) 符号第一列写的是 \(J_f\) 与 \(M_f\)，不知道为什么。接下来再把张量积用 \ref{eqs:tensor-op-prod} 展开，得到
+\begin{equation}
+  \langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle = \sum_{m_\alpha m_\beta}(-1)^{j_\beta-m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu} \langle \Psi_f|a^\dag_\alpha a_\beta|\Psi_i\rangle.
+\end{equation}

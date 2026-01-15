@@ -4,7 +4,9 @@
 *.blg
 *.out
 *.log
-*.pdf
 *.synctex.gz
 .vscode/*
 .tasks
+*.fls
+*.fdb_latexmk
+*.xdv
