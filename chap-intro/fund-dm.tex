@@ -3,13 +3,20 @@
 但是直接用 \(m\)-scheme 的波函数夹算符计算可观测量会很慢，计算的量级是整个组态空间的维数。如果更改算符，就需要用波函数重新再计算一次。另外波函数的存储也很占用内存。因此，很多壳模型程序如 KSHELL，BIGSTICK 等选择先用波函数计算密度矩阵并输出，不是直接在程序内部处理算符信息，而是将波函数的信息与算符的信息分离开。密度矩阵的规模是由单粒子基决定的，因此不管是计算还是储存都要更方便。
 
 \subsection{密度矩阵的基本理论}
+态 \(\ket{\Psi}\) 的密度矩阵定义为
+\begin{equation}
+  \rho=\ket{\Psi}\bra{\Psi},\label{eqs:density-matrix-pure}
+\end{equation}
+这里的 \(\ket{\Psi}\) 是纯态。纯态指的是能用确定的态矢量描述的态，可以不是某个力学量完全集的共同本征态。比如组态空间的某一个组态对应的态 \(\ket{D}\) 不是 \(H\) 的本征态，也就不是定态，如果制备出体系初态位于 \(\ket{D}\) 上，它会进行时间演化。
+
+而密度矩阵理论更重要的意义是为了处理混态。混态无法用单一的态矢量描述，只能用密度矩阵描述混态，
+\begin{equation}
+  \rho=\sum_\alpha p_\alpha\ket{\psi_\alpha}\bra{\psi_\alpha}.
+\end{equation}
+混态的典型例子是自旋 1/2 的无偏极化束流，1/2 的概率分别处于自旋向上与自旋向下态。总之，密度矩阵理论最重要的作用还是描述波函数描述失效的统计系综，体系按一定的概率分布在波函数上。对核多体问题，密度矩阵主要是用来算可观测量的，在构建自然基时也有用到。
 
 \subsubsection{约化密度矩阵}
-密度矩阵最一般的定义是
-\begin{equation}
-  \rho=\ket{\Psi}\bra{\Psi},
-\end{equation}
-对于多体问题来说，\(\ket{\Psi}\) 是一系列组态的叠加，令组态空间维数为 \(D\)，因此密度矩阵变成了 \(D\) 维方阵，与直接用波函数处理问题的难度相同。通常说的密度矩阵指的都是一体与两体的约化密度矩阵（RDM），体系的一体与两体算符都可以用两体约化密度矩阵计算。而约化密度矩阵与完整的密度矩阵的关系是对 \(N\) 体系统中很多用不到的自由度求和掉。比如两体约化密度矩阵（2RDM）：
+纯态密度矩阵最一般的定义是 \ref{eqs:density-matrix-pure}，在多体问题中也用不到混态。对组态相互作用理论，\(\ket{\Psi}\) 是一系列组态的叠加，令组态空间维数为 \(D\)，因此密度矩阵变成了 \(D\) 维方阵，与直接用波函数处理问题的难度相同。在实际计算中有用的密度矩阵指的都是一体与两体的约化密度矩阵（RDM），一体与两体算符的期望值（与跃迁矩阵元）都可以用两体约化密度矩阵计算。而约化密度矩阵与完整的密度矩阵的关系是对 \(N\) 体系统中很多用不到的自由度求和掉。比如两体约化密度矩阵（2RDM）：
 \begin{equation}
   \Gamma_{pqrs}=\mel{\Psi}{a_p^\dag a_q^\dag a_s a_r}{\Psi}=\sum_{ij}C_iC_j\mel{D_i}{a_p^\dag a_q^\dag a_s a_r}{D_j}.
 \end{equation}
@@ -47,7 +54,7 @@
   O_{fi}=\Trace(\gamma^{if}\hat{O}),
 \end{equation}
 这就证明了单体算符对应的可观测量只需要单体密度矩阵即可，之前定义的 \(\rho\) 是完整的密度矩阵。
-定义单体密度矩阵的时候必须把下标的顺序换一下，才能正确与迹的定义对应起来，否则就会出现 \(\gamma_{pq}O_{pq}\) 的结果。在处理的哈密顿量是实对称矩阵时这样也是正确的，单体密度矩阵定义的顺序与产生湮灭算符保持一致是 \cite{2017blunt} 中的记号。而在 \cite{book-zeng2} 中是反过来的定义。
+定义单体密度矩阵的时候必须把下标的顺序换一下，才能正确与迹的定义对应起来，否则就会出现 \(\gamma_{pq}O_{pq}\) 的结果。在处理的哈密顿量是实对称矩阵时这样也是正确的，单体密度矩阵定义的顺序与产生湮灭算符保持一致是 \cite{2017blunt} 中的记号。而在 \cite{book-zeng2} 中是反过来的定义，也是比较严格的。
 
 同样的思路用两体算符的计算推导两体密度矩阵。
 
@@ -56,10 +63,10 @@
 
 核物理还有好的角动量量子数，因此算符也都是给出的约化矩阵元，因此 \cite{brown} 用 \(m\)-scheme 的波函数计算了跃迁密度，包括单体跃迁密度（OBTD）与两体跃迁密度（TBTD），这些跃迁密度给的都是约化后的双线矩阵元。所以原则上这些密度矩阵实际上经历过两次约化，不过单体与两体的这个称呼，已经包含了一层约化的含义，因此也有将 OBTD 与 TBTD 称为约化的单体与两体密度矩阵的，比如 BIGSTICK 的手册与 \cite{2007suhonen}，此时约化指的就是变为双线矩阵元。不过在 \cite{2007suhonen} 中将 \(\langle \Psi_f|\hat{O}^\lambda_\mu|\Psi_i\rangle=\langle \xi_fJ_fM_f|\hat{O}^\lambda_\mu|\xi_iJ_iM_i\rangle\) 称为单体跃迁密度了。这些称呼有些混乱，不过都是细节，知道接下来推导的 OBTD 与 TBTD 都是约化后的双线矩阵元就够了。
 
-\subsubsection{OBTD}
+\subsection{单体跃迁密度}
 单体算符在 \(m\)-scheme 下写为二次量子化的形式为
 \begin{equation}
-  \hat{O}^\lambda_\mu=\sum_{\alpha\beta}\langle \alpha|\hat{O}^\lambda_\mu|\beta\rangle a_\alpha^\dag a_\beta,
+  \hat{O}^\lambda_\mu=\sum_{\alpha\beta}\langle \alpha|\hat{O}^\lambda_\mu|\beta\rangle a_\alpha^\dag a_\beta,\label{eqs:one-body-op}
 \end{equation}
 这里的 \(\alpha\) 与 \(\beta\) 是 \(m\)-scheme 下单粒子态的标号，包含所有量子数。也正因如此才能写出产生湮灭算符，\(j\)-scheme 的单粒子态自然是写不成产生湮灭算符的。
 
@@ -106,7 +113,7 @@
 \end{equation}
 因此约化跃迁矩阵元的计算就简化为了
 \begin{equation}
-  \langle \Psi_f||\hat{O}^\lambda||\Psi_i\rangle = \sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\;\text{OBTD}(fik_\alpha k_\beta\lambda).
+  \langle \Psi_f||\hat{O}^\lambda||\Psi_i\rangle = \sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\;\text{OBTD}(fik_\alpha k_\beta\lambda).\label{eqs:tr-mat-obtd}
 \end{equation}
 这就是完全的 \(j\)-scheme 下的表达式了，算符的全部物理信息都由其约化矩阵元给出，而波函数的信息全部被分离在 OBTD 中。后续讨论算符的章节会将核物理计算常用的各种算符的约化矩阵元全部给出。
 
@@ -118,3 +125,29 @@
 \begin{equation}
   \langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle = \sum_{m_\alpha m_\beta}(-1)^{j_\beta-m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu} \langle \Psi_f|a^\dag_\alpha a_\beta|\Psi_i\rangle.
 \end{equation}
+因此 OBTD 只需计算
+\begin{equation}
+  \langle \Psi_f||[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda||\Psi_i\rangle=(-1)^{J_f-M_f}\mqty(J_f&\lambda&J_i\\-M_f&\mu&M_i)^{-1}\sum_{m_\alpha m_\beta}(-1)^{j_\beta-m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu}\gamma^{if}_{\beta\alpha}
+\end{equation}
+即可。可以看出这个值是依赖于秩 \(\lambda\) 的，实际计算中是先给定跃迁的初末态，通过初末态角动量的耦合确定能发生跃迁的算符秩的范围 \(|J_f-J_i|\le\lambda\le J_f+J_i\)，然后计算每个 \(\lambda\) 对应的 OBTD。以 KSHELL 用 USDB 计算 \ce{^24Mg} 的 OBTD 为例，如果初末态都是 \(0^+\)，即使是 \(0d_{5/2}\) 轨道之间的 OBTD，也只计算了 \(\lambda=0\) 的情况。
+
+\subsubsection{\(m\)-scheme 计算跃迁矩阵元}
+相比计算 OBTD，更自然的方式自然是直接用 \(m\)-scheme 夹单体算符 \ref{eqs:one-body-op}。有必要证明这种计算方法与 OBTD 的计算是等价的。直接计算初末态之间跃迁矩阵元
+\begin{equation}
+  \mel{\Psi_f}{\hat{O}^\lambda_\mu}{\Psi_i}=\sum_{\alpha\beta}\langle \alpha|\hat{O}^\lambda_\mu|\beta\rangle \mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i},
+\end{equation}
+重点是把算符的两个单线矩阵元全部约化为双线，因此左侧变为
+\begin{equation}
+  \mel{\Psi_f}{\hat{O}^\lambda_\mu}{\Psi_i}=(-1)^{J_f - M_f} \mqty(J_f&\lambda&J_i\\-M_f&\mu&M_i) \langle \Psi_f||\hat{O}^\lambda||\Psi_i\rangle,
+\end{equation}
+而右侧变为
+\begin{align}
+  \sum_{\alpha\beta}\langle\alpha|\hat{O}^\lambda_\mu|\beta\rangle\mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}
+  &=\sum_{k_\alpha k_\beta}\sum_{m_\alpha m_\beta} \hat{j_\alpha}^{-1}C_{j_\beta m_\beta \lambda \mu}^{j_\alpha m_\alpha} \langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}\notag\\
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}\hat{\lambda}^{-1}(-1)^{j_\beta - m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda \mu}\mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}\notag\\
+  &=\hat{\lambda}^{-1}\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle,
+\end{align}
+将左侧的 \(3j\) 符号等除到右边，就回到了用 OBTD 计算跃迁矩阵元的 \ref{eqs:tr-mat-obtd}，证明了在 \(m\)-scheme 下直接计算跃迁矩阵元是等价的。因为波函数在 \(m\)-scheme 下，所以计算 OBTD 也必须先在 \(m\)-scheme 下计算出密度矩阵 \(\gamma_{\beta\alpha}^{if}=\mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}\)。从计算量角度来看，计算 OBTD 时需要对中间夹的 \(j\)-scheme 轨道 \(k_\alpha\) 与 \(k_\beta\) 计算 CG 系数 \(C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda \mu}\)，才能把 \(m\)-scheme 的密度矩阵转为 OBTD；但因为算符本身都是直接构建约化矩阵元，在 \(m\)-scheme 计算时还是需要用 CG 系数 \(C_{j_\beta m_\beta\lambda\mu}^{j_\alpha m_\alpha}\) 才能把约化矩阵元转为单线矩阵元，因此两种方式计算量是一致的。区别只在于保存层面，如果想确实在内存中构建出密度矩阵的话，就只能存 OBTD 而不能是 \(m\)-scheme 的 \(\gamma_{\beta\alpha}^{if}\)。
+
+
+\subsection{两体跃迁密度}
