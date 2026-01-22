@@ -84,9 +84,9 @@
 \end{equation}
 因此 
 \begin{equation}
-  \tilde{\hat{T}}^L_M \equiv (-1)^{p+M}(\hat{T}^L_{-M})^\dag
+  \tilde{\hat{T}}^L_M \equiv (-1)^{p+M}(\hat{T}^L_{-M})^\dag\label{eqs:tilde-tensor-op}
 \end{equation}
-是球张量算符。根据 \cite{brown} 的说法，\(p\) 可任意选择，当秩 \(L\) 为整数时取 \(p=0\)，为半整数时取 \(p=L\)，以保证相位为实数。对于产生湮灭算符，\(a^\dag=a^\dag_{km}\) 是秩为 \(j\) 的球张量算符，为半整数，因此需要将湮灭算符也变为球张量算符，
+是球张量算符。根据 \cite{brown} 的说法，\(p\) 可任意选择，当秩 \(L\) 为整数时可以取 \(p=0\)，为半整数时可以取 \(p=L\)，以保证相位为实数。对于产生湮灭算符，\(a^\dag=a^\dag_{km}\) 是秩为 \(j\) 的球张量算符，为半整数，因此湮灭算符变为球张量算符的变换取为
 \begin{equation}
   \tilde{a}_{km} =(-1)^{j+m}(a^\dag_{k,-m})^\dag=(-1)^{j+m} a_{k,-m},
 \end{equation}
@@ -99,9 +99,9 @@
 \begin{align}
   \hat{O}^\lambda_\mu &=\sum_{\alpha\beta}(-1)^{j_\alpha - m_\alpha}(-1)^{j_\alpha+j_\beta+\lambda}\mqty(j_\alpha&j_\beta&\lambda\\-m_\alpha&m_\beta&\mu)\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle a^\dag_\alpha a_\beta\notag\\
   &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}(-1)^{j_\alpha-m_\alpha+\lambda-\mu+1}\hat{\lambda}^{-1}C_{j_\alpha -m_\alpha j_\beta m_\beta}^{\lambda -\mu}a^\dag_\alpha a_\beta\notag\\
-  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}(-1)^{j_\beta + m_\beta+1}\hat{\lambda}^{-1}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu}\hat{\lambda}^{-1}a^\dag_{k_\alpha m_\alpha} (-1)^{j_\beta - m_\beta}\tilde{a}_{k_\beta -m_\beta}\notag\\
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}(-1)^{j_\beta + m_\beta+1}\hat{\lambda}^{-1}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu}a^\dag_{k_\alpha m_\alpha} (-1)^{j_\beta - m_\beta}\tilde{a}_{k_\beta -m_\beta}\notag\\
   &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \hat{\lambda}^{-1}\sum_{m_\alpha m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu} a^\dag_{k_\alpha m_\alpha}\tilde{a}_{k_\beta -m_\beta}\notag\\
-  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \hat{\lambda}^{-1}[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu.
+  &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle \hat{\lambda}^{-1}[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu.\label{eqs:ob-op-to-tensor-prod}
 \end{align}
 由此计算初态 \(\ket{\Psi_i}\) 与末态 \(\ket{\Psi_f}\) 之间的约化跃迁矩阵元
 \begin{equation}
@@ -121,15 +121,21 @@
 \begin{equation}
   \langle \Psi_f||[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda||\Psi_i\rangle = \frac{\langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle}{(-1)^{J_f - M_f} \mqty(J_f&\lambda&J_i\\-M_f&\mu&M_i)},
 \end{equation}
-这里 \cite{brown} 应该是写错了，分母的 \(3j\) 符号第一列写的是 \(J_f\) 与 \(M_f\)，不知道为什么。接下来再把张量积用 \ref{eqs:tensor-op-prod} 展开，得到
+\cite{brown} 的这个公式应该是写错了，分母的 \(3j\) 符号第一列写的是 \(J_f\) 与 \(M_f\)，不知道原因。而 KSHELL 代码中写的公式则是用 \ref{eqs:w-e-cg1} 与 \ref{app:cg-changej1j2j3} 将 OBTD 换为单线矩阵元，这样才能在 \(m\)-scheme 下计算，即 
+\begin{equation}
+  \text{OBTD}(fik_\alpha k_\beta\lambda)=\hat{\lambda}^{-1}\frac{\langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle}{\hat{\lambda}^{-1}(-1)^{J_i-M_i}C_{J_iM_iJ_f-M_f}^{\lambda-\mu}}=\frac{(-1)^{J_i-M_i}}{C_{J_iM_iJ_f-M_f}^{\lambda-\mu}}\langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle,
+\end{equation}
+虽然看上去很奇怪，用到了 \(-\mu\)，不过 KSHELL 写的全是初态的 \(M_i\)（代码中记为右态的 \(M_R\)）减去末态的 \(M_f\)（代码中为 \(M_L\)），没显式用到这里定义的 \(\mu=M_f-M_i\)。用 CG 系数而不是 \(3j\) 符号还有一个好处是 \(\hat{\lambda}\) 因子被移除了，不用担心 OBTD 定义的问题。
+
+接下来再把 OBTD 中的张量积用 \ref{eqs:tensor-op-prod} 展开，得到
 \begin{equation}
   \langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle = \sum_{m_\alpha m_\beta}(-1)^{j_\beta-m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu} \langle \Psi_f|a^\dag_\alpha a_\beta|\Psi_i\rangle.
 \end{equation}
-因此 OBTD 只需计算
-\begin{equation}
-  \langle \Psi_f||[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda||\Psi_i\rangle=(-1)^{J_f-M_f}\mqty(J_f&\lambda&J_i\\-M_f&\mu&M_i)^{-1}\sum_{m_\alpha m_\beta}(-1)^{j_\beta-m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda\mu}\gamma^{if}_{\beta\alpha}
-\end{equation}
-即可。可以看出这个值是依赖于秩 \(\lambda\) 的，实际计算中是先给定跃迁的初末态，通过初末态角动量的耦合确定能发生跃迁的算符秩的范围 \(|J_f-J_i|\le\lambda\le J_f+J_i\)，然后计算每个 \(\lambda\) 对应的 OBTD。以 KSHELL 用 USDB 计算 \ce{^24Mg} 的 OBTD 为例，如果初末态都是 \(0^+\)，即使是 \(0d_{5/2}\) 轨道之间的 OBTD，也只计算了 \(\lambda=0\) 的情况。
+这样就能在 \(m\)-scheme 下计算 OBTD，注意 OBTD 的基矢是 \(j\)-scheme 的单粒子态 \(k\)，任两个单粒子态自然都可以计算，但对给定的算符而言，\(k_\alpha\) 与 \(k_\beta\) 不满足算符本身的对称性时，算符值本身就是 0，自然也没必要计算这个矩阵元。对称性是宇称与同位旋，OBTD 的矩阵元左右的单粒子态必须与初末态波函数的宇称与同位旋对应才能得到非 0 的值。利用这些对称性可以稀疏存储 OBTD。
+
+OBTD 也是依赖于秩 \(\lambda\) 的，实际计算中是先给定跃迁的初末态，通过初末态角动量的耦合确定能发生跃迁的算符秩的范围 \(|J_f-J_i|\le\lambda\le J_f+J_i\)，然后计算每个 \(\lambda\) 对应的 OBTD。以 KSHELL 用 USDB 计算 \ce{^24Mg} 的 OBTD 为例，如果初末态都是 \(0^+\)，即使是 \(0d_{5/2}\) 轨道之间的 OBTD，也只需要计算 \(\lambda=0\)。
+
+\subsubsection{标量算符}
 
 \subsubsection{\(m\)-scheme 计算跃迁矩阵元}
 相比计算 OBTD，更自然的方式自然是直接用 \(m\)-scheme 夹单体算符 \ref{eqs:one-body-op}。有必要证明这种计算方法与 OBTD 的计算是等价的。直接计算初末态之间跃迁矩阵元
@@ -147,7 +153,54 @@
   &=\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\sum_{m_\alpha m_\beta}\hat{\lambda}^{-1}(-1)^{j_\beta - m_\beta}C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda \mu}\mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}\notag\\
   &=\hat{\lambda}^{-1}\sum_{k_\alpha k_\beta}\langle k_\alpha||\hat{O}^\lambda||k_\beta\rangle\langle \Psi_f|[a^\dag_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^\lambda_\mu|\Psi_i\rangle,
 \end{align}
-将左侧的 \(3j\) 符号等除到右边，就回到了用 OBTD 计算跃迁矩阵元的 \ref{eqs:tr-mat-obtd}，证明了在 \(m\)-scheme 下直接计算跃迁矩阵元是等价的。因为波函数在 \(m\)-scheme 下，所以计算 OBTD 也必须先在 \(m\)-scheme 下计算出密度矩阵 \(\gamma_{\beta\alpha}^{if}=\mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}\)。从计算量角度来看，计算 OBTD 时需要对中间夹的 \(j\)-scheme 轨道 \(k_\alpha\) 与 \(k_\beta\) 计算 CG 系数 \(C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda \mu}\)，才能把 \(m\)-scheme 的密度矩阵转为 OBTD；但因为算符本身都是直接构建约化矩阵元，在 \(m\)-scheme 计算时还是需要用 CG 系数 \(C_{j_\beta m_\beta\lambda\mu}^{j_\alpha m_\alpha}\) 才能把约化矩阵元转为单线矩阵元，因此两种方式计算量是一致的。区别只在于保存层面，如果想确实在内存中构建出密度矩阵的话，就只能存 OBTD 而不能是 \(m\)-scheme 的 \(\gamma_{\beta\alpha}^{if}\)。
+将左侧的 \(3j\) 符号等除到右边，就回到了用 OBTD 计算跃迁矩阵元的 \ref{eqs:tr-mat-obtd}，证明了在 \(m\)-scheme 下直接计算跃迁矩阵元是等价的。因为波函数在 \(m\)-scheme 下，所以计算 OBTD 也必须先在 \(m\)-scheme 下计算出密度矩阵 \(\gamma_{\beta\alpha}^{if}=\mel{\Psi_f}{a_\alpha^\dag a_\beta}{\Psi_i}\)。
+
+从计算量角度来看，计算 OBTD 时需要对中间夹的 \(j\)-scheme 轨道 \(k_\alpha\) 与 \(k_\beta\) 计算 CG 系数 \(C_{j_\alpha m_\alpha j_\beta -m_\beta}^{\lambda \mu}\)，才能把 \(m\)-scheme 的密度矩阵转为 OBTD；但因为算符本身都是直接构建约化矩阵元，在 \(m\)-scheme 计算时还是需要用 CG 系数 \(C_{j_\beta m_\beta\lambda\mu}^{j_\alpha m_\alpha}\) 才能把约化矩阵元转为单线矩阵元，因此两种方式计算量是一致的。区别只在于保存层面，如果想确实在内存中构建出密度矩阵的话，就只能存 OBTD 而不能是 \(m\)-scheme 的 \(\gamma_{\beta\alpha}^{if}\)。
 
 
 \subsection{两体跃迁密度}
+两体算符在 \(m\)-scheme 下写为二次量子化的形式为
+\begin{equation}
+  \hat{T}^\lambda_\mu=\frac{1}{4}\sum_{\alpha\beta\gamma\delta}\langle \alpha\beta|\hat{T}^\lambda_\mu|\gamma\delta\rangle a_\alpha^\dag a_\beta^\dag a_\delta a_\gamma,\label{eqs:two-body-op}
+\end{equation}
+\(m\)-scheme 还有一个特点是处于非耦合表象，因此需要对两体算符进行两步处理，先用 \ref{eqs:j-mel-to-m} 将非耦合表象的单线矩阵元用耦合表象下的矩阵元表示出来，此时初态与末态才有好角动量，才能用 \ref{eqs:wigner-eckart} 将单线矩阵元转为约化矩阵元，也即
+\begin{align}
+  \hat{T}^\lambda_\mu ={}& \frac14\sum_{k_\alpha k_\beta k_\gamma k_\delta}\sum_{m_\alpha m_\beta m_\gamma m_\delta}\mel{k_\alpha m_\alpha k_\beta m_\beta}{\hat{T}^\lambda_\mu}{k_\gamma m_\gamma k_\delta m_\delta}a^\dag_{k_\alpha m_\alpha} a^\dag_{k_\beta m_\beta} a_{k_\delta m_\delta} a_{k_\gamma m_\gamma}\notag\\
+  ={}&\frac14\sum_{k_\alpha k_\beta k_\gamma k_\delta}\sum_{JMJ'M'}\frac1{N_{k_\alpha k_\beta}N_{k_\gamma k_\delta}}\mel{k_\alpha k_\beta JM}{\hat{T}^\lambda_\mu}{k_\gamma k_\delta J'M'}\notag\\
+  &\times\sum_{m_\alpha m_\beta m_\gamma m_\delta}C_{j_\alpha m_\alpha j_\beta m_\beta}^{JM}C_{j_\gamma m_\gamma j_\delta m_\delta}^{J'M'}a^\dag_{k_\alpha m_\alpha} a^\dag_{k_\beta m_\beta} a_{k_\delta m_\delta} a_{k_\gamma m_\gamma},
+\end{align}
+单体算符的推导中先用 \ref{eqs:tensor-op-prod} 将产生湮灭算符的乘积耦合为张量积，再逆用 \ref{eqs:tensor-op-prod} 以在 \(m\)-scheme 下计算矩阵元。这么做是因为只有张量积算符才能用 Wigner-Eckart 定理，进而才能定义出 \(j\)-scheme 下的 OBTD。但是因为波函数是 \(m\)-scheme 的，所以还要再倒回去。但是对两个产生算符与两个湮灭算符，怎么定义球张量算符与张量积是一个问题。\cite{brown} 的做法是考虑耦合的两体态 \(\ket{k_\alpha k_\beta JM}\)，将其视为一个产生算符 \(A^\dag\) 作用于真空态的产物，
+\begin{equation}
+  A^\dag(k_\alpha k_\beta JM)\ket{0}\equiv \ket{k_\alpha k_\beta JM},
+\end{equation}
+因此 
+\begin{equation}
+  A^\dag(k_\alpha k_\beta JM)=N_{k_\alpha k_\beta}\sum_{m_\alpha m_\beta}C_{j_\alpha m_\alpha j_\beta m_\beta}^{JM}a^\dag_{k_\beta m_\beta}a^\dag_{k_\alpha m_\alpha},
+\end{equation}
+这其实就可以直接使用 \ref{eqs:tensor-op-prod} 得到
+\begin{equation}
+  A^\dag(k_\alpha k_\beta JM)=-N_{k_\alpha k_\beta}[a^\dag_{k_\alpha}\otimes a^\dag_{k_\beta}]^J_M.
+\end{equation}
+湮灭算符为
+\begin{equation}
+  A(k_\alpha k_\beta JM)=\{A^\dag(k_\alpha k_\beta JM)\}^\dag=N_{k_\alpha k_\beta}\sum_{m_\alpha m_\beta}C_{j_\alpha m_\alpha j_\beta m_\beta}^{JM}a_{k_\alpha m_\alpha} a_{k_\beta m_\beta},
+\end{equation}
+同样变为球张量算符
+\begin{align}
+  \tilde{A}(k_\alpha k_\beta JM) &= (-1)^{J+M}\{A^\dag(k_\alpha k_\beta J,-M)\}^\dag\notag\\
+  &= N_{k_\alpha k_\beta}(-1)^{J+M}\sum_{m_\alpha m_\beta}C_{j_\alpha m_\alpha j_\beta m_\beta}^{J -M} a_{k_\alpha m_\alpha} a_{k_\beta m_\beta}\notag\\
+  &= N_{k_\alpha k_\beta} (-1)^{J+M}\sum_{m_\alpha m_\beta}(-1)^{j_\alpha+j_\beta-J}C_{j_\alpha -m_\alpha j_\beta -m_\beta}^{J M}(-1)^{j_\alpha - m_\alpha} \tilde{a}_{k_\alpha -m_\alpha} (-1)^{j_\beta - m_\beta} \tilde{a}_{k_\beta -m_\beta}\notag\\
+  &=N_{k_\alpha k_\beta}[\tilde{a}_{k_\alpha}\otimes \tilde{a}_{k_\beta}]^J_M,
+\end{align}
+推导中用了 \(-M=m_\alpha+m_\beta\)，以及默认 \(J\) 为整数，将 \((-1)^M\) 换为了 \((-1)^{-M}\)。我并不确定这是不是来自于 \ref{eqs:tilde-tensor-op} 中的相位约定，虽然 \cite{brown,book-zeng2} 写的都是 \((-1)^{p+M}\)，但 \cite{brown} 在这个公式的推导中又把 \(+M\) 偷偷换为了 \(-M\)。不过在两体态的情况肯定是可以的。关于这个符号约定 \cite{book-zeng2} 也并未提 \(p\) 任取的事情，而是直接取了算符的秩 \(L\)；而 \cite{brown} 虽然说秩为整数时取 \(p=0\)，但在这个推导反而取了 \(p=L\) 的形式。看上去只有这么取，一些不想要的负号才能消失。
+
+定义好耦合表象两体态的产生湮灭算符之后，\(\hat{T}^\lambda_\mu\) 可以写为
+\begin{align}
+  \hat{T}^\lambda_\mu = \frac14\sum_{k_\alpha k_\beta k_\gamma k_\delta}\sum_{JMJ'M'}\frac1{N_{k_\alpha k_\beta}^2N_{k_\gamma k_\delta}^2}\mel{k_\alpha k_\beta JM}{\hat{T}^\lambda_\mu}{k_\gamma k_\delta J'M'}A^\dag(k_\alpha k_\beta JM)A(k_\gamma k_\delta J'M'),
+\end{align}
+为了与二次量子化的四个单粒子产生湮灭算符的顺序相对应，在换为两体态的产生湮灭算符时交换顺序各自产生一个负号，消去了。接下来就可以将湮灭算符换为球张量算符并使用 \ref{eqs:tensor-op-prod}，因为此时两体态的产生湮灭算符形式上与单粒子没有任何区别，角动量从半整数变为整数也不会额外产生相位，因此这个推导完全重复 \ref{eqs:ob-op-to-tensor-prod} 的过程，直接写出
+\begin{align}
+  \hat{T}^\lambda_\mu ={}& \frac14\sum_{k_\alpha k_\beta k_\gamma k_\delta JJ'}\frac1{N_{k_\alpha k_\beta}^2{N_{k_\gamma k_\delta}^2}}\langle k_\alpha k_\beta J||\hat{T}^\lambda||k_\gamma k_\delta J'\rangle \hat{\lambda}^{-1}[A^\dag(k_\alpha k_\beta J)\otimes \tilde{A}(k_\gamma k_\delta J')]^\lambda_\mu\notag\\
+  ={}& \sum_{k_\alpha\le k_\beta, k_\gamma\le k_\delta}\sum_{JJ'}\langle k_\alpha k_\beta J||\hat{T}^\lambda||k_\gamma k_\delta J'\rangle \hat{\lambda}^{-1}\hat{\lambda}^{-1}[A^\dag(k_\alpha k_\beta J)\otimes \tilde{A}(k_\gamma k_\delta J')]^\lambda_\mu.\label{eqs:tb-op-to-tensor-prod}
+\end{align}
+之前在 \ref{sec:second-quantum} 讨论过二次量子化形式中系数 1/4 的问题。这里要注意已经写到了 \(j\)-scheme 下，因此是允许 \(k_\alpha=k_\beta\) 或 \(k_\gamma=k_\delta\) 的，这就是归一化因子 \(N_{k_\alpha k_\beta}\) 干的事情。当 \(k_\alpha=k_\beta\) 时，\(N_{k_\alpha k_\beta}=1/\sqrt{2}\)，因此在 \ref{eqs:tb-op-to-tensor-prod} 中，\(k_\alpha=k_\beta\) 时确实求和了两次，直接将 1/4 改为 \(k_\alpha\le k_\beta\) 是正确的。

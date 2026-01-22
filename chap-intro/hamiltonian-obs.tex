@@ -1,0 +1,131 @@
+核结构相关的多体问题本质就是计算原子核体系的能谱与各种可观测量。在非相对论量子力学的框架中，一切物理量都通过算符表示，控制体系的最基本算符是哈密顿量，通过薛定谔方程得到体系的波函数，并用波函数去夹各种可观测量算符。这个流程实际上就是将大象放进冰箱，概念上非常简单。各种多体方法都是直接或等效地完成这个过程。因此在讨论具体的方法之前，先简单介绍一下会在后续出现的哈密顿量与可观测量的算符形式，以及如何在选定的表象下计算它们的矩阵元。
+
+\section{Wigner-Eckart 定理}
+\label{sec:wigner-eckart}
+$j$-scheme 能大量地节省存储空间，但从 $m$ 量子数简并只能直观地看出来单粒子轨道可以只储存一条，算符矩阵元与 $m$ 量子数无关的性质还需要 Wigner-Eckart 定理才能得到，并不是那么显然。
+
+在正式的推导开始之前，再次重复对各种量子数的记号，以与 \cite{2007suhonen} 与 \cite{brown} 的推导相对应。态的量子数包含 \(n,l,j,m,t_z\)，在耦合与约化矩阵元的计算中，\(j,m\) 必须显式写出，因此用 \(\xi\) 表示量子数 \(n,l,t_z\) \cite{2007suhonen}，单粒子态写为 \(|\xi jm\rangle\)。这种记号主要是为了把 Wigner-Eckart 定理展示得更明白，而在核物理计算中，为了更简洁，将 \(j\) 与 \(\xi\) 一起用 \(k\) 表示，单粒子态写为 \(|km\rangle\)。尤其是涉及多个态时，用 \(\alpha\) 作为态的编号，可记为 \(|\alpha\rangle=|k_\alpha m_\alpha\rangle\)，当需要角动量时直接写 \(j_\alpha\)。另外，张量算符的秩用 \(\lambda\) 表示而不用 \(k\)，以免与单粒子态的编号混淆，这也与核物理中常用的 \(E\lambda,M\lambda\) 记号对应，而张量算符的磁量子数则记为 \(\mu\)。
+
+Wigner-Eckart 定理对约化矩阵元有不同的记法，首先是曾谨言以及 Edmonds 的记号
+\begin{subequations}\label{eqs:wigner-eckart}
+\begin{align}
+  \langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle
+  &=\frac1{\sqrt{2j_f+1}}C_{j_im_i\lambda\mu}^{j_fm_f}\langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle\label{eqs:w-e-cg1}\\
+  &=\frac{(-1)^{\lambda-j_i+j_f}}{\sqrt{2j_f+1}}C_{\lambda\mu j_im_i}^{j_fm_f}\langle\xi_fj_f||T^\lambda||\xi_i j_i\rangle\label{eqs:w-e-cg2}\\
+  &=(-1)^{j_f-m_f}
+  \begin{pmatrix}
+    j_f&\lambda&j_i\\-m_f&\mu&m_i
+  \end{pmatrix}\langle\xi_fj_f||T^\lambda||\xi_i j_i\rangle,\label{eqs:w-e-3j}
+\end{align}
+\end{subequations}
+
+这里注意两个问题，一是 CG 系数的三种记号，分别是 $C_{j_1m_1j_2m_2}^{JM}=\langle j_1m_1j_2m_2|JM\rangle=C_{m_1m_2M}^{j_1j_2J}$，第二种在推公式的时候最好理解，但是看上去比较费事，容易与波函数搞混，因此这里统一采用第一种记号。二是 Edmonds 约定的相位问题，看上去与 \ref{eqs:cg-property} 交换耦合的相位并不一样，这是因为此处的讨论仅限于整数秩的张量算符，$j_i$ 与 $k$ 耦合为 $j_f$，因此 $j_i,j_f$ 或全为整数，或全为半整数，则 $j_i-j_f$ 必为整数，就可以把相位换为 Edmonds 的写法。
+
+通过 \ref{eqs:wigner-eckart} 能够很方便地从角动量耦合的角度理解为什么标量算符 $H$ 不会改变角动量，又因为 CG 系数隐含的要求 $m_i+\mu=m_f$，$H$ 也不会改变 $m$ 量子数。因此哈密顿量的两体部分的矩阵元是
+\begin{equation}
+  \langle k_1k_2JM|\hat{V}|k_3k_4JM\rangle=\frac1{\sqrt{2J+1}}\langle k_1k_2J||\hat{V}||k_3k_4J\rangle,
+\end{equation}
+不过核力文件存储的反而不是约化矩阵元 $\langle k_1k_2J||\hat{V}||k_3k_4J\rangle$，而是 $\langle k_1k_2JM|\hat{V}|k_3k_4JM\rangle$，这是因为标量算符 $H$ 的 Wigner-Eckart 定理结构非常简单，在非耦合表象与耦合表象转换时，用 $\langle k_1k_2JM|\hat{V}|k_3k_4JM\rangle$ 计算并不会带来什么麻烦，反而少算一个 $1/\sqrt{2J+1}$ 的系数更加简单。不过对于秩非 0 的张量算符，实际处理的就都是约化矩阵元了。
+
+为了方便地从 $m$-scheme 矩阵元逆向得到约化矩阵元，推导一下 Wigner-Eckart 定理的逆变换。显然需要使用 CG 系数的幺正性消去等式右边的 CG 系数。观察等式可知需要求和的应该是 $m_i,m_f$，但是它们分别处于 CG 系数的上面与下面，无法直接使用 \ref{app:cg-unitary-summ1m2}，因此这里使用 CG 系数的“换底公式” \ref{app:cg-changej1j2j3} 将 $m_i,m_f$ 全拉到 CG 系数的下面，有 
+\begin{align}
+  \langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle
+  =(-1)^{j_i-m_i}\hat{\lambda}^{-1}C_{j_fm_fj_i-m_i}^{\lambda\mu}\langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle,
+\end{align}
+由此在左右两侧同乘 $C_{j_fm_fj_i-m_i}^{\lambda\mu}$ 并对 $m_i,m_f$ 求和，得到
+\begin{subequations}\label{eqs:wigner-eckart-reverse}
+\begin{align}
+  \langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle&=\hat{\lambda}\sum_{m_im_f}(-1)^{j_i-m_i}C_{j_fm_fj_i-m_i}^{\lambda\mu}\langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle\label{eqs:w-e-reverse-cg}\\
+  &=\hat{\lambda}^2\sum_{m_im_f}(-1)^{j_f-m_f}
+  \begin{pmatrix}
+    j_f&\lambda&j_i\\-m_f&\mu&m_i
+  \end{pmatrix}\langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle\label{eqs:w-e-reverse-3j1}\\
+  &=\sum_{m_im_fq}(-1)^{j_f-m_f}
+  \begin{pmatrix}
+    j_f&\lambda&j_i\\-m_f&\mu&m_i
+  \end{pmatrix}\langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle,\label{eqs:w-e-reverse-3j2}
+\end{align}
+\end{subequations}
+在 CG 系数转换为 $3j$ 符号时，用到了 $\mu=m_f-m_i$ 且 $\mu$ 为整数的条件。得到 \ref{eqs:w-e-reverse-3j2} 用到的 $3j$ 符号正交关系为 \ref{app:3j-ortho-summ1m2m3}。
+
+另外，当考虑两体算符时，需要在角动量耦合表象下使用 Wigner-Eckart 定理，此时就有直积态与反对称态两种矩阵元。一个直观的理解是 \ref{eqs:wigner-eckart} 等号左右都用直积态，就得到直积态的约化矩阵元；左右都用反对称态，就是反对称态的约化矩阵元。\ref{eqs:wigner-eckart} 用直积态矩阵元应该是自然的，反对称态矩阵元的 Wigner-Eckart 定理用 \ref{eqs:tensor-to-antisym} 可以直接得出，形式与 \ref{eqs:wigner-eckart} 一样，只需把矩阵元换为反对称的即可。
+
+除了 Edmonds 之外，在 $\hat{Q}$-box 中 Kuo 采取了不同的约化矩阵元的规定，
+\begin{equation}
+  \langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle=(-1)^{\lambda-\mu}(-1)^{j_f-m_f}C_{j_im_ij_f-m_f}^{\lambda-\mu}\langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle_\mathrm{Kuo},
+\end{equation}
+前面的相位可以吸收进 CG 系数中，使定义更加清晰，
+\begin{equation}
+    \langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle=(-1)^{j_i+m_i}C_{j_i-m_ij_fm_f}^{\lambda\mu}\langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle_\mathrm{Kuo},\label{eqs:w-e-kuo}
+\end{equation}
+转为 $3j$ 符号，
+\begin{equation}
+    \langle\xi_fj_fm_f|T^\lambda_\mu|\xi_ij_im_i\rangle=(-1)^{j_i-m_f+\lambda}\hat{\lambda}
+    \begin{pmatrix}
+      j_f&\lambda&j_i\\-m_f&\mu&m_i
+    \end{pmatrix}
+    \langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle_\mathrm{Kuo},\label{eqs:w-e-kuo-3j}
+\end{equation}
+与 Edmonds 约定 \ref{eqs:w-e-3j} 的 $3j$ 符号一致，可以很简单地约去，得到 Kuo 的约定与 Edmonds 满足的关系为
+\begin{equation}
+  \langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle_\mathrm{Edmonds}=(-1)^{j_i-j_f+\lambda}\hat{\lambda}\langle\xi_fj_f||T^\lambda||\xi_ij_i\rangle_\mathrm{Kuo},
+\end{equation}
+接下来 Edmonds 约定就不写下标了。Kuo 新定义的目的是为了简化 Goldstone 图的计算，这一点在第 \ref{chap:effop} 章会更加仔细地论述。
+
+\section{密度矩阵}
+\input{chap-intro/fund-dm.tex}
+
+\section{哈密顿量}
+
+接下来具体到原子核这个体系，讨论实际会用到的原子核的内禀哈密顿量与其他可观测量算符。坐标或动量空间中的一次量子化哈密顿量写为
+\begin{equation}
+  H = T_{\mathrm{rel}} + V = \sum_{i=1}^{A} \frac{p_{i}^{2}}{2m} - \frac{P^{2}}{2M} + \sum_{i<j} V(i, j),\label{eqs:intrinsic-H}
+\end{equation}
+其中 \(\bm{P}=\sum_{i=1}^A\bm{p}_i\) 是质心动量，必须要减去，否则质心运动的能量会污染原子核的能谱。不过这还不足以把质心运动完全去掉，因为实际得到的波函数有 \(3A\) 个坐标分量，原则上可以分离变量，把 3 个质心运动的坐标分离出来，不管质心如何运动都不会影响原子核的内禀波函数。但实际上并不能做到这一点，因此实际的处理是 Lawson 方法，引入谐振子形式的质心运动，
+\begin{equation}
+    H = T_{\mathrm{rel}} + V +\beta\left(\frac{P^2}{2M}+\frac12M\Omega^2R^2-\frac32\hbar\Omega\right),\label{eqs:intrinsic-H-betaCM}
+\end{equation}
+并调节 \(\beta\) 使能量随着 \(\beta\) 基本不变，此时可以认为质心不激发，已经消去了质心运动的影响。
+
+首先对哈密顿量 \ref{eqs:intrinsic-H-betaCM} 进行化简，来更方便看到需要计算哪些量。相对质心的动能化简为
+\begin{equation}
+  T_\text{rel}=\left(1-\frac1A\right)\sum_{i=1}^A\frac{p_i^2}{2m}-\frac1{mA}\sum_{i<j}\bm{p}_i\cdot\bm{p}_j,
+\end{equation}
+同样的方式化简质心的动量 \(\bm{P}=\sum_{i=1}^A\bm{p}_i\) 与坐标 \(\bm{R}=\frac1A\sum_{i=1}^A\bm{r}_i\)，得到
+\begin{align}
+  H = & -\frac{3}{2} \beta \hbar \Omega + \left(1 - \frac{1 - \beta}{A}\right) \sum_{i}^{A} \frac{\bm{p}_{i}^{2}}{2m} + \frac{\beta}{2A} m \Omega^{2} \sum_{i=1}^A \bm{r}_{i}^{2}\notag\\
+  & + \frac{\beta - 1}{mA} \sum_{i<j} \bm{p}_{i} \cdot \bm{p}_{j} + \beta \frac{m \Omega^{2}}{A} \sum_{i<j} \bm{r}_{i} \cdot \bm{r}_{j} + \sum_{i<j} V_{ij}^{NN},
+\end{align}
+第一行是零体与单体算符，第二行是两体算符。不过需注意原则上属于核力的成分只有 \(V_{ij}^{NN}\)，这就是通常说的两体核力（相互作用）。注意到哈密顿量的单体与两体部分还有很多来自于动能的贡献，这是可以直接计算的，并不用存到核力文件中。不同的核力格式存了哈密顿量的哪些部分不太一样。以 Oslo 格式为例，它除了两体核力之外还有 Hcom，rirj 与 pipj 三列。先将哈密顿量写为
+\begin{align}
+  H_\text{Oslo} = & -\frac{3}{2}\beta\hbar\Omega + \left(1-\frac{1}{A}+\frac{\beta}{A}\right)\sum_{i=1}^{A}\left(\frac{p_{i}^{2}}{2m}+\frac{1}{2}m\Omega^{2}r_{i}^{2}\right) \notag \\
+  & +\frac{\beta-1}{A}\sum_{i<j}\left(\frac{\bm{p}_{i}\cdot\bm{p}_{j}}{m}+m\Omega^{2}\bm{r}_{i}\cdot\bm{r}_{j}\right) -\frac{1}{A}\sum_{i<j}\frac{1}{2}m\Omega^{2}\left(\bm{r}_{i}-\bm{r}_{j}\right)^{2}+\sum_{i<j}V_{ij}^{NN},
+\end{align}
+Oslo 格式存储的 Hcom 是 \(\frac1{\hbar\Omega}\sum_{i<j}\left(\frac{\bm{p}_{i}\cdot\bm{p}_{j}}{m}+m\Omega^{2}\bm{r}_{i}\cdot\bm{r}_{j}\right)\)，rirj 是 \(\frac1{\hbar\Omega}\sum_{i<j}\frac{1}{2}m\Omega^{2}\left(\bm{r}_{i}-\bm{r}_{j}\right)^{2}\)，而 pipj 则是 \(\frac1{m\hbar\Omega}\sum_{i<j}\bm{p}_i\cdot\bm{p}_j\)。虽然 Oslo 格式是这么存储的，但直接把存储的这几部分加起来作为哈密顿量，在有截断的多体方法中可能是不好的，原因我并未细究。总之目前的代码使用的哈密顿量是
+\begin{align}
+  H=&-\frac{3}{2}\beta\hbar\Omega+\left(1 - \frac{1 - \beta}{A}\right) \sum_{i=1}^{A} \frac{\bm{p}_{i}^{2}}{2m} + \frac{\beta}{A}\sum_{i=1}^A\frac12m\Omega^{2}\bm{r}_{i}^{2}\notag\\
+  &+\frac{\hbar\Omega}{A}\beta\left[\frac1{\hbar\Omega}\sum_{i<j}\left(\frac{\bm{p}_i\cdot\bm{p}_j}{m}+m\Omega^2\bm{r}_i\cdot\bm{r}_j\right)\right]-\frac{\hbar\Omega}{A}\frac1{m\hbar\Omega}\sum_{i<j}\bm{p}_i\cdot\bm{p}_j+\sum_{i<j}V_{ij}^{NN}.
+\end{align}
+也就是说 Oslo 格式的 Hcom 与 pipj 被用到，rirj 是没有被用到的。
+
+Oslo 格式的读取需要配套轨道文件。还有另外一类常用的格式称为 me2j，在读取的时候需要手动加上 \(V_{ij}^{NN}\) 以外的项，这类格式不需要外部额外输入轨道文件，而是需要自己生成。
+
+\subsection{哈密顿量的矩阵元}
+目前所有的讨论全是在一次量子化的框架下完成的，接下来需要进行二次量子化，将哈密顿量写到谐振子基下，然后存到核力文件中供多体计算读取。这里重点讨论需要额外计算的坐标与动量算符在谐振子基下的矩阵元形式。
+
+\subsection{核子质量修正}
+新版 IMSRG 代码加入了对哈密顿量动能项的修正，这是因为上面计算实际上只用了一个核子质量 \(m\)，并未考虑质子与中子的质量不同。实际上使用的核子质量 \(m\) 是
+\begin{equation}
+  m=\frac12(m_p+m_n),
+\end{equation}
+核子动能最严格的写法应该是
+\begin{equation}
+  \sum_{i=1}^A\frac{p_i^2}{2m_i}=\sum_{i=1}^A\left(\frac{p_i^2}{2m}+\frac{p_i^2}{2m}\frac{m-m_i}{m_i}\right),
+\end{equation}
+\ref{eqs:intrinsic-H-betaCM} 算的是等式右边的第一项，只需要对每一个 \(i\) 再用其真实质量 \(m_i=m_p,m_n\) 做修正即可。而质心动能
+\begin{equation}
+  \frac{P^2}{2\sum_{i=1}^Am_i}=\frac{P^2}{2M}+\frac{P^2}{2M}\left(\frac{M}{\sum_{i=1}^Am_i}-1\right),
+\end{equation}
+其中 \(M=Am\)。因此只需把 \ref{eqs:intrinsic-H-betaCM} 中的质心动能整体乘一个系数就能得到修正项。
+
+\section{可观测量算符}
